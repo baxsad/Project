@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "YGBDefines.h"
 #import "YGBBLESocketDelegate.h"
+#import "YGBPacket.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -57,7 +57,12 @@
  @param mode 模式
  @return NSData
  */
-+ (  NSData *)packet_set_state_mode:(uint)mode;
++ (  NSData *)packet_set_state_mode:(uint)mode
+                                ctr:(uint)ctr
+                                tik:(uint)tik
+                                  R:(uint)R
+                                  G:(uint)G
+                                  B:(uint)B;
 
 /**
  设置设备更新

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SCContext.h"
+#import "SCCenterProtocol.h"
 
 typedef NS_ENUM(NSInteger, SCEventType)
 {
@@ -47,5 +48,8 @@ typedef NS_ENUM(NSInteger, SCEventType)
 - (void)triggerEvent:(SCEventType)eventType;
 - (void)triggerEvent:(SCEventType)eventType
      withCustomParam:(NSDictionary *)customParam;
+
++ (void)registerDynamicListener:(Class)listener;
+- (void)registerDynamicListener:(Class)listener;
 
 @end

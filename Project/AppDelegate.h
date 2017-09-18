@@ -9,10 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "MainDelegate.h"
 
-@interface AppDelegate : MainDelegate <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
 
 @end
 
