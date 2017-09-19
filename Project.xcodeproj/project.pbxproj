@@ -110,6 +110,7 @@
 		E5654D471F6B7782002DAA18 /* UIResponder+ResponderChain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIResponder+ResponderChain.h"; sourceTree = "<group>"; };
 		E5654D481F6B7782002DAA18 /* UIResponder+ResponderChain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+ResponderChain.m"; sourceTree = "<group>"; };
 		E5654D4A1F6B78F1002DAA18 /* Responder.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Responder.md; sourceTree = "<group>"; };
+		E56EBAF81F6F737B00CAE052 /* SCCenterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCCenterProtocol.h; sourceTree = "<group>"; };
 		E571DCA51F57A9D9005511A3 /* NSGlobalTraking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGlobalTraking.h; sourceTree = "<group>"; };
 		E571DCA61F57A9D9005511A3 /* NSGlobalTraking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSGlobalTraking.m; sourceTree = "<group>"; };
 		E571DCA91F57B2DB005511A3 /* NSGlobalDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSGlobalDeviceInfo.h; sourceTree = "<group>"; };
@@ -402,6 +403,7 @@
 				E5EE37751F6BE53500B179F5 /* SCCenter.m */,
 				E5EE377A1F6BE9C900B179F5 /* SCModel.h */,
 				E5EE377B1F6BE9C900B179F5 /* SCModel.m */,
+				E56EBAF81F6F737B00CAE052 /* SCCenterProtocol.h */,
 			);
 			path = SCCenter;
 			sourceTree = "<group>";

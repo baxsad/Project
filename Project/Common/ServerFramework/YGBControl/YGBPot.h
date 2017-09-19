@@ -219,7 +219,12 @@ namespace YGB {
   class POTSetStateMode: Pocket
   {
   public:
+    uint8_t ctr;
     uint8_t mode;
+    uint8_t tik;
+    uint8_t R;
+    uint8_t G;
+    uint8_t B;
     
     POTSetStateMode() YGB_NOTHROW:
     Pocket(YGB_HEAD,YGB_CMD_SET,YGB_FUNC_SET_STATE_MODE)
@@ -232,7 +237,12 @@ namespace YGB {
       this -> TD8(this -> H());
       this -> TD8(this -> C());
       this -> TD8(this -> F());
+      this -> TD8(this -> ctr);
       this -> TD8(this -> mode);
+      this -> TD8(this -> tik);
+      this -> TD8(this -> R);
+      this -> TD8(this -> G);
+      this -> TD8(this -> B);
       
       return this -> _Transform();
     }

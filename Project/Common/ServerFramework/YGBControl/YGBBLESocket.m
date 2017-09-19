@@ -16,6 +16,9 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
 
 #define Lock() pthread_mutex_lock(&(self -> _lock))
 #define Unlock() pthread_mutex_unlock(&(self -> _lock))
+#define YGB_CHECK_CURRENT_PERIPHERAL if(![peripheral.identifier.UUIDString isEqualToString:self.UUID])return;
+
+static CBPeripheral *willConnectingPeripheral;
 
 @interface YGBBLESocket ()
 @property (nullable, nonatomic, strong, readwrite) NSString *UUID;
@@ -29,6 +32,7 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
   NSNumber *_RSSI;
   
   NSMutableDictionary *_services;
+  NSMutableDictionary *_characteristics;
   pthread_mutex_t _lock;
 }
 
@@ -38,9 +42,11 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
     assert(UUID);
     _UUID       = UUID;
     _channel    = channel == nil || channel.length == 0 ? @"YGB.BANGBANGBNAG.CN" : channel;
-    _workQueue  = dispatch_queue_create(NULL, DISPATCH_QUEUE_SERIAL);
+    _workQueue  = /**dispatch_queue_create(NULL, DISPATCH_QUEUE_SERIAL)*/dispatch_get_main_queue();
     _littleBoy  = [BabyBluetooth shareBabyBluetooth];
+    [_littleBoy retrievePeripheralWithUUIDString:_UUID];
     _services   = [NSMutableDictionary dictionary];
+    _characteristics = [NSMutableDictionary dictionary];
     NSDictionary *scanForPeripheralsWithOptions = @{CBCentralManagerScanOptionAllowDuplicatesKey:@YES};
     NSDictionary *connectOptions = @{CBConnectPeripheralOptionNotifyOnConnectionKey:@YES,
                                      CBConnectPeripheralOptionNotifyOnDisconnectionKey:@YES,
@@ -90,7 +96,9 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
   [_littleBoy setBlockOnDiscoverToPeripheralsAtChannel:_channel
                                                  block:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
                                                    @strongify(self);
-                                                   if ([peripheral.identifier.UUIDString isEqualToString:self.UUID]) {
+                                                   YGB_CHECK_CURRENT_PERIPHERAL
+                                                   if (willConnectingPeripheral == nil) {
+                                                     willConnectingPeripheral = peripheral;
                                                      self -> _littleBoy
                                                      .having(peripheral)
                                                      .and
@@ -98,6 +106,10 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
                                                      .then
                                                      .connectToPeripherals()
                                                      .discoverServices()
+                                                     .discoverCharacteristics()
+                                                     .readValueForCharacteristic()
+                                                     .discoverDescriptorsForCharacteristic()
+                                                     .readValueForDescriptors()
                                                      .begin();
                                                    }
                                                  }];
@@ -111,21 +123,36 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
                                                  return NO;
                                                }];
   
+  [_littleBoy setFilterOnConnectToPeripheralsAtChannel:_channel
+                                                filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
+                                                  if (peripheralName.length >0) {
+                                                    return YES;
+                                                  }
+                                                  return NO;
+                                                }];
+  
   // Bluetooth Connected to peripheral successed
-  [_littleBoy setBlockOnConnectedAtChannel:self.channel block:^(CBCentralManager *central, CBPeripheral *peripheral) {
-    @strongify(self);
-    self -> _peripheral = peripheral;
-    self -> _workState = YGBBLEWorkStateConnect;
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onConnect:)]) {
-      [self.delegate onConnect:self -> _peripheral];
-    }
-  }];
+  [_littleBoy setBlockOnConnectedAtChannel:_channel
+                                     block:^(CBCentralManager *central, CBPeripheral *peripheral) {
+                                       @strongify(self);
+                                       YGB_CHECK_CURRENT_PERIPHERAL
+                                       self -> _peripheral = peripheral;
+                                       self -> _workState = YGBBLEWorkStateConnect;
+                                       willConnectingPeripheral = nil;
+                                       [self -> _littleBoy cancelScan];
+                                       if (self.delegate && [self.delegate respondsToSelector:@selector(onConnect:)]) {
+                                         [self.delegate onConnect:self -> _peripheral];
+                                       }
+                                     }];
   
   // Bluetooth Connected to peripheral failed
   [_littleBoy setBlockOnFailToConnectAtChannel:self.channel block:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
     @strongify(self);
+    YGB_CHECK_CURRENT_PERIPHERAL
     self -> _peripheral = nil;
     self -> _workState = YGBBLEWorkStateDisconnect;
+    willConnectingPeripheral = nil;
+    [self -> _littleBoy cancelScan];
     if (self.delegate && [self.delegate respondsToSelector:@selector(onDisconnect:error:)]) {
       [self.delegate onDisconnect:self -> _peripheral error:error];
     }
@@ -134,8 +161,11 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
   // Bluetooth Disconnect for peripheral
   [_littleBoy setBlockOnDisconnectAtChannel:self.channel block:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
     @strongify(self);
+    YGB_CHECK_CURRENT_PERIPHERAL
     self -> _peripheral = nil;
     self -> _workState = YGBBLEWorkStateDisconnect;
+    willConnectingPeripheral = nil;
+    [self -> _littleBoy cancelScan];
     if (self.delegate && [self.delegate respondsToSelector:@selector(onDisconnect:error:)]) {
       [self.delegate onDisconnect:self -> _peripheral error:error];
     }
@@ -153,12 +183,12 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
   // Bluetooth discover Peripheral Servers
   [_littleBoy setBlockOnDiscoverServicesAtChannel:_channel block:^(CBPeripheral *peripheral, NSError *error) {
     @strongify(self);
-    if (![peripheral.identifier.UUIDString isEqualToString:self -> _peripheral.identifier.UUIDString]) return ;
+    YGB_CHECK_CURRENT_PERIPHERAL
     for (CBService *s in peripheral.services) {
       Lock();
       CBService *service = [self -> _services objectForKey:s.UUID.UUIDString];
       Unlock();
-      if (service == nil) {
+      if (service == nil && s.UUID.UUIDString.length > 0) {
         Lock();
         [self -> _services setObject:s forKey:s.UUID.UUIDString];
         Unlock();
@@ -166,27 +196,45 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
     }
   }];
   
-  /**
-  //设置发现设service的Characteristics的委托
+  
+  //设置发现service的Characteristics的委托
   [_littleBoy setBlockOnDiscoverCharacteristicsAtChannel:_channel block:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
+    @strongify(self);
+    YGB_CHECK_CURRENT_PERIPHERAL
     NSLog(@"发现服务 %@ 的特征 %@",service.UUID,service.characteristics);
+    for (CBCharacteristic *c in service.characteristics) {
+      Lock();
+      CBCharacteristic *characteristic = [self -> _characteristics objectForKey:c.UUID.UUIDString];
+      Unlock();
+      if (characteristic == nil && c.UUID.UUIDString.length > 0) {
+        Lock();
+        [self -> _characteristics setObject:c forKey:c.UUID.UUIDString];
+        Unlock();
+      }
+    }
   }];
   
   //设置读取characteristics的委托
   [_littleBoy setBlockOnReadValueForCharacteristicAtChannel:_channel block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
+    @strongify(self);
+    YGB_CHECK_CURRENT_PERIPHERAL
     NSLog(@"读取服务 %@ 的特征 %@ 的值 %@",characteristics.service.UUID,characteristics.UUID,characteristics.value);
   }];
   
   //设置发现characteristics的descriptors的委托
   [_littleBoy setBlockOnDiscoverDescriptorsForCharacteristicAtChannel:_channel block:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
+    @strongify(self);
+    YGB_CHECK_CURRENT_PERIPHERAL
     NSLog(@"发现服务 %@ 的特征 %@ 的描述符 %@",characteristic.service.UUID,characteristic.UUID,characteristic.descriptors);
   }];
   
   //设置读取Descriptor的委托
   [_littleBoy setBlockOnReadValueForDescriptorsAtChannel:_channel block:^(CBPeripheral *peripheral, CBDescriptor *descriptor, NSError *error) {
+    @strongify(self);
+    YGB_CHECK_CURRENT_PERIPHERAL
     NSLog(@"读取服务 %@ 的特征 %@ 的描述符 %@ 的值 %@",descriptor.characteristic.service.UUID,descriptor.characteristic.UUID, descriptor.UUID,descriptor.value);
   }];
-   */
+ 
   
 }
 
@@ -246,7 +294,7 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
 
 - (void)_sendData:(NSData *)data
 {
-  [self assertOnWorkQueue];
+  //[self assertOnWorkQueue];
   
   if (!data) {
     return;
@@ -264,12 +312,14 @@ NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
   
   // send pocket
   
-  if ([[_littleBoy findConnectedPeripheral:_peripheral.name] isEqual:_peripheral] == NO) {
+  if (_peripheral == nil) {
     [self errorWithCode:YGBBLEStatusCodePeripheralError reason:@"This peripheral is not BLE current Peripheral"];
     return;
   }
   
-  
+  [_peripheral writeValue:data
+        forCharacteristic:_characteristics[@"B6110002-1114-4D64-8426-0690F9BE36EF"]
+                     type:CBCharacteristicWriteWithoutResponse];
   
 }
 

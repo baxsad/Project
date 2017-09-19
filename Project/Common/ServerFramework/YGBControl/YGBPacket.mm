@@ -59,9 +59,22 @@ using namespace YGB;
   return [data copy];
 }
 + (  NSData *)packet_set_state_mode:(uint)mode
+                                ctr:(uint)ctr
+                                tik:(uint)tik
+                                  R:(uint)R
+                                  G:(uint)G
+                                  B:(uint)B
 {
   YGB::POTSetStateMode *p = new YGB::POTSetStateMode();
+  if(R > 255) R = 255;
+  if(G > 255) G = 255;
+  if(B > 255) B = 255;
+  p -> ctr  = (uint8_t)ctr;
   p -> mode = (uint8_t)mode;
+  p -> tik  = (uint8_t)tik;
+  p -> R    = (uint8_t)R;
+  p -> G    = (uint8_t)G;
+  p -> B    = (uint8_t)B;
   NSData *data = p -> Transform();
   _delete(p);
   

@@ -16,6 +16,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  //[super application:application didFinishLaunchingWithOptions:launchOptions];
   
   [UICMI initDefaultConfiguration];
   [UICMI renderGlobalAppearances];

@@ -54,6 +54,16 @@ static  NSString *kAppCustomSelector = @"modDidCustomEvent:";
   return SCCInstance;
 }
 
++ (void)registerDynamicListener:(Class)listener
+{
+  [[SCCenter defaultCenter] registerDynamicListener:listener];
+}
+
+- (void)registerDynamicListener:(Class)listener
+{
+  
+}
+
 - (instancetype)init
 {
   if (self = [super init]) {
