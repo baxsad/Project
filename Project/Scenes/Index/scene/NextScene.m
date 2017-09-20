@@ -17,8 +17,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  self.interactivePopDisabled = NO;
-  //self.navBarBarTintColor = UIColorWhite;
+  self.navBarBarTintColor = UIColorBlue;
   self.navBarBackgroundAlpha = 1.0;
   self.statusBarStyle = UIStatusBarStyleLightContent;
   
@@ -31,7 +30,7 @@
 
 - (void)action
 {
-  [self setNavBarHidden:!self.navBarHidden animation:YES];
+  //[self setNavBarHidden:!self.navBarHidden animation:YES];
 }
   
 - (void)viewWillAppear:(BOOL)animated

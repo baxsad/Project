@@ -10,9 +10,6 @@
 
 @interface UINavigationBar (Transition)
 
-+ (void)setDefaultNavBarHidden:(BOOL)hidden;
-+ (BOOL)defaultNavBarHidden;
-
 + (void)setDefaultNavBarShadowImageColor:(UIColor *)color;
 + (UIColor *)defaultNavBarShadowImageColor;
   
@@ -30,23 +27,21 @@
   
 @end
 
-@interface UINavigationController (Transition)
+@interface UINavigationController (Transition)<UINavigationBarDelegate, UINavigationControllerDelegate>
 
 @property(nonatomic,strong,readonly) UIPanGestureRecognizer *fullscreenPopGestureRecognizer;
-- (UIColor *)containerViewBackgroundColor;
-@property (nonatomic, weak) UIViewController *transitionContextToViewController;
+
+- (void)setNeedsNavigationBarUpdateForShadowImageColor:(UIColor *)color;
+- (void)setNeedsNavigationBarUpdateForBarTintColor:(UIColor *)color;
+- (void)setNeedsNavigationBarUpdateForBarBackgroundAlpha:(CGFloat)alpha;
+- (void)setNeedsNavigationBarUpdateForTintColor:(UIColor *)color;
+- (void)setNeedsStatusBarUpdateForStyle:(UIStatusBarStyle)style;
 
 @end
 
 @interface UIViewController (Transition)
 
 @property (nonatomic, assign) BOOL interactivePopDisabled;
-@property (nonatomic, strong) UINavigationBar *transitionNavigationBar;
-@property (nonatomic, assign) BOOL prefersNavigationBarBackgroundViewHidden;
-- (void)addTransitionNavigationBarIfNeeded;
-
-- (void)setNavBarHidden:(BOOL)hidden animation:(BOOL)animation;
-- (BOOL)navBarHidden;
 
 - (void)setNavBarShadowImageColor:(UIColor *)color;
 - (UIColor *)navBarShadowImageColor;
@@ -62,11 +57,5 @@
   
 - (void)setStatusBarStyle:(UIStatusBarStyle)style;
 - (UIStatusBarStyle)statusBarStyle;
-
-- (void)setNeedsNavigationBarUpdateForShadowImageColor:(UIColor *)color real:(BOOL)real;
-- (void)setNeedsNavigationBarUpdateForBarTintColor:(UIColor *)color real:(BOOL)real;
-- (void)setNeedsNavigationBarUpdateForBarBackgroundAlpha:(CGFloat)alpha real:(BOOL)real;
-- (void)setNeedsNavigationBarUpdateForTintColor:(UIColor *)color real:(BOOL)real;
-- (void)setNeedsStatusBarUpdateForStyle:(UIStatusBarStyle)style animation:(BOOL)animation;
 
 @end

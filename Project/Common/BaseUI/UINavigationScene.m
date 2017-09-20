@@ -31,17 +31,5 @@
   [super pushViewController:viewController animated:animated];
 }
 
-#pragma mark - getter
-  
-- (UIScene *)topScene
-{
-  return (UIScene *)self.topViewController;
-}
-  
-- (UIScene *)visibleScene
-{
-  return (UIScene *)self.visibleViewController;
-}
-  
 @end
 

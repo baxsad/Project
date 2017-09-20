@@ -8,38 +8,16 @@
 
 #import "IndexScene.h"
 #import "NextScene.h"
+#import "YGBHomeScene.h"
 #import "TestView.h"
-#import "YGBBLESocket.h"
 
-@interface IndexScene ()<YGBBLESocketDelegate>
-@property (nonatomic, strong) YGBBLESocket *socket;
+@interface IndexScene ()
 @end
 
 @implementation IndexScene
 
-- (void)didUpdateRSSI:(CBPeripheral *)peripheral RSSI:(NSNumber *)RSSI error:(NSError *)error
-{
-  NSLog(@"233");
-}
-
-- (void)readyStateUpdate:(YGBBLEReadyState)state socket:(YGBBLESocket *)socket
-{
-  NSLog(@"233");
-}
-- (void)onConnect:(CBPeripheral *)peripheral
-{
-  NSLog(@"233");
-}
-- (void)onDisconnect:(CBPeripheral *)peripheral error:(NSError *)error
-{
-  NSLog(@"233");
-}
-
 - (void)viewDidLoad {
   [super viewDidLoad];
-  
-  self.socket = [[YGBBLESocket alloc] initWithUUID:@"35E1613F-D2E9-1A2A-DBE8-65747B8EA925" channel:@"YGB"];
-  self.socket.delegate = self;
   
   UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 100, 100, 50)];
   btn.backgroundColor = UIColorRed;
@@ -54,10 +32,9 @@
   TestView *test = [[TestView alloc] initWithFrame:CGRectMake(20, 300, 100, 50)];
   test.backgroundColor = UIColorGreen;
   [self.view addSubview:test];
-  @weakify(self);
+  //@weakify(self);
   [[test rac_signalForSelector:@selector(buttonClick)] subscribeNext:^(id x) {
-    @strongify(self);
-    [self.socket connect];
+    
   }];
   
   UIButton *btn3 = [[UIButton alloc] initWithFrame:CGRectMake(20, 400, 100, 50)];
@@ -66,7 +43,7 @@
   [self.view addSubview:btn3];
   
   self.navBarBarTintColor = UIColorRed;
-  self.navBarBackgroundAlpha = 1.0;
+  self.navBarBackgroundAlpha = 1;
   self.statusBarStyle = UIStatusBarStyleDefault;
   
 }
@@ -84,16 +61,13 @@
   
 - (void)action2
 {
-  [self setNavBarHidden:!self.navBarHidden animation:YES];
+  //[self setNavBarHidden:!self.navBarHidden animation:YES];
 }
 
 - (void)action3
 {
-  NSError *error;
-  [self.socket sendData:[YGBPacket packet_set_state_mode:0 ctr:0 tik:1 R:0xff G:0x5a B:0x5f] error:&error];
-  if (error) {
-    NSLog(@"error");
-  }
+  YGBHomeScene *ygb = [[YGBHomeScene alloc] init];
+  [self.navigationController pushViewController:ygb animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

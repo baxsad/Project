@@ -32,6 +32,7 @@
 		E5654D491F6B7782002DAA18 /* UIResponder+ResponderChain.m in Sources */ = {isa = PBXBuildFile; fileRef = E5654D481F6B7782002DAA18 /* UIResponder+ResponderChain.m */; };
 		E571DCA71F57A9D9005511A3 /* NSGlobalTraking.m in Sources */ = {isa = PBXBuildFile; fileRef = E571DCA61F57A9D9005511A3 /* NSGlobalTraking.m */; };
 		E571DCAB1F57B2DB005511A3 /* NSGlobalDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E571DCAA1F57B2DB005511A3 /* NSGlobalDeviceInfo.m */; };
+		E59C4B4B1F711EB30006D69B /* YGBHomeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E59C4B491F711EB30006D69B /* YGBHomeScene.m */; };
 		E5A96B211F58FC0900266055 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = E5A96B201F58FC0900266055 /* TestView.m */; };
 		E5EE376E1F6BE24A00B179F5 /* MainDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EE376D1F6BE24A00B179F5 /* MainDelegate.m */; };
 		E5EE37761F6BE53500B179F5 /* SCCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EE37751F6BE53500B179F5 /* SCCenter.m */; };
@@ -117,6 +118,8 @@
 		E571DCAA1F57B2DB005511A3 /* NSGlobalDeviceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSGlobalDeviceInfo.m; sourceTree = "<group>"; };
 		E571DCAC1F57B314005511A3 /* NSGlobalDeviceInfoTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSGlobalDeviceInfoTypes.h; sourceTree = "<group>"; };
 		E571DCAD1F57B382005511A3 /* NSGlobalDeviceInfoInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSGlobalDeviceInfoInterface.h; sourceTree = "<group>"; };
+		E59C4B481F711EB30006D69B /* YGBHomeScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YGBHomeScene.h; sourceTree = "<group>"; };
+		E59C4B491F711EB30006D69B /* YGBHomeScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YGBHomeScene.m; sourceTree = "<group>"; };
 		E5A96B1F1F58FC0900266055 /* TestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestView.h; sourceTree = "<group>"; };
 		E5A96B201F58FC0900266055 /* TestView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestView.m; sourceTree = "<group>"; };
 		E5EE376C1F6BE24A00B179F5 /* MainDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainDelegate.h; sourceTree = "<group>"; };
@@ -276,6 +279,7 @@
 		E52C99221F53CD0C007D8408 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				E59C4B451F711E210006D69B /* ygb */,
 				E52C99231F53CD0C007D8408 /* Index */,
 				E52C99291F53CD0C007D8408 /* Mine */,
 			);
@@ -383,6 +387,23 @@
 				E571DCAD1F57B382005511A3 /* NSGlobalDeviceInfoInterface.h */,
 			);
 			path = GBDeviceInfo;
+			sourceTree = "<group>";
+		};
+		E59C4B451F711E210006D69B /* ygb */ = {
+			isa = PBXGroup;
+			children = (
+				E59C4B471F711E5F0006D69B /* scene */,
+			);
+			path = ygb;
+			sourceTree = "<group>";
+		};
+		E59C4B471F711E5F0006D69B /* scene */ = {
+			isa = PBXGroup;
+			children = (
+				E59C4B481F711EB30006D69B /* YGBHomeScene.h */,
+				E59C4B491F711EB30006D69B /* YGBHomeScene.m */,
+			);
+			path = scene;
 			sourceTree = "<group>";
 		};
 		E5EE376B1F6BE15800B179F5 /* AppDelegate */ = {
@@ -573,16 +594,13 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Project-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		CD1BCC2E144CEE14F4ED54C8 /* [CP] Copy Pods Resources */ = {
@@ -631,6 +649,7 @@
 				E52C99471F53CE79007D8408 /* YGBPacket.mm in Sources */,
 				E52C99341F53CD0C007D8408 /* NextScene.m in Sources */,
 				E5654D491F6B7782002DAA18 /* UIResponder+ResponderChain.m in Sources */,
+				E59C4B4B1F711EB30006D69B /* YGBHomeScene.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

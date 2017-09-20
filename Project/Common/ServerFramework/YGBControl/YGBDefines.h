@@ -27,12 +27,15 @@ typedef NS_ENUM(NSInteger, YGBBLEReadyState) {
   YGBBLEReadyStateOpen      = 0x05,
 };
 
-typedef NS_ENUM(NSInteger, YGBBLEStatusCode) {
-  YGBBLEStatusCodeEmpty     = 1000,
-  YGBBLEStatusCodeTooBig    = 1001,
-  YGBBLEStatusCodeUUIDNull  = 1002,
-  YGBBLEStatusCodeClosed    = 1003,
-  YGBBLEStatusCodePeripheralError = 1004,
+typedef NS_ENUM(NSInteger, YGBErrorCode) {
+  YGBErrorCodeDataEmpty      = 1000,
+  YGBErrorCodeDataTooBig     = 1001,
+  YGBErrorCodeUUIDNill       = 1002,
+  YGBErrorCodeBLEClosed      = 1003,
+  YGBErrorCodePeripheralNill = 1004,
+  YGBErrorCodePeripheralDisconnect = 1005,
+  YGBErrorCodePeripheralBusy = 1006,
+  YGBErrorCodeCharacteristicNill = 1007,
 };
 
 typedef NS_ENUM(NSInteger, YGBBLEWorkState) {

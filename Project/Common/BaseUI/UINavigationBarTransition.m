@@ -16,6 +16,8 @@
 void objc_setAssociatedWeakObject(id container, void *key, id value);
 id objc_getAssociatedWeakObject(id container, void *key);
 
+#define IOS10 [[[UIDevice currentDevice]systemVersion] floatValue] >= 10.0
+
 @interface NSWeakObjectContainer : NSObject
 @property (nonatomic, weak) id object;
 @end
@@ -89,26 +91,11 @@ void _SwizzleMethod(Class cls, SEL originalSelector, SEL swizzledSelector)
 
 @implementation UINavigationBar (Transition)
 
-static char kDefaultNavBarHiddenKey;
 static char kDefaultNavBarShadowImageColorKey;
 static char kDefaultNavBarBarTintColorKey;
 static char kDefaultNavBarTintColorKey;
 static char kDefaultNavBarBackgroundAlpha;
 static char kDefaultStatusBarStyle;
-
-///< Default NavBarHodden
-+ (BOOL)defaultNavBarHidden
-{
-  id hidden = objc_getAssociatedObject(self, &kDefaultNavBarHiddenKey);
-  return (hidden != nil) ? [hidden boolValue] : NO;
-}
-+ (void)setDefaultNavBarHidden:(BOOL)hidden
-{
-  objc_setAssociatedObject(self,
-                           &kDefaultNavBarHiddenKey,
-                           @(hidden),
-                           OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
 
 ///< Default NavBarShadowImageColor
 + (UIColor *)defaultNavBarShadowImageColor
@@ -191,109 +178,94 @@ static char kDefaultStatusBarStyle;
 
 - (void)pr_setBackgroundColor:(UIColor *)color
 {
-  [self setBackgroundImage:[UIImage ui_imageWithColor:color
-                                                 size:CGSizeMake(1, 1)
-                                         cornerRadius:0]
-             forBarMetrics:UIBarMetricsDefault];
+//  [self setBackgroundImage:[UIImage ui_imageWithColor:color
+//                                                 size:CGSizeMake(1, 1)
+//                                         cornerRadius:0]
+//             forBarMetrics:UIBarMetricsDefault];
+  [self setTintColor:color];
+  
 }
 
 - (void)pr_setBackgroundAlpha:(CGFloat)alpha
 {
-  UIImage *image = [self backgroundImageForBarMetrics:UIBarMetricsDefault];
-  if (image == nil) {
-    image = [UIImage ui_imageWithColor:[UINavigationBar defaultNavBarBarTintColor]
-                                  size:CGSizeMake(1, 1)
-                          cornerRadius:0];
+  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
+  UIView *shadowView = [barBackgroundView valueForKey:@"_shadowView"];
+  if (shadowView) {
+    shadowView.alpha = alpha;
   }
-  [self setBackgroundImage:[image ui_imageByApplyingAlpha:alpha]
-             forBarMetrics:UIBarMetricsDefault];
+  
+  if (!self.isTranslucent) {
+    barBackgroundView.alpha = alpha;
+    return;
+  }
+  
+  if (IOS10) {
+    UIView *backgroundEffectView = [barBackgroundView valueForKey:@"_backgroundEffectView"];
+    if (backgroundEffectView != nil && [self backgroundImageForBarMetrics:UIBarMetricsDefault] == nil) {
+      backgroundEffectView.alpha = alpha;
+    }
+  }
+  else{
+    UIView *daptiveBackdrop = [barBackgroundView valueForKey:@"_adaptiveBackdrop"];
+    UIView *backdropEffectView = [daptiveBackdrop valueForKey:@"_backdropEffectView"];
+    if (daptiveBackdrop != nil && backdropEffectView != nil ) {
+      backdropEffectView.alpha = alpha;
+    }
+  }
 }
 
 @end
 
 @implementation UINavigationController (Transition)
 
-+ (void)load {
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    _SwizzleMethod([self class],
-                   @selector(pushViewController:animated:),
-                   @selector(pr_pushViewController:animated:));
-    
-    _SwizzleMethod([self class],
-                   @selector(popViewControllerAnimated:),
-                   @selector(pr_popViewControllerAnimated:));
-    
-    _SwizzleMethod([self class],
-                   @selector(popToViewController:animated:),
-                   @selector(pr_popToViewController:animated:));
-    
-    _SwizzleMethod([self class],
-                   @selector(popToRootViewControllerAnimated:),
-                   @selector(pr_popToRootViewControllerAnimated:));
-    
-    _SwizzleMethod([self class],
-                   @selector(setViewControllers:animated:),
-                   @selector(pr_setViewControllers:animated:));
-    
-    _SwizzleMethod([self class],
-                   @selector(viewDidLayoutSubviews),
-                   @selector(pr_nav_viewDidLayoutSubviews));
-  });
-}
-  
-- (void)pr_nav_viewDidLayoutSubviews
+UIColor *averageColor(UIColor *fromColor,UIColor *toColor,CGFloat percent)
 {
-  UIViewController *fromVC = [self.topViewController.transitionCoordinator viewControllerForKey:UITransitionContextFromViewControllerKey];
-  UIViewController *toVC = [self.topViewController.transitionCoordinator viewControllerForKey:UITransitionContextToViewControllerKey];
+  CGFloat fromRed = 0;
+  CGFloat fromGreen = 0;
+  CGFloat fromBlue = 0;
+  CGFloat fromAlpha = 0;
+  [fromColor getRed:&fromRed green:&fromGreen blue:&fromBlue alpha:&fromAlpha];
   
-  if (fromVC == nil && toVC == nil) {
-    [self pr_nav_viewDidLayoutSubviews];
-    return;
+  CGFloat toRed = 0;
+  CGFloat toGreen = 0;
+  CGFloat toBlue = 0;
+  CGFloat toAlpha = 0;
+  [toColor getRed:&toRed green:&toGreen blue:&toBlue alpha:&toAlpha];
+  
+  CGFloat nowRed = fromRed + (toRed - fromRed) * percent;
+  CGFloat nowGreen = fromGreen + (toGreen - fromGreen) * percent;
+  CGFloat nowBlue = fromBlue + (toBlue - fromBlue) * percent;
+  CGFloat nowAlpha = fromAlpha + (toAlpha - fromAlpha) * percent;
+  
+  return [UIColor colorWithRed:nowRed green:nowGreen blue:nowBlue alpha:nowAlpha];
+}
+
++ (void)load {
+  if (self == [UINavigationController self]) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+      _SwizzleMethod([self class],
+                     @selector(pushViewController:animated:),
+                     @selector(pr_pushViewController:animated:));
+      
+      _SwizzleMethod([self class],
+                     @selector(popViewControllerAnimated:),
+                     @selector(pr_popViewControllerAnimated:));
+      
+      _SwizzleMethod([self class],
+                     @selector(popToViewController:animated:),
+                     @selector(pr_popToViewController:animated:));
+      
+      _SwizzleMethod([self class],
+                     @selector(popToRootViewControllerAnimated:),
+                     @selector(pr_popToRootViewControllerAnimated:));
+      
+      _SwizzleMethod([self class],
+                     NSSelectorFromString(@"_updateInteractiveTransition:"),
+                     @selector(pr__updateInteractiveTransition:));
+      
+    });
   }
-  
-  UIView *disView = fromVC.view;
-  UIView *disViewSuperView = disView.superview;
-  
-  UIView *appearView = toVC.view;
-  UIView *appearViewSuperView = appearView.superview;
-  
-  ///< 如果隐藏导航栏滑动返回的时候的阴影效果不好，不能延伸到导航栏，这里暴力修改滑动返回时的边框阴影布局，以达到舒适的效果
-  if ([disViewSuperView isKindOfClass:NSClassFromString(@"_UIParallaxDimmingView")]) {
-    disViewSuperView.clipsToBounds = NO;
-    [disViewSuperView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-      if ([obj isKindOfClass:[UIImageView class]]) {
-        
-        CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-        CGRect rect = obj.frame;
-        if (rect.size.height < screenHeight) {
-          rect.origin.y -= screenHeight - rect.size.height;
-          rect.size.height = screenHeight;
-        }
-        obj.frame = rect;
-        
-      }
-    }];
-  }
-  
-  if ([appearViewSuperView isKindOfClass:NSClassFromString(@"_UIParallaxDimmingView")]) {
-    appearViewSuperView.clipsToBounds = NO;
-    [appearViewSuperView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-      if ([obj isKindOfClass:[UIImageView class]]) {
-        
-        CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-        CGRect rect = obj.frame;
-        if (rect.size.height < screenHeight) {
-          rect.origin.y -= screenHeight - rect.size.height;
-          rect.size.height = screenHeight;
-        }
-        obj.frame = rect;
-        
-      }
-    }];
-  }
-  
-  [self pr_nav_viewDidLayoutSubviews];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -301,8 +273,25 @@ static char kDefaultStatusBarStyle;
   return [self.topViewController statusBarStyle];
 }
 
-- (UIColor *)containerViewBackgroundColor {
-  return SceneBackgroundColor;
+- (void)pr__updateInteractiveTransition:(CGFloat)percentComplete
+{
+  UIViewController *topVC = self.topViewController;
+  id<UIViewControllerTransitionCoordinator> coor = topVC.transitionCoordinator;
+  
+  if (topVC && coor) {
+    UIViewController *fromeVC = [coor viewControllerForKey:UITransitionContextFromViewControllerKey];
+    UIViewController *toVC = [coor viewControllerForKey:UITransitionContextToViewControllerKey];
+    CGFloat fromAlpha = fromeVC.navBarBackgroundAlpha;
+    CGFloat toAlpha = topVC.navBarBackgroundAlpha;
+    CGFloat newAlpha = fromAlpha + (toAlpha - fromAlpha) * percentComplete;
+    
+    [self setNeedsStatusBarUpdateForStyle:toVC.statusBarStyle];
+    [self setNeedsNavigationBarUpdateForTintColor:averageColor(fromeVC.navBarTintColor,topVC.navBarTintColor,percentComplete)];
+    [self setNeedsNavigationBarUpdateForBarTintColor:averageColor(fromeVC.navBarBarTintColor,topVC.navBarBarTintColor,percentComplete)];
+    [self setNeedsNavigationBarUpdateForBarBackgroundAlpha:newAlpha];
+    [self setNeedsNavigationBarUpdateForShadowImageColor:toVC.navBarShadowImageColor];
+  }
+  [self pr__updateInteractiveTransition:percentComplete];
 }
 
 - (_FullscreenPopGestureRecognizerDelegate *)popGestureRecognizerDelegate
@@ -341,16 +330,8 @@ static char kDefaultStatusBarStyle;
 {
   UIViewController *disappearingViewController = self.viewControllers.lastObject;
   if (!disappearingViewController) {
-    return [self pr_pushViewController:viewController animated:animated];
-  }
-  if (!self.transitionContextToViewController || !disappearingViewController.transitionNavigationBar) {
-    [disappearingViewController addTransitionNavigationBarIfNeeded];
-  }
-  if (animated) {
-    self.transitionContextToViewController = viewController;
-    if (disappearingViewController.transitionNavigationBar) {
-      disappearingViewController.prefersNavigationBarBackgroundViewHidden = YES;
-    }
+    [self pr_pushViewController:viewController animated:animated];
+    return;
   }
   
   if (![self.interactivePopGestureRecognizer.view.gestureRecognizers containsObject:self.fullscreenPopGestureRecognizer]) {
@@ -366,30 +347,11 @@ static char kDefaultStatusBarStyle;
     self.interactivePopGestureRecognizer.enabled = NO;
   }
   
-  return [self pr_pushViewController:viewController animated:animated];
+  [self pr_pushViewController:viewController animated:animated];
 }
 
 - (UIViewController *)pr_popViewControllerAnimated:(BOOL)animated
 {
-  if (self.viewControllers.count < 2) {
-    return [self pr_popViewControllerAnimated:animated];
-  }
-  UIViewController *disappearingViewController = self.viewControllers.lastObject;
-  [disappearingViewController addTransitionNavigationBarIfNeeded];
-  UIViewController *appearingViewController = self.viewControllers[self.viewControllers.count - 2];
-  
-  if (appearingViewController.transitionNavigationBar) {
-    
-    [appearingViewController setNeedsNavigationBarUpdateForTintColor:appearingViewController.navBarTintColor real:YES];
-    [appearingViewController setNeedsNavigationBarUpdateForBarTintColor:appearingViewController.navBarBarTintColor real:YES];
-    [appearingViewController setNeedsNavigationBarUpdateForShadowImageColor:appearingViewController.navBarShadowImageColor real:YES];
-    [appearingViewController setNeedsNavigationBarUpdateForBarBackgroundAlpha:appearingViewController.navBarBackgroundAlpha real:YES];
-    
-  }
-  if (animated) {
-    disappearingViewController.prefersNavigationBarBackgroundViewHidden = YES;
-  }
-  
   return [self pr_popViewControllerAnimated:animated];
 }
 
@@ -398,19 +360,13 @@ static char kDefaultStatusBarStyle;
   if (![self.viewControllers containsObject:viewController] || self.viewControllers.count < 2) {
     return [self pr_popToViewController:viewController animated:animated];
   }
-  UIViewController *disappearingViewController = self.viewControllers.lastObject;
-  [disappearingViewController addTransitionNavigationBarIfNeeded];
-  if (viewController.transitionNavigationBar) {
-    
-    [viewController setNeedsNavigationBarUpdateForTintColor:viewController.navBarTintColor real:YES];
-    [viewController setNeedsNavigationBarUpdateForBarTintColor:viewController.navBarBarTintColor real:YES];
-    [viewController setNeedsNavigationBarUpdateForShadowImageColor:viewController.navBarShadowImageColor real:YES];
-    [viewController setNeedsNavigationBarUpdateForBarBackgroundAlpha:viewController.navBarBackgroundAlpha real:YES];
-    
-  }
-  if (animated) {
-    disappearingViewController.prefersNavigationBarBackgroundViewHidden = YES;
-  }
+  
+  [self setNeedsStatusBarUpdateForStyle:viewController.statusBarStyle];
+  [self setNeedsNavigationBarUpdateForTintColor:viewController.navBarTintColor];
+  [self setNeedsNavigationBarUpdateForBarTintColor:viewController.navBarBarTintColor];
+  [self setNeedsNavigationBarUpdateForBarBackgroundAlpha:viewController.navBarBackgroundAlpha];
+  [self setNeedsNavigationBarUpdateForShadowImageColor:viewController.navBarShadowImageColor];
+  
   return [self pr_popToViewController:viewController animated:animated];
 }
 
@@ -419,71 +375,132 @@ static char kDefaultStatusBarStyle;
   if (self.viewControllers.count < 2) {
     return [self pr_popToRootViewControllerAnimated:animated];
   }
-  UIViewController *disappearingViewController = self.viewControllers.lastObject;
-  [disappearingViewController addTransitionNavigationBarIfNeeded];
-  UIViewController *rootViewController = self.viewControllers.firstObject;
-  if (rootViewController.transitionNavigationBar) {
-    
-    [rootViewController setNeedsNavigationBarUpdateForTintColor:rootViewController.navBarTintColor real:YES];
-    [rootViewController setNeedsNavigationBarUpdateForBarTintColor:rootViewController.navBarBarTintColor real:YES];
-    [rootViewController setNeedsNavigationBarUpdateForShadowImageColor:rootViewController.navBarShadowImageColor real:YES];
-    [rootViewController setNeedsNavigationBarUpdateForBarBackgroundAlpha:rootViewController.navBarBackgroundAlpha real:YES];
-    
-  }
-  if (animated) {
-    disappearingViewController.prefersNavigationBarBackgroundViewHidden = YES;
-  }
+  UIViewController *rootVC = self.viewControllers.firstObject;
+  
+  [self setNeedsStatusBarUpdateForStyle:rootVC.statusBarStyle];
+  [self setNeedsNavigationBarUpdateForTintColor:rootVC.navBarTintColor];
+  [self setNeedsNavigationBarUpdateForBarTintColor:rootVC.navBarBarTintColor];
+  [self setNeedsNavigationBarUpdateForBarBackgroundAlpha:rootVC.navBarBackgroundAlpha];
+  [self setNeedsNavigationBarUpdateForShadowImageColor:rootVC.navBarShadowImageColor];
+  
   return [self pr_popToRootViewControllerAnimated:animated];
 }
 
 - (void)pr_setViewControllers:(NSArray<UIViewController *> *)viewControllers animated:(BOOL)animated
 {
-  UIViewController *disappearingViewController = self.viewControllers.lastObject;
-  if (animated && disappearingViewController && ![disappearingViewController isEqual:viewControllers.lastObject]) {
-    [disappearingViewController addTransitionNavigationBarIfNeeded];
-    if (disappearingViewController.transitionNavigationBar) {
-      disappearingViewController.prefersNavigationBarBackgroundViewHidden = YES;
-    }
-  }
   [self pr_setViewControllers:viewControllers animated:animated];
 }
 
-- (UIViewController *)transitionContextToViewController {
-  return objc_getAssociatedWeakObject(self, _cmd);
+#pragma mark - UINavigationBar Delegate
+
+- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item
+{
+  UIViewController *topVC = self.topViewController;
+  id <UIViewControllerTransitionCoordinator>coor = topVC.transitionCoordinator;
+  if (topVC && coor && coor.initiallyInteractive) {
+    __weak typeof(self) weakSelf = self;
+    if ([[UIDevice currentDevice].systemName integerValue] >= 10.0) {
+      [coor notifyWhenInteractionChangesUsingBlock:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf dealInteractionChanges:context];
+      }];
+    }else{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+      [coor notifyWhenInteractionEndsUsingBlock:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf dealInteractionChanges:context];
+      }];
+#pragma clang diagnostic pop
+      return YES;
+    }
+  }
+  
+  NSInteger itemCount = navigationBar.items.count;
+  NSInteger n = self.viewControllers.count >= itemCount ? 2 : 1;
+  UIViewController *popToVC = self.viewControllers[self.viewControllers.count - n];
+  
+  [self popToViewController:popToVC animated:YES];
+  return YES;
 }
 
-- (void)setTransitionContextToViewController:(UIViewController *)viewController {
-  objc_setAssociatedWeakObject(self, @selector(transitionContextToViewController), viewController);
+#pragma mark - dealInteractionChanges
+
+- (void)dealInteractionChanges:(id<UIViewControllerTransitionCoordinatorContext>)context {
+  
+  __weak typeof(self) weakSelf = self;
+  void(^animation)(BOOL from,id<UIViewControllerTransitionCoordinatorContext> ctx) = ^(BOOL from,id<UIViewControllerTransitionCoordinatorContext> ctx){
+    NSTimeInterval duration = 0;
+    UIViewController *showVC = nil;
+    if (from) {
+      duration = [ctx transitionDuration] * (double)[ctx percentComplete];
+      showVC = [context viewControllerForKey:UITransitionContextFromViewControllerKey];
+    }else{
+      duration = [ctx transitionDuration] * (double)(1 - [ctx percentComplete]);
+      showVC = [context viewControllerForKey:UITransitionContextToViewControllerKey];
+    }
+    
+    [UIView animateWithDuration:duration animations:^{
+      __strong typeof(self) strongSelf = weakSelf;
+      [strongSelf setNeedsStatusBarUpdateForStyle:showVC.statusBarStyle];
+      [strongSelf setNeedsNavigationBarUpdateForTintColor:showVC.navBarTintColor];
+      [strongSelf setNeedsNavigationBarUpdateForBarTintColor:showVC.navBarBarTintColor];
+      [strongSelf setNeedsNavigationBarUpdateForBarBackgroundAlpha:showVC.navBarBackgroundAlpha];
+      [strongSelf setNeedsNavigationBarUpdateForShadowImageColor:showVC.navBarShadowImageColor];
+    }];
+  };
+  
+  if ([context isCancelled]) {
+    animation(YES,context);
+  } else {
+    animation(NO,context);
+  }
+}
+
+- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPushItem:(UINavigationItem *)item
+{
+  [self setNeedsStatusBarUpdateForStyle:self.topViewController.statusBarStyle];
+  [self setNeedsNavigationBarUpdateForTintColor:self.topViewController.navBarTintColor];
+  [self setNeedsNavigationBarUpdateForBarTintColor:self.topViewController.navBarBarTintColor];
+  [self setNeedsNavigationBarUpdateForBarBackgroundAlpha:self.topViewController.navBarBackgroundAlpha];
+  [self setNeedsNavigationBarUpdateForShadowImageColor:self.topViewController.navBarShadowImageColor];
+  return YES;
+}
+
+#pragma mark -
+
+- (void)setNeedsNavigationBarUpdateForShadowImageColor:(UIColor *)color
+{
+  [self.navigationBar pr_setShadowImageColor:color];
+}
+- (void)setNeedsNavigationBarUpdateForBarTintColor:(UIColor *)color
+{
+  [self.navigationBar pr_setBackgroundColor:color];
+}
+- (void)setNeedsNavigationBarUpdateForBarBackgroundAlpha:(CGFloat)alpha
+{
+  [self.navigationBar pr_setBackgroundAlpha:alpha];
+}
+- (void)setNeedsNavigationBarUpdateForTintColor:(UIColor *)color
+{
+  [self.navigationBar setTintColor:color];
+}
+- (void)setNeedsStatusBarUpdateForStyle:(UIStatusBarStyle)style{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+  [[UIApplication sharedApplication] setStatusBarStyle:style animated:YES];
+#pragma clang diagnostic pop
 }
 
 @end
   
 @implementation UIViewController (Transition)
 
-static char kNavBaHiddenKey;
-static char kNavBaHiddenAnimationKey;
 static char kNavBarShadowImageColorKey;
 static char kNavBarBarTintColorKey;
 static char kNavBarBackgroundAlphaKey;
 static char kNavBarTintColorKey;
 static char kStatusBarStyleKey;
-  
-- (BOOL)navBarHidden
-{
-  id hidden = objc_getAssociatedObject(self, &kNavBaHiddenKey);
-  return (hidden != nil) ? [hidden boolValue] : [UINavigationBar defaultNavBarHidden];
-}
-- (BOOL)navBarHiddenAnimation
-{
-  id animation = objc_getAssociatedObject(self, &kNavBaHiddenAnimationKey);
-  return (animation != nil) ? [animation boolValue] : NO;
-}
-- (void)setNavBarHidden:(BOOL)hidden animation:(BOOL)animation
-{
-  objc_setAssociatedObject(self, &kNavBaHiddenKey, @(hidden), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  objc_setAssociatedObject(self, &kNavBaHiddenAnimationKey, @(animation), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self setNeedsNavigationBarUpdateForHidden:hidden animation:animation];
-}
 
 - (UIColor *)navBarShadowImageColor
 {
@@ -493,7 +510,7 @@ static char kStatusBarStyleKey;
 - (void)setNavBarShadowImageColor:(UIColor *)color
 {
   objc_setAssociatedObject(self, &kNavBarShadowImageColorKey, color, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self setNeedsNavigationBarUpdateForShadowImageColor:color real:YES];
+  [self.navigationController setNeedsNavigationBarUpdateForShadowImageColor:color];
 }
 
 - (UIColor *)navBarBarTintColor
@@ -504,19 +521,18 @@ static char kStatusBarStyleKey;
 - (void)setNavBarBarTintColor:(UIColor *)color
 {
   objc_setAssociatedObject(self, &kNavBarBarTintColorKey, color, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self setNeedsNavigationBarUpdateForBarTintColor:color real:YES];
+  [self.navigationController setNeedsNavigationBarUpdateForBarTintColor:color];
 }
 
 - (CGFloat)navBarBackgroundAlpha
 {
   id barBackgroundAlpha = objc_getAssociatedObject(self, &kNavBarBackgroundAlphaKey);
   return (barBackgroundAlpha != nil) ? [barBackgroundAlpha floatValue] : [UINavigationBar defaultNavBarBackgroundAlpha];
-  
 }
 - (void)setNavBarBackgroundAlpha:(CGFloat)alpha
 {
   objc_setAssociatedObject(self, &kNavBarBackgroundAlphaKey, @(alpha), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self setNeedsNavigationBarUpdateForBarBackgroundAlpha:alpha real:YES];
+  [self.navigationController setNeedsNavigationBarUpdateForBarBackgroundAlpha:alpha];
 }
   
 - (UIColor *)navBarTintColor
@@ -527,13 +543,13 @@ static char kStatusBarStyleKey;
 - (void)setNavBarTintColor:(UIColor *)color
 {
   objc_setAssociatedObject(self, &kNavBarTintColorKey, color, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self setNeedsNavigationBarUpdateForTintColor:color real:YES];
+  [self.navigationController setNeedsNavigationBarUpdateForTintColor:color];
 }
   
 - (void)setStatusBarStyle:(UIStatusBarStyle)style
 {
   objc_setAssociatedObject(self, &kStatusBarStyleKey, @(style), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self setNeedsStatusBarUpdateForStyle:style animation:YES];
+  [self.navigationController setNeedsStatusBarUpdateForStyle:style];
 }
 - (UIStatusBarStyle)statusBarStyle
 {
@@ -541,80 +557,12 @@ static char kStatusBarStyleKey;
   return (style != nil) ? [style integerValue] : [UINavigationBar defaultStatusBarStyle];
 }
 
-#pragma mark - 
-
-- (void)setNeedsNavigationBarUpdateForHidden:(BOOL)hidden animation:(BOOL)animation
-{
-  [self.navigationController setNavigationBarHidden:hidden animated:animation];
-}
-
-- (void)setNeedsNavigationBarUpdateForShadowImageColor:(UIColor *)color real:(BOOL)real
-{
-  if (real) {
-    [self.navigationController.navigationBar pr_setShadowImageColor:color];
-  }else{
-    if (self.transitionNavigationBar) {
-      [self.transitionNavigationBar pr_setShadowImageColor:color];
-    }else{
-      [self.navigationController.navigationBar pr_setShadowImageColor:color];
-    }
-  }
-}
-- (void)setNeedsNavigationBarUpdateForBarTintColor:(UIColor *)color real:(BOOL)real
-{
-  if (real) {
-    [self.navigationController.navigationBar pr_setBackgroundColor:color];
-  }else{
-    if (self.transitionNavigationBar) {
-      [self.transitionNavigationBar pr_setBackgroundColor:color];
-    }else{
-      [self.navigationController.navigationBar pr_setBackgroundColor:color];
-    }
-  }
-}
-- (void)setNeedsNavigationBarUpdateForBarBackgroundAlpha:(CGFloat)alpha real:(BOOL)real
-{
-  if (real) {
-    [self.navigationController.navigationBar pr_setBackgroundAlpha:alpha];
-  }else{
-    if (self.transitionNavigationBar) {
-      [self.transitionNavigationBar pr_setBackgroundAlpha:alpha];
-    }else{
-      [self.navigationController.navigationBar pr_setBackgroundAlpha:alpha];
-    }
-  }
-}
-- (void)setNeedsNavigationBarUpdateForTintColor:(UIColor *)color real:(BOOL)real
-{
-  if (real) {
-    [self.navigationController.navigationBar setTintColor:color];
-  }else{
-    if (self.transitionNavigationBar) {
-      [self.transitionNavigationBar setTintColor:color];
-    }else{
-      [self.navigationController.navigationBar setTintColor:color];
-    }
-  }
-}
-- (void)setNeedsStatusBarUpdateForStyle:(UIStatusBarStyle)style animation:(BOOL)animation{
-  [[UIApplication sharedApplication] setStatusBarStyle:style animated:YES];
-}
+#pragma mark -
 
 + (void)load
 {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    _SwizzleMethod([self class],
-                    @selector(viewWillLayoutSubviews),
-                    @selector(pr_controller_viewDidLayoutSubviews));
-    
-    _SwizzleMethod([self class],
-                   @selector(viewDidAppear:),
-                   @selector(pr_viewDidAppear:));
-    
-    _SwizzleMethod([self class],
-                   @selector(viewWillAppear:),
-                   @selector(pr_viewWillAppear));
     
   });
 }
@@ -622,127 +570,6 @@ static char kStatusBarStyleKey;
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
   return [self statusBarStyle];
-}
-
-- (void)pr_controller_viewDidLayoutSubviews
-{
-  id<UIViewControllerTransitionCoordinator> tc = self.transitionCoordinator;
-  UIViewController *fromViewController = [tc viewControllerForKey:UITransitionContextFromViewControllerKey];
-  UIViewController *toViewController = [tc viewControllerForKey:UITransitionContextToViewControllerKey];
-  UIViewController *lastViewController = self.navigationController.viewControllers.lastObject;
-  
-  if (toViewController && [toViewController isEqual:lastViewController] && toViewController.transitionNavigationBar) {
-    [toViewController resizeTransitionNavigationBarFrame];
-  }
-  
-  if ([self isEqual:self.navigationController.viewControllers.lastObject] && [toViewController isEqual:self] && self.navigationController.transitionContextToViewController) {
-    if (self.navigationController.navigationBar.translucent) {
-      [tc containerView].backgroundColor = [self.navigationController containerViewBackgroundColor];
-    }
-    fromViewController.view.clipsToBounds = NO;
-    toViewController.view.clipsToBounds = NO;
-    if (!self.transitionNavigationBar) {
-      [self addTransitionNavigationBarIfNeeded];
-      
-      self.prefersNavigationBarBackgroundViewHidden = YES;
-    }
-    [self resizeTransitionNavigationBarFrame];
-  }
-  if (self.transitionNavigationBar) {
-    [self.view bringSubviewToFront:self.transitionNavigationBar];
-  }
-  [self pr_controller_viewDidLayoutSubviews];
-}
-
-- (void)pr_viewDidAppear:(BOOL)animated
-{
-  if (self.transitionNavigationBar) {
-    
-    [self setNeedsNavigationBarUpdateForTintColor:self.navBarTintColor real:YES];
-    [self setNeedsNavigationBarUpdateForBarTintColor:self.navBarBarTintColor real:YES];
-    [self setNeedsNavigationBarUpdateForShadowImageColor:self.navBarShadowImageColor real:YES];
-    [self setNeedsNavigationBarUpdateForBarBackgroundAlpha:self.navBarBackgroundAlpha real:YES];
-    
-    UIViewController *transitionViewController = self.navigationController.transitionContextToViewController;
-    if (!transitionViewController || [transitionViewController isEqual:self]) {
-      [self.transitionNavigationBar removeFromSuperview];
-      self.transitionNavigationBar = nil;
-      self.navigationController.transitionContextToViewController = nil;
-    }
-  }
-  self.prefersNavigationBarBackgroundViewHidden = NO;
-  [self pr_viewDidAppear:animated];
-}
-
-- (void)pr_viewWillAppear
-{
-  if (self.navigationController) {
-    [self setNavBarHidden:self.navBarHidden animation:[self navBarHiddenAnimation]];
-  }
-  [self setNeedsStatusBarUpdateForStyle:self.statusBarStyle animation:YES];
-  [self pr_viewWillAppear];
-}
-
-#pragma mark - 
-
-- (void)resizeTransitionNavigationBarFrame {
-  if (!self.view.window) {
-    return;
-  }
-  UIView *backgroundView = [self.navigationController.navigationBar valueForKey:@"_backgroundView"];
-  CGRect rect = [backgroundView.superview convertRect:backgroundView.frame toView:self.view];
-  if (self.transitionNavigationBar &&
-      (self.transitionNavigationBar.frame.size.width != rect.size.width ||
-       self.transitionNavigationBar.frame.size.height != rect.size.height)) {
-    self.transitionNavigationBar.frame = rect;
-  }
-  
-}
-
-- (void)addTransitionNavigationBarIfNeeded {
-  if (!self.isViewLoaded || !self.view.window) {
-    return;
-  }
-  if (!self.navigationController.navigationBar) {
-    return;
-  }
-  [self adjustScrollViewContentOffsetIfNeeded];
-  
-  UINavigationBar *bar = [[UINavigationBar alloc] init];
-  bar.barStyle = self.navigationController.navigationBar.barStyle;
-  if (bar.translucent != self.navigationController.navigationBar.translucent) {
-    bar.translucent = self.navigationController.navigationBar.translucent;
-  }
-  
-  [self.transitionNavigationBar removeFromSuperview];
-  self.transitionNavigationBar = bar;
-  [self resizeTransitionNavigationBarFrame];
-  if (!self.navigationController.navigationBarHidden && !self.navigationController.navigationBar.hidden && !self.navBarHidden) {
-    [self.view addSubview:self.transitionNavigationBar];
-    
-    [self setNeedsNavigationBarUpdateForTintColor:self.navBarTintColor real:NO];
-    [self setNeedsNavigationBarUpdateForBarTintColor:self.navBarBarTintColor real:NO];
-    [self setNeedsNavigationBarUpdateForShadowImageColor:self.navBarShadowImageColor real:NO];
-    [self setNeedsNavigationBarUpdateForBarBackgroundAlpha:self.navBarBackgroundAlpha real:NO];
-    
-  }
-}
-
-- (void)adjustScrollViewContentOffsetIfNeeded {
-  if ([self.view isKindOfClass:[UIScrollView class]]) {
-    UIScrollView *scrollView = (UIScrollView *)self.view;
-    const CGFloat topContentOffsetY = -scrollView.contentInset.top;
-    const CGFloat bottomContentOffsetY = scrollView.contentSize.height - (CGRectGetHeight(scrollView.bounds) - scrollView.contentInset.bottom);
-    
-    CGPoint adjustedContentOffset = scrollView.contentOffset;
-    if (adjustedContentOffset.y > bottomContentOffsetY) {
-      adjustedContentOffset.y = bottomContentOffsetY;
-    }
-    if (adjustedContentOffset.y < topContentOffsetY) {
-      adjustedContentOffset.y = topContentOffsetY;
-    }
-    [scrollView setContentOffset:adjustedContentOffset animated:NO];
-  }
 }
 
 #pragma mark - porperty
@@ -758,24 +585,6 @@ static char kStatusBarStyleKey;
                            @selector(interactivePopDisabled),
                            @(disabled),
                            OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UINavigationBar *)transitionNavigationBar {
-  return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setTransitionNavigationBar:(UINavigationBar *)navigationBar {
-  objc_setAssociatedObject(self, @selector(transitionNavigationBar), navigationBar, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)prefersNavigationBarBackgroundViewHidden {
-  return [objc_getAssociatedObject(self, _cmd) boolValue];
-}
-
-- (void)setPrefersNavigationBarBackgroundViewHidden:(BOOL)hidden {
-  [[self.navigationController.navigationBar valueForKey:@"_backgroundView"]
-   setHidden:hidden];
-  objc_setAssociatedObject(self, @selector(prefersNavigationBarBackgroundViewHidden), @(hidden), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

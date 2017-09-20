@@ -46,8 +46,10 @@ extern NSString *const YGBBLESocketErrorKey;
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)initWithUUID:(NSString *)UUID channel:(NSString *)channel;
 
-- (BOOL)sendData:(nullable NSData *)data error:(NSError **)error;
-- (BOOL)sendDataNoCopy:(nullable NSData *)data error:(NSError **)error;
+- (void)sendData:(nullable NSData *)data characteristic:(CBCharacteristic *)characteristic error:(NSError **)error;
+- (void)sendDataNoCopy:(nullable NSData *)data characteristic:(CBCharacteristic *)characteristic error:(NSError **)error;
+- (void)sendData:(nullable NSData *)data characteristicUUID:(NSString *)UUID error:(NSError **)error;
+- (void)sendDataNoCopy:(nullable NSData *)data characteristicUUID:(NSString *)UUID error:(NSError **)error;
 
 - (void)connect;
 - (void)disConnect;

@@ -42,9 +42,8 @@ static CBPeripheral *willConnectingPeripheral;
     assert(UUID);
     _UUID       = UUID;
     _channel    = channel == nil || channel.length == 0 ? @"YGB.BANGBANGBNAG.CN" : channel;
-    _workQueue  = /**dispatch_queue_create(NULL, DISPATCH_QUEUE_SERIAL)*/dispatch_get_main_queue();
+    _workQueue  = dispatch_queue_create((__bridge void *)self, DISPATCH_QUEUE_SERIAL);
     _littleBoy  = [BabyBluetooth shareBabyBluetooth];
-    [_littleBoy retrievePeripheralWithUUIDString:_UUID];
     _services   = [NSMutableDictionary dictionary];
     _characteristics = [NSMutableDictionary dictionary];
     NSDictionary *scanForPeripheralsWithOptions = @{CBCentralManagerScanOptionAllowDuplicatesKey:@YES};
@@ -67,10 +66,10 @@ static CBPeripheral *willConnectingPeripheral;
 {
   @weakify(self);
   
-  // Bluetooth readyState update
+  // 蓝牙状态改变
   [_littleBoy setBlockOnCentralManagerDidUpdateState:^(CBCentralManager *central) {
     @strongify(self);
-    if (central.state != CBManagerStatePoweredOn) {
+    if (self.readyState != CBManagerStatePoweredOn) {
       self -> _peripheral = nil;
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(readyStateUpdate:socket:)]) {
@@ -78,9 +77,20 @@ static CBPeripheral *willConnectingPeripheral;
     }
   }];
   
-  // Bluetooth RSSI update
-  [_littleBoy setBlockOnDidReadRSSIAtChannel:_channel block:^(NSNumber *RSSI, NSError *error) {
+  // 当前连接设备的信号变化
+  [[[NSNotificationCenter defaultCenter] rac_addObserverForName:BabyNotificationAtDidReadRSSI
+                                                         object:nil] subscribeNext:^(NSDictionary *object) {
     @strongify(self);
+    CBPeripheral *peripheral = object[@"peripheral"];
+    NSNumber *RSSI = object[@"RSSI"];
+    NSError *error = object[@"error"];
+    if ([object[@"error"] isKindOfClass:[NSError class]]) {
+      return;
+    }
+    if (peripheral == nil) {
+      return;
+    }
+    YGB_CHECK_CURRENT_PERIPHERAL
     if (self -> _RSSI != nil || [self -> _RSSI integerValue] == [RSSI integerValue]) {
       self -> _RSSI = RSSI;
       return ;
@@ -92,7 +102,7 @@ static CBPeripheral *willConnectingPeripheral;
     }
   }];
   
-  // Bluetooth discover Peripherals
+  // 扫描到外设时的回调
   [_littleBoy setBlockOnDiscoverToPeripheralsAtChannel:_channel
                                                  block:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
                                                    @strongify(self);
@@ -114,24 +124,7 @@ static CBPeripheral *willConnectingPeripheral;
                                                    }
                                                  }];
   
-  // Bluetooth filter for discover Peripherals
-  [_littleBoy setFilterOnDiscoverPeripheralsAtChannel:_channel
-                                               filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-                                                 if (peripheralName.length >0) {
-                                                   return YES;
-                                                 }
-                                                 return NO;
-                                               }];
-  
-  [_littleBoy setFilterOnConnectToPeripheralsAtChannel:_channel
-                                                filter:^BOOL(NSString *peripheralName, NSDictionary *advertisementData, NSNumber *RSSI) {
-                                                  if (peripheralName.length >0) {
-                                                    return YES;
-                                                  }
-                                                  return NO;
-                                                }];
-  
-  // Bluetooth Connected to peripheral successed
+  // 成功连接到外设时的回调
   [_littleBoy setBlockOnConnectedAtChannel:_channel
                                      block:^(CBCentralManager *central, CBPeripheral *peripheral) {
                                        @strongify(self);
@@ -140,12 +133,12 @@ static CBPeripheral *willConnectingPeripheral;
                                        self -> _workState = YGBBLEWorkStateConnect;
                                        willConnectingPeripheral = nil;
                                        [self -> _littleBoy cancelScan];
-                                       if (self.delegate && [self.delegate respondsToSelector:@selector(onConnect:)]) {
-                                         [self.delegate onConnect:self -> _peripheral];
+                                       if (self.delegate && [self.delegate respondsToSelector:@selector(connectSucceed:)]) {
+                                         [self.delegate connectSucceed:self -> _peripheral];
                                        }
                                      }];
   
-  // Bluetooth Connected to peripheral failed
+  // 连接外设失败的回调
   [_littleBoy setBlockOnFailToConnectAtChannel:self.channel block:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
     @strongify(self);
     YGB_CHECK_CURRENT_PERIPHERAL
@@ -153,12 +146,12 @@ static CBPeripheral *willConnectingPeripheral;
     self -> _workState = YGBBLEWorkStateDisconnect;
     willConnectingPeripheral = nil;
     [self -> _littleBoy cancelScan];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onDisconnect:error:)]) {
-      [self.delegate onDisconnect:self -> _peripheral error:error];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(connectFailed:error:)]) {
+      [self.delegate connectFailed:self -> _peripheral error:error];
     }
   }];
   
-  // Bluetooth Disconnect for peripheral
+  // 外设失去连接时的回调
   [_littleBoy setBlockOnDisconnectAtChannel:self.channel block:^(CBCentralManager *central, CBPeripheral *peripheral, NSError *error) {
     @strongify(self);
     YGB_CHECK_CURRENT_PERIPHERAL
@@ -166,12 +159,12 @@ static CBPeripheral *willConnectingPeripheral;
     self -> _workState = YGBBLEWorkStateDisconnect;
     willConnectingPeripheral = nil;
     [self -> _littleBoy cancelScan];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(onDisconnect:error:)]) {
-      [self.delegate onDisconnect:self -> _peripheral error:error];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(disconnect:error:)]) {
+      [self.delegate disconnect:self -> _peripheral error:error];
     }
   }];
   
-  // Hert Beats
+  // 心跳
   BabyRhythm *rhythm = [[BabyRhythm alloc] init];
   [rhythm setBlockOnBeatsBreak:^(BabyRhythm *bry) {
     @strongify(self);
@@ -180,7 +173,7 @@ static CBPeripheral *willConnectingPeripheral;
   [rhythm setBlockOnBeatsOver:^(BabyRhythm *bry) {}];
   [rhythm beats];
   
-  // Bluetooth discover Peripheral Servers
+  // 发现外设服务时的回调
   [_littleBoy setBlockOnDiscoverServicesAtChannel:_channel block:^(CBPeripheral *peripheral, NSError *error) {
     @strongify(self);
     YGB_CHECK_CURRENT_PERIPHERAL
@@ -196,12 +189,16 @@ static CBPeripheral *willConnectingPeripheral;
     }
   }];
   
-  
-  //设置发现service的Characteristics的委托
+  // 发现外设服务特征的回调
   [_littleBoy setBlockOnDiscoverCharacteristicsAtChannel:_channel block:^(CBPeripheral *peripheral, CBService *service, NSError *error) {
     @strongify(self);
     YGB_CHECK_CURRENT_PERIPHERAL
-    NSLog(@"发现服务 %@ 的特征 %@",service.UUID,service.characteristics);
+    if (error) {
+      if (self.delegate && [self.delegate respondsToSelector:@selector(discoverCharacteristicsFailed:service:error:)]) {
+        [self.delegate discoverCharacteristicsFailed:peripheral service:service error:error];
+      }
+      return;
+    }
     for (CBCharacteristic *c in service.characteristics) {
       Lock();
       CBCharacteristic *characteristic = [self -> _characteristics objectForKey:c.UUID.UUIDString];
@@ -212,89 +209,150 @@ static CBPeripheral *willConnectingPeripheral;
         Unlock();
       }
     }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(discoverCharacteristicsSucceed:peripheral:service:)]) {
+      [self.delegate discoverCharacteristicsSucceed:self -> _characteristics peripheral:peripheral service:service];
+    }
   }];
   
-  //设置读取characteristics的委托
+  // 读取特征值的回调
   [_littleBoy setBlockOnReadValueForCharacteristicAtChannel:_channel block:^(CBPeripheral *peripheral, CBCharacteristic *characteristics, NSError *error) {
     @strongify(self);
     YGB_CHECK_CURRENT_PERIPHERAL
-    NSLog(@"读取服务 %@ 的特征 %@ 的值 %@",characteristics.service.UUID,characteristics.UUID,characteristics.value);
+    if (error) {
+      if (self.delegate && [self.delegate respondsToSelector:@selector(receiveDataFailed:peripheral:error:)]) {
+        [self.delegate receiveDataFailed:characteristics peripheral:peripheral error:error];
+      }
+      return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(receiveDataSucceed:peripheral:value:)]) {
+      [self.delegate receiveDataSucceed:characteristics peripheral:peripheral value:characteristics.value];
+    }
+
   }];
   
-  //设置发现characteristics的descriptors的委托
+  /**
+  // 设置发现特征的描述的回调
   [_littleBoy setBlockOnDiscoverDescriptorsForCharacteristicAtChannel:_channel block:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
     @strongify(self);
     YGB_CHECK_CURRENT_PERIPHERAL
     NSLog(@"发现服务 %@ 的特征 %@ 的描述符 %@",characteristic.service.UUID,characteristic.UUID,characteristic.descriptors);
   }];
   
-  //设置读取Descriptor的委托
+  // 读取描述的回调
   [_littleBoy setBlockOnReadValueForDescriptorsAtChannel:_channel block:^(CBPeripheral *peripheral, CBDescriptor *descriptor, NSError *error) {
     @strongify(self);
     YGB_CHECK_CURRENT_PERIPHERAL
     NSLog(@"读取服务 %@ 的特征 %@ 的描述符 %@ 的值 %@",descriptor.characteristic.service.UUID,descriptor.characteristic.UUID, descriptor.UUID,descriptor.value);
   }];
- 
+  */
   
 }
 
-- (BOOL)sendData:(nullable NSData *)data error:(NSError **)error
+- (void)sendData:(nullable NSData *)data characteristicUUID:(NSString *)UUID error:(NSError **)error
 {
-  data = [data copy];
-  return [self sendDataNoCopy:data error:error];
+  return [self sendData:data characteristic:UUID==nil||UUID.length<=0 ? nil : _characteristics[UUID] error:error];
 }
 
-- (BOOL)sendDataNoCopy:(nullable NSData *)data error:(NSError **)error
+- (void)sendDataNoCopy:(nullable NSData *)data characteristicUUID:(NSString *)UUID error:(NSError **)error
 {
-  if (self.readyState != YGBBLEReadyStateOpen) {
-    NSString *message = @"Invalid State: Cannot call `sendDataNoCopy:error:` until connection is open.";
+  return [self sendDataNoCopy:data characteristic:UUID==nil||UUID.length<=0 ? nil : _characteristics[UUID] error:error];
+}
+
+- (void)sendData:(nullable NSData *)data characteristic:(CBCharacteristic *)characteristic error:(NSError **)error
+{
+  if (data == nil) {
+    NSString *message = @"特征不能为空";
     if (error) {
-      *error = YGBErrorWithCodeDescription(2134, message);
+      *error = YGBErrorWithCodeDescription(YGBErrorCodeCharacteristicNill, message);
     }
+    [self errorWithCode:YGBErrorCodeCharacteristicNill reason:message];
     YGBDebugLog(message);
-    return NO;
+    return;
+  }
+  
+  if (data == nil) {
+    NSString *message = @"数据包不能为空";
+    if (error) {
+      *error = YGBErrorWithCodeDescription(YGBErrorCodeDataEmpty, message);
+    }
+    [self errorWithCode:YGBErrorCodeDataEmpty reason:message];
+    YGBDebugLog(message);
+    return;
+  }
+  data = [data copy];
+  return [self sendDataNoCopy:data characteristic:characteristic error:error];
+}
+
+- (void)sendDataNoCopy:(nullable NSData *)data characteristic:(CBCharacteristic *)characteristic error:(NSError **)error;
+{
+  if (data == nil) {
+    NSString *message = @"特征不能为空";
+    if (error) {
+      *error = YGBErrorWithCodeDescription(YGBErrorCodeCharacteristicNill, message);
+    }
+    [self errorWithCode:YGBErrorCodeCharacteristicNill reason:message];
+    YGBDebugLog(message);
+    return;
+  }
+  
+  if (data == nil) {
+    NSString *message = @"数据包不能为空";
+    if (error) {
+      *error = YGBErrorWithCodeDescription(YGBErrorCodeDataEmpty, message);
+    }
+    [self errorWithCode:YGBErrorCodeDataEmpty reason:message];
+    YGBDebugLog(message);
+    return;
+  }
+  
+  if (self.readyState != YGBBLEReadyStateOpen) {
+    NSString *message = @"蓝牙未打开";
+    if (error) {
+      *error = YGBErrorWithCodeDescription(YGBErrorCodeBLEClosed, message);
+    }
+    [self errorWithCode:YGBErrorCodeBLEClosed reason:message];
+    YGBDebugLog(message);
+    return;
   }
   
   if (self.workState == YGBBLEWorkStateDisconnect) {
-    NSString *message = @"Invalid State: Cannot call `sendDataNoCopy:error:` server is disconnect.";
+    NSString *message = @"外设未连接";
     if (error) {
-      *error = YGBErrorWithCodeDescription(2136, message);
+      *error = YGBErrorWithCodeDescription(YGBErrorCodePeripheralDisconnect, message);
     }
+    [self errorWithCode:YGBErrorCodePeripheralDisconnect reason:message];
     YGBDebugLog(message);
-    return NO;
+    return;
   }
   
   if (self.workState == YGBBLEWorkStateSending) {
-    NSString *message = @"Invalid State: Cannot call `sendDataNoCopy:error:` data is sending.";
+    NSString *message = @"当前有数据正在发送中";
     if (error) {
-      *error = YGBErrorWithCodeDescription(2138, message);
+      *error = YGBErrorWithCodeDescription(YGBErrorCodePeripheralBusy, message);
     }
+    [self errorWithCode:YGBErrorCodePeripheralBusy reason:message];
     YGBDebugLog(message);
-    return NO;
+    return;
   }
   
   if (_peripheral == nil) {
-    NSString *message = @"Invalid State: Cannot call `sendDataNoCopy:error:` Peripheral is nil.";
+    NSString *message = @"当前没有连接的外设";
     if (error) {
-      *error = YGBErrorWithCodeDescription(2140, message);
+      *error = YGBErrorWithCodeDescription(YGBErrorCodePeripheralNill, message);
     }
+    [self errorWithCode:YGBErrorCodePeripheralNill reason:message];
     YGBDebugLog(message);
-    return NO;
+    return;
   }
   
   dispatch_async(_workQueue, ^{
-    if (data) {
-      [self _sendData:data];
-    } else {
-      [self _sendData:nil];
-    }
+    [self _sendData:data];
   });
-  return YES;
 }
 
 - (void)_sendData:(NSData *)data
 {
-  //[self assertOnWorkQueue];
+  [self assertOnWorkQueue];
   
   if (!data) {
     return;
@@ -303,17 +361,15 @@ static CBPeripheral *willConnectingPeripheral;
   size_t dataLength = data.length;
   
   if (dataLength > 20) {
-    [self errorWithCode:YGBBLEStatusCodeTooBig reason:@"Message too big"];
+    [self errorWithCode:YGBErrorCodeDataTooBig reason:@"数据包过大"];
     return;
   }else if (dataLength == 0){
-    [self errorWithCode:YGBBLEStatusCodeEmpty reason:@"Message is empty"];
+    [self errorWithCode:YGBErrorCodeDataEmpty reason:@"数据包不能为空"];
     return;
   }
   
-  // send pocket
-  
   if (_peripheral == nil) {
-    [self errorWithCode:YGBBLEStatusCodePeripheralError reason:@"This peripheral is not BLE current Peripheral"];
+    [self errorWithCode:YGBErrorCodePeripheralNill reason:@"This peripheral is not BLE current Peripheral"];
     return;
   }
   
@@ -326,12 +382,16 @@ static CBPeripheral *willConnectingPeripheral;
 - (void)connect
 {
   if (self.readyState != YGBBLEReadyStateOpen) {
-    [self errorWithCode:YGBBLEStatusCodeClosed reason:@"Bluetooth is closed"];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(connectFailed:error:)]) {
+      [self.delegate connectFailed:nil error:YGBErrorWithCodeDescription(YGBErrorCodeBLEClosed, @"蓝牙处于关闭状态")];
+    }
     return;
   }
   
   if (self.UUID == nil && self.UUID.length == 0) {
-    [self errorWithCode:YGBBLEStatusCodeUUIDNull reason:@"UUID is empty"];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(connectFailed:error:)]) {
+      [self.delegate connectFailed:nil error:YGBErrorWithCodeDescription(YGBErrorCodeUUIDNill, @"UUID 不能为空")];
+    }
     return;
   }
   
@@ -351,7 +411,9 @@ static CBPeripheral *willConnectingPeripheral;
 
 - (void)errorWithCode:(NSInteger)code reason:(NSString *)reason
 {
-  
+  if (self.delegate && [self.delegate respondsToSelector:@selector(requestFailed:peripheral:)]) {
+    [self.delegate requestFailed:YGBErrorWithCodeDescription(code, reason) peripheral:_peripheral];
+  }
 }
 
 #pragma mark -

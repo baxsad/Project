@@ -114,8 +114,9 @@
   
   // UINavigationBar
   UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
+  navigationBarAppearance.translucent = YES;
   [navigationBarAppearance setBarTintColor:NavBarBarTintColor];
-  [navigationBarAppearance setBackgroundImage:NavBarBackgroundImage forBarMetrics:UIBarMetricsDefault];
+  //[navigationBarAppearance setBackgroundImage:NavBarBackgroundImage forBarMetrics:UIBarMetricsDefault];
   [navigationBarAppearance setShadowImage:[UIImage ui_imageWithColor:NavBarShadowImageColor size:CGSizeMake(1, PixelOne()) cornerRadius:0]];
   [navigationBarAppearance setTitleTextAttributes:@{NSFontAttributeName:NavBarTitleFont,NSForegroundColorAttributeName:NavBarTitleColor}];
   [navigationBarAppearance setTintColor:NavBarTintColor];
