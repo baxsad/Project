@@ -96,6 +96,16 @@ static char kDefaultNavBarBarTintColorKey;
 static char kDefaultNavBarTintColorKey;
 static char kDefaultNavBarBackgroundAlpha;
 static char kDefaultStatusBarStyle;
+static char kBarColorLayer;
+
++ (void)load {
+  if (self == [UINavigationBar self]) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+      
+    });
+  }
+}
 
 ///< Default NavBarShadowImageColor
 + (UIColor *)defaultNavBarShadowImageColor
@@ -167,6 +177,20 @@ static char kDefaultStatusBarStyle;
                            OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+///< colorLayer
+- (UIView *)colorLayer
+{
+  id layer = objc_getAssociatedObject(self, &kBarColorLayer);
+  return layer;
+}
+- (void)setColorLayer:(UIView *)layer
+{
+  objc_setAssociatedObject(self,
+                           &kBarColorLayer,
+                           layer,
+                           OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 #pragma mark - setter
 
 - (void)pr_setShadowImageColor:(UIColor *)color
@@ -178,40 +202,44 @@ static char kDefaultStatusBarStyle;
 
 - (void)pr_setBackgroundColor:(UIColor *)color
 {
-//  [self setBackgroundImage:[UIImage ui_imageWithColor:color
-//                                                 size:CGSizeMake(1, 1)
-//                                         cornerRadius:0]
-//             forBarMetrics:UIBarMetricsDefault];
-  [self setTintColor:color];
-  
+//  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
+//  UIView *subView = [barBackgroundView.subviews objectAtIndex:0];
+//  if (self.colorLayer == nil) {
+//    self.colorLayer = [UIView new];
+//    [barBackgroundView addSubview:self.colorLayer];
+//    @weakify(barBackgroundView);
+//    [self.colorLayer mas_makeConstraints:^(MASConstraintMaker *make) {
+//      @strongify(barBackgroundView);
+//      make.left.right.top.bottom.equalTo(barBackgroundView).offset(0);
+//    }];
+//  }
+//  self.colorLayer.backgroundColor = color;
+//  barBackgroundView.backgroundColor = [UIColor whiteColor];
+  [self setBackgroundImage:[UIImage ui_imageWithColor:color size:CGSizeMake(1, 1) cornerRadius:0] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)pr_setBackgroundAlpha:(CGFloat)alpha
 {
-  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
-  UIView *shadowView = [barBackgroundView valueForKey:@"_shadowView"];
-  if (shadowView) {
-    shadowView.alpha = alpha;
-  }
-  
-  if (!self.isTranslucent) {
-    barBackgroundView.alpha = alpha;
-    return;
-  }
-  
-  if (IOS10) {
-    UIView *backgroundEffectView = [barBackgroundView valueForKey:@"_backgroundEffectView"];
-    if (backgroundEffectView != nil && [self backgroundImageForBarMetrics:UIBarMetricsDefault] == nil) {
-      backgroundEffectView.alpha = alpha;
-    }
-  }
-  else{
-    UIView *daptiveBackdrop = [barBackgroundView valueForKey:@"_adaptiveBackdrop"];
-    UIView *backdropEffectView = [daptiveBackdrop valueForKey:@"_backdropEffectView"];
-    if (daptiveBackdrop != nil && backdropEffectView != nil ) {
-      backdropEffectView.alpha = alpha;
-    }
-  }
+//  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
+//  UIView *shadowView = [barBackgroundView valueForKey:@"_shadowView"];
+//  if (shadowView) {
+//    shadowView.alpha = alpha;
+//    shadowView.hidden = alpha == 0;
+//  }
+//  if (self.colorLayer == nil) {
+//    self.colorLayer = [UIView new];
+//    [barBackgroundView addSubview:self.colorLayer];
+//    @weakify(barBackgroundView);
+//    [self.colorLayer mas_makeConstraints:^(MASConstraintMaker *make) {
+//      @strongify(barBackgroundView);
+//      make.left.right.top.bottom.equalTo(barBackgroundView).offset(0);
+//    }];
+//  }
+//  self.colorLayer.alpha = alpha;
+//  UIImage *image = [self backgroundImageForBarMetrics:UIBarMetricsDefault];
+//  if (image = nil) {
+//    [];
+//  }
 }
 
 @end
@@ -561,12 +589,37 @@ static char kStatusBarStyleKey;
 
 + (void)load
 {
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    
-  });
+  if (self == [UIViewController self]) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+      _SwizzleMethod([self class],
+                     @selector(viewWillAppear:),
+                     @selector(pr_viewWillAppear:));
+      _SwizzleMethod([self class],
+                     @selector(viewDidLoad),
+                     @selector(pr_viewDidLoad));
+      _SwizzleMethod([self class],
+                     @selector(viewDidDisappear:),
+                     @selector(pr_viewDidDisappear:));
+    });
+  }
 }
-  
+
+- (void)pr_viewDidLoad
+{
+  [self pr_viewDidLoad];
+}
+
+- (void)pr_viewWillAppear:(BOOL)animated
+{
+  [self pr_viewWillAppear:animated];
+}
+
+- (void)pr_viewDidDisappear:(BOOL)animated
+{
+  [self pr_viewDidDisappear:animated];
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
   return [self statusBarStyle];

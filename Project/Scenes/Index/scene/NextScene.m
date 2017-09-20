@@ -8,6 +8,7 @@
 
 #import "NextScene.h"
 #import "UIImage+UIConfig.h"
+#import "YGBHomeScene.h"
 
 @interface NextScene ()
 
@@ -31,6 +32,8 @@
 - (void)action
 {
   //[self setNavBarHidden:!self.navBarHidden animation:YES];
+  YGBHomeScene *scene = [[YGBHomeScene alloc] init];
+  [self.navigationController pushViewController:scene animated:YES];
 }
   
 - (void)viewWillAppear:(BOOL)animated

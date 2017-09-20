@@ -58,13 +58,13 @@
                                                      size:CGSizeMake(1, 1)
                                              cornerRadius:0];
   self.navBarShadowImageColor = _UIColorMake(255.0,255.0,255.0,0.0);
-  self.navBarBarTintColor = _UIColorMake(0xFF,0xE4,0x01,1.0);
+  self.navBarBarTintColor = _UIColorMake(40,43,53,1.0);
   self.navBarTintColor = _UIColorMake(0x34,0x34,0x34,1.0);
   self.navBarTitleColor = _UIColorMake(0x34,0x34,0x34,1.0);
   self.navBarTitleFont = _UIFontMake(18);
   self.navBarSubTitleColor = _UIColorMake(0x97,0x97,0x97,1.0);
   self.navBarSubTitleFont = _UIFontMake(12);
-  self.navBarBackButtonTitlePositionAdjustment = UIOffsetMake(-500, -500);
+  self.navBarBackButtonTitlePositionAdjustment = UIOffsetMake(-500, 0);
   self.navBarBackButtonMarginLeft = 10;
   self.navBarBackIndicatorImage = [UIImage ui_imageWithShape:UIImageShapeNavBack
                                                         size:CGSizeMake(9, 16)
@@ -114,9 +114,8 @@
   
   // UINavigationBar
   UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
-  navigationBarAppearance.translucent = YES;
+  navigationBarAppearance.translucent = NO;
   [navigationBarAppearance setBarTintColor:NavBarBarTintColor];
-  //[navigationBarAppearance setBackgroundImage:NavBarBackgroundImage forBarMetrics:UIBarMetricsDefault];
   [navigationBarAppearance setShadowImage:[UIImage ui_imageWithColor:NavBarShadowImageColor size:CGSizeMake(1, PixelOne()) cornerRadius:0]];
   [navigationBarAppearance setTitleTextAttributes:@{NSFontAttributeName:NavBarTitleFont,NSForegroundColorAttributeName:NavBarTitleColor}];
   [navigationBarAppearance setTintColor:NavBarTintColor];
@@ -139,7 +138,7 @@
   UIImage *customBackIndicatorImage = NavBarBackIndicatorImage;
   if (customBackIndicatorImage && [UINavigationBar instancesRespondToSelector:@selector(setBackIndicatorImage:)]) {
     UINavigationBar *navBarAppearance = [UINavigationBar appearanceWhenContainedIn:[UINavigationController class], nil];
-    
+
     // 返回按钮的图片frame是和系统默认的返回图片的大小一致的（13, 21），所以用自定义返回箭头时要保证图片大小与系统的箭头大小一样，否则无法对齐
     CGSize systemBackIndicatorImageSize = CGSizeMake(13, 21); // 在iOS9上实际测量得到
     CGSize customBackIndicatorImageSize = customBackIndicatorImage.size;
@@ -150,7 +149,7 @@
                                                                                                                imageExtensionVerticalFloat,
                                                                                                                systemBackIndicatorImageSize.width - customBackIndicatorImageSize.width)];
     }
-    
+
     navBarAppearance.backIndicatorImage = [customBackIndicatorImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     navBarAppearance.backIndicatorTransitionMaskImage = navBarAppearance.backIndicatorImage;
   }

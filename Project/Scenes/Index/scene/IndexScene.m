@@ -62,6 +62,7 @@
 - (void)action2
 {
   //[self setNavBarHidden:!self.navBarHidden animation:YES];
+  self.view.backgroundColor = UIColorGreen;
 }
 
 - (void)action3
