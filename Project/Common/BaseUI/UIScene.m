@@ -22,12 +22,5 @@
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
 }
-  
-#pragma mark - getter
-  
-- (UINavigationScene *)navigationScene
-{
-  return (UINavigationScene *)self.navigationController;
-}
 
 @end

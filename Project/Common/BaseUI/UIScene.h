@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UINavigationBarTransition.h"
 
 @class UINavigationScene;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIScene : UIViewController
-@property(nullable, nonatomic,readonly,strong) UINavigationScene *navigationScene;
 @end
 
 NS_ASSUME_NONNULL_END
