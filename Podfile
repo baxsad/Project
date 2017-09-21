@@ -8,4 +8,5 @@ target ‘Project’ do
     pod 'pop', '~> 1.0.9'
     pod 'KVOController'
     pod 'BabyBluetooth'
+    pod 'Bugly'
 end

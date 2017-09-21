@@ -15,5 +15,6 @@
 #import "UINavigationBarTransition.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <Masonry/Masonry.h>
+#import <Bugly/Bugly.h>
 
 #endif /* PH_pch */

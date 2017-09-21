@@ -15,6 +15,7 @@ PODS:
   - AFNetworking/UIKit (3.0.4):
     - AFNetworking/NSURLSession
   - BabyBluetooth (0.7.0)
+  - Bugly (2.4.8)
   - KVOController (1.2.0)
   - Masonry (0.6.4)
   - OpenUDID (1.0.0)
@@ -30,6 +31,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 3.0.4)
   - BabyBluetooth
+  - Bugly
   - KVOController
   - Masonry (~> 0.6.1)
   - OpenUDID
@@ -39,12 +41,13 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
   BabyBluetooth: d50758aecf24d4a0ab9271d69f0f116d6bee51c9
+  Bugly: da3c02408c14838d498429320545a8e439392978
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
   OpenUDID: e7cb6984c7304906ad20f3a36bf087b025896b6b
   pop: 82ca6b068ce9278fd350fd9dd09482a0ce9492e6
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
 
-PODFILE CHECKSUM: 7614c7573962e09f5c38af9e3bf8c2e64d430e01
+PODFILE CHECKSUM: 1ad50ad73bfe3dba076bfc815e0dfa4bc55edc32
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.3.1

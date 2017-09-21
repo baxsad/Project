@@ -62,7 +62,7 @@
   self.navBarBarTintColor = _UIColorMake(40,43,53,1.0);
   self.navBarTintColor = _UIColorMake(244,244,244,1.0);
   self.navBarTitleColor = _UIColorMake(0xff,0xff,0xff,1.0);
-  self.navBarTitleFont = _UIFontMediumMake(17);
+  self.navBarTitleFont = _UIFontMediumMake(18);
   self.navBarSubTitleColor = _UIColorMake(0x97,0x97,0x97,1.0);
   self.navBarSubTitleFont = _UIFontMake(12);
   self.navBarBackButtonTitlePositionAdjustment = UIOffsetMake(0, 0);

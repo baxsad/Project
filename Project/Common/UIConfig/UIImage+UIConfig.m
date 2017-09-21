@@ -17,19 +17,19 @@
   CGFloat lineWidth = 0;
   switch (shape) {
     case UIImageShapeNavBack:
-    lineWidth = 3*PixelOne();
+    lineWidth = 2;
     break;
     case UIImageShapeDisclosureIndicator:
-    lineWidth = 3*PixelOne();
+    lineWidth = 2;
     break;
     case UIImageShapeCheckmark:
-    lineWidth = 3*PixelOne();
+    lineWidth = 2;
     break;
     case UIImageShapeNavClose:
-    lineWidth = 3*PixelOne();
+    lineWidth = 2;
     break;
     case UIImageShapeNavAdd:
-    lineWidth = 3*PixelOne();
+    lineWidth = 2;
     break;
     default:
     break;
