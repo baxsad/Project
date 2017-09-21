@@ -13,6 +13,7 @@
 
 #define _UIColorMake(r, g, b, a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
 #define _UIFontMake(size) [UIFont systemFontOfSize:size]
+#define _UIFontMediumMake(fontSize) [UIFont fontWithName:[[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0 ? @"PingFangSC-Medium" : @"HelveticaNeue-Medium" size:fontSize]
 
 @implementation UIConfigurationManager
 
@@ -59,12 +60,12 @@
                                              cornerRadius:0];
   self.navBarShadowImageColor = _UIColorMake(255.0,255.0,255.0,0.0);
   self.navBarBarTintColor = _UIColorMake(40,43,53,1.0);
-  self.navBarTintColor = _UIColorMake(0x34,0x34,0x34,1.0);
-  self.navBarTitleColor = _UIColorMake(0x34,0x34,0x34,1.0);
-  self.navBarTitleFont = _UIFontMake(18);
+  self.navBarTintColor = _UIColorMake(244,244,244,1.0);
+  self.navBarTitleColor = _UIColorMake(0xff,0xff,0xff,1.0);
+  self.navBarTitleFont = _UIFontMediumMake(17);
   self.navBarSubTitleColor = _UIColorMake(0x97,0x97,0x97,1.0);
   self.navBarSubTitleFont = _UIFontMake(12);
-  self.navBarBackButtonTitlePositionAdjustment = UIOffsetMake(-500, 0);
+  self.navBarBackButtonTitlePositionAdjustment = UIOffsetMake(0, 0);
   self.navBarBackButtonMarginLeft = 10;
   self.navBarBackIndicatorImage = [UIImage ui_imageWithShape:UIImageShapeNavBack
                                                         size:CGSizeMake(9, 16)
@@ -75,16 +76,16 @@
   self.navBarAddButtonImage = [UIImage ui_imageWithShape:UIImageShapeNavAdd
                                                     size:CGSizeMake(14, 14)
                                                tintColor:self.navBarTintColor];
-  self.navBarButtonItemNormallColor = _UIColorMake(76.0, 173.0, 255.0, 1);
-  self.navBarButtonItemHighlightedColor = _UIColorMake(76.0, 173.0, 255.0, self.buttonHighlightedAlpha);
-  self.navBarButtonItemDisabledColor = _UIColorMake(76.0, 173.0, 255.0, self.buttonDisabledAlpha);
+  self.navBarButtonItemNormallColor = _UIColorMake(255.0,255.0,255.0,0.0);
+  self.navBarButtonItemHighlightedColor = _UIColorMake(255.0,255.0,255.0,0.0);
+  self.navBarButtonItemDisabledColor = _UIColorMake(255.0,255.0,255.0,0.0);
   
   self.statusBarStyle = UIStatusBarStyleLightContent;
   
-  self.tabBarBackgroundImage = [UIImage ui_imageWithColor:_UIColorMake(0xFF, 0xE4, 0X01, 1.0)
+  self.tabBarBarTintColor = _UIColorMake(40,43,53,1.0);
+  self.tabBarBackgroundImage = [UIImage ui_imageWithColor:self.tabBarBarTintColor
                                                      size:CGSizeMake(1, 1)
                                              cornerRadius:0];
-  self.tabBarBarTintColor = _UIColorMake(0xFF,0xE4,0x01,1.0);
   self.tabBarShadowImageColor = _UIColorMake(255.0,255.0,255.0,0.0);
   self.tabBarTintColor = _UIColorMake(0xFF,0xE4,0x01,1.0);
   self.tabBarItemTitleColor = _UIColorMake(0x27,0x27,0x27,1.0);
@@ -114,7 +115,7 @@
   
   // UINavigationBar
   UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
-  navigationBarAppearance.translucent = NO;
+  navigationBarAppearance.translucent = YES;
   [navigationBarAppearance setBarTintColor:NavBarBarTintColor];
   [navigationBarAppearance setShadowImage:[UIImage ui_imageWithColor:NavBarShadowImageColor size:CGSizeMake(1, PixelOne()) cornerRadius:0]];
   [navigationBarAppearance setTitleTextAttributes:@{NSFontAttributeName:NavBarTitleFont,NSForegroundColorAttributeName:NavBarTitleColor}];
@@ -155,9 +156,9 @@
   }
   
   // 更改全局返回按钮的文字间距
-  UIBarButtonItem *backBarButtonItem = [UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil];
-  [backBarButtonItem setBackButtonTitlePositionAdjustment:NavBarBackButtonTitlePositionAdjustment
-                                            forBarMetrics:UIBarMetricsDefault];
+//  UIBarButtonItem *backBarButtonItem = [UIBarButtonItem appearanceWhenContainedIn:[UINavigationController class], nil];
+//  [backBarButtonItem setBackButtonTitlePositionAdjustment:NavBarBackButtonTitlePositionAdjustment
+//                                            forBarMetrics:UIBarMetricsDefault];
 }
   
 #pragma clang diagnostic pop

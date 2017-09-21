@@ -18,6 +18,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+  self.navigationItem.title = @"熒光棒";
   
   UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 100, 100, 50)];
   btn.backgroundColor = UIColorRed;
@@ -42,9 +43,8 @@
   [btn3 addTarget:self action:@selector(action3) forControlEvents:UIControlEventTouchUpInside];
   [self.view addSubview:btn3];
   
-  self.navBarBarTintColor = UIColorRed;
-  self.navBarBackgroundAlpha = 1;
-  self.statusBarStyle = UIStatusBarStyleDefault;
+  //self.navBarBarTintColor = UIColorRed;
+  //self.navBarBackgroundAlpha = 1;
   
 }
 

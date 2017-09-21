@@ -45,14 +45,14 @@
 
 - (void)setNavBarShadowImageColor:(UIColor *)color;
 - (UIColor *)navBarShadowImageColor;
-  
+
 - (void)setNavBarBarTintColor:(UIColor *)color;
 - (UIColor *)navBarBarTintColor;
-  
+
 - (void)setNavBarTintColor:(UIColor *)color;
 - (UIColor *)navBarTintColor;
   
-- (void)setNavBarBackgroundAlpha:(CGFloat)alpha;
+- (void)setNavBarBackgroundAlpha:(CGFloat)alpha needUpdate:(BOOL)need;
 - (CGFloat)navBarBackgroundAlpha;
   
 - (void)setStatusBarStyle:(UIStatusBarStyle)style;

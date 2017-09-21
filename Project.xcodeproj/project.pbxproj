@@ -29,6 +29,7 @@
 		E52C99451F53CE79007D8408 /* YGBBLESocket.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C993C1F53CE79007D8408 /* YGBBLESocket.m */; };
 		E52C99461F53CE79007D8408 /* YGBError.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C99401F53CE79007D8408 /* YGBError.m */; };
 		E52C99471F53CE79007D8408 /* YGBPacket.mm in Sources */ = {isa = PBXBuildFile; fileRef = E52C99421F53CE79007D8408 /* YGBPacket.mm */; };
+		E53D636D1F737EDE0023FE1D /* UITableScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E53D636C1F737EDE0023FE1D /* UITableScene.m */; };
 		E5654D491F6B7782002DAA18 /* UIResponder+ResponderChain.m in Sources */ = {isa = PBXBuildFile; fileRef = E5654D481F6B7782002DAA18 /* UIResponder+ResponderChain.m */; };
 		E571DCA71F57A9D9005511A3 /* NSGlobalTraking.m in Sources */ = {isa = PBXBuildFile; fileRef = E571DCA61F57A9D9005511A3 /* NSGlobalTraking.m */; };
 		E571DCAB1F57B2DB005511A3 /* NSGlobalDeviceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E571DCAA1F57B2DB005511A3 /* NSGlobalDeviceInfo.m */; };
@@ -108,6 +109,8 @@
 		E52C99411F53CE79007D8408 /* YGBPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGBPacket.h; sourceTree = "<group>"; };
 		E52C99421F53CE79007D8408 /* YGBPacket.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YGBPacket.mm; sourceTree = "<group>"; };
 		E52C99431F53CE79007D8408 /* YGBPot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YGBPot.h; sourceTree = "<group>"; };
+		E53D636B1F737EDE0023FE1D /* UITableScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UITableScene.h; sourceTree = "<group>"; };
+		E53D636C1F737EDE0023FE1D /* UITableScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UITableScene.m; sourceTree = "<group>"; };
 		E5654D471F6B7782002DAA18 /* UIResponder+ResponderChain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIResponder+ResponderChain.h"; sourceTree = "<group>"; };
 		E5654D481F6B7782002DAA18 /* UIResponder+ResponderChain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+ResponderChain.m"; sourceTree = "<group>"; };
 		E5654D4A1F6B78F1002DAA18 /* Responder.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Responder.md; sourceTree = "<group>"; };
@@ -259,6 +262,8 @@
 				E52C99181F53CD0C007D8408 /* UIScene.m */,
 				E52C99191F53CD0C007D8408 /* UITabBarScene.h */,
 				E52C991A1F53CD0C007D8408 /* UITabBarScene.m */,
+				E53D636B1F737EDE0023FE1D /* UITableScene.h */,
+				E53D636C1F737EDE0023FE1D /* UITableScene.m */,
 			);
 			path = BaseUI;
 			sourceTree = "<group>";
@@ -642,6 +647,7 @@
 				E5A96B211F58FC0900266055 /* TestView.m in Sources */,
 				E571DCA71F57A9D9005511A3 /* NSGlobalTraking.m in Sources */,
 				E52C992E1F53CD0C007D8408 /* UINavigationScene.m in Sources */,
+				E53D636D1F737EDE0023FE1D /* UITableScene.m in Sources */,
 				E52C99441F53CE79007D8408 /* NSData+Resolve.m in Sources */,
 				E52C98E01F53CCA1007D8408 /* main.m in Sources */,
 				E5EE377C1F6BE9C900B179F5 /* SCModel.m in Sources */,
@@ -802,9 +808,11 @@
 				DEVELOPMENT_TEAM = 7524R5UJ2G;
 				GCC_PREFIX_HEADER = Project/PH.pch;
 				INFOPLIST_FILE = Project/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = code.com.rui.Project;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -816,9 +824,11 @@
 				DEVELOPMENT_TEAM = 7524R5UJ2G;
 				GCC_PREFIX_HEADER = Project/PH.pch;
 				INFOPLIST_FILE = Project/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = code.com.rui.Project;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

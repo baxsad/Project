@@ -7,9 +7,10 @@
 //
 
 #import "YGBHomeScene.h"
+#import "UITableScene.h"
 
 @interface YGBHomeScene ()<UITableViewDelegate,UITableViewDataSource>
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableScene *tableView;
 @end
 
 @implementation YGBHomeScene
@@ -18,18 +19,19 @@
   [super viewDidLoad];
   //self.statusBarStyle = UIStatusBarStyleLightContent;
   //self.navBarBarTintColor = [UIColor blackColor];
-  self.navBarBackgroundAlpha = 1.0;
-  self.tableView = [[UITableView alloc] init];
+  [self setNavBarBackgroundAlpha:0 needUpdate:NO];
+  //[self setNavBarBarTintColor:UIColorYellow needUpdate:NO];
+  self.tableView = [[UITableScene alloc] init];
   self.tableView.delegate = self;
   self.tableView.dataSource = self;
   [self.view addSubview:self.tableView];
+  
   @weakify(self);
   [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
     @strongify(self);
     make.left.right.bottom.equalTo(self.view);
-    make.top.equalTo(self.view).offset(-64);
+    make.top.equalTo(self.view).offset(0);
   }];
-  
 }
 
 - (void)viewDidAppear:(BOOL)animated

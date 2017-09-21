@@ -102,7 +102,9 @@ static char kBarColorLayer;
   if (self == [UINavigationBar self]) {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-      
+      _SwizzleMethod([self class],
+                     @selector(layoutSubviews),
+                     @selector(pr_layoutSubviews));
     });
   }
 }
@@ -202,44 +204,116 @@ static char kBarColorLayer;
 
 - (void)pr_setBackgroundColor:(UIColor *)color
 {
-//  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
-//  UIView *subView = [barBackgroundView.subviews objectAtIndex:0];
-//  if (self.colorLayer == nil) {
-//    self.colorLayer = [UIView new];
-//    [barBackgroundView addSubview:self.colorLayer];
-//    @weakify(barBackgroundView);
-//    [self.colorLayer mas_makeConstraints:^(MASConstraintMaker *make) {
-//      @strongify(barBackgroundView);
-//      make.left.right.top.bottom.equalTo(barBackgroundView).offset(0);
-//    }];
-//  }
-//  self.colorLayer.backgroundColor = color;
-//  barBackgroundView.backgroundColor = [UIColor whiteColor];
-  [self setBackgroundImage:[UIImage ui_imageWithColor:color size:CGSizeMake(1, 1) cornerRadius:0] forBarMetrics:UIBarMetricsDefault];
+  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
+  if (self.colorLayer == nil) {
+    self.colorLayer = [UIView new];
+    [barBackgroundView addSubview:self.colorLayer];
+    @weakify(barBackgroundView);
+    [self.colorLayer mas_makeConstraints:^(MASConstraintMaker *make) {
+      @strongify(barBackgroundView);
+      make.left.right.top.bottom.equalTo(barBackgroundView).offset(0);
+    }];
+  }
+  self.colorLayer.backgroundColor = color;
+  barBackgroundView.backgroundColor = [UIColor clearColor];
+  [self setBarTintColor:[UIColor clearColor]];
+  
+  if (!self.isTranslucent) {
+    return;
+  }
+  
+  if (IOS10) {
+    UIView *backgroundEffectView = [barBackgroundView valueForKey:@"_backgroundEffectView"];
+    if (backgroundEffectView != nil && [self backgroundImageForBarMetrics:UIBarMetricsDefault] == nil) {
+      backgroundEffectView.alpha = 0;
+      backgroundEffectView.hidden = YES;
+    }
+  }
+  else{
+    UIView *daptiveBackdrop = [barBackgroundView valueForKey:@"_adaptiveBackdrop"];
+    UIView *backdropEffectView = [daptiveBackdrop valueForKey:@"_backdropEffectView"];
+    if (daptiveBackdrop != nil && backdropEffectView != nil ) {
+      backdropEffectView.alpha = 0;
+      backdropEffectView.hidden = YES;
+    }
+    for (UIView *view in barBackgroundView.subviews) {
+      if ([view isKindOfClass:NSClassFromString(@"_UIBackdropView")]) {
+        view.hidden = YES;
+      }
+    }
+  }
+  
 }
+
 
 - (void)pr_setBackgroundAlpha:(CGFloat)alpha
 {
-//  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
-//  UIView *shadowView = [barBackgroundView valueForKey:@"_shadowView"];
-//  if (shadowView) {
-//    shadowView.alpha = alpha;
-//    shadowView.hidden = alpha == 0;
-//  }
-//  if (self.colorLayer == nil) {
-//    self.colorLayer = [UIView new];
-//    [barBackgroundView addSubview:self.colorLayer];
-//    @weakify(barBackgroundView);
-//    [self.colorLayer mas_makeConstraints:^(MASConstraintMaker *make) {
-//      @strongify(barBackgroundView);
-//      make.left.right.top.bottom.equalTo(barBackgroundView).offset(0);
-//    }];
-//  }
-//  self.colorLayer.alpha = alpha;
-//  UIImage *image = [self backgroundImageForBarMetrics:UIBarMetricsDefault];
-//  if (image = nil) {
-//    [];
-//  }
+  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
+  UIView *shadowView = [barBackgroundView valueForKey:@"_shadowView"];
+  if (shadowView) {
+    shadowView.alpha = alpha;
+    shadowView.hidden = alpha == 0;
+  }
+  if (self.colorLayer) {
+    self.colorLayer.alpha = alpha;
+  }
+  
+  if (!self.isTranslucent) {
+    barBackgroundView.alpha = alpha;
+    return;
+  }
+  
+  if (IOS10) {
+    UIView *backgroundEffectView = [barBackgroundView valueForKey:@"_backgroundEffectView"];
+    if (backgroundEffectView != nil && [self backgroundImageForBarMetrics:UIBarMetricsDefault] == nil) {
+      backgroundEffectView.alpha = 0;
+      backgroundEffectView.hidden = YES;
+    }
+  }
+  else{
+    UIView *daptiveBackdrop = [barBackgroundView valueForKey:@"_adaptiveBackdrop"];
+    UIView *backdropEffectView = [daptiveBackdrop valueForKey:@"_backdropEffectView"];
+    if (daptiveBackdrop != nil && backdropEffectView != nil ) {
+      backdropEffectView.alpha = 0;
+      backdropEffectView.hidden = YES;
+    }
+    for (UIView *view in barBackgroundView.subviews) {
+      if ([view isKindOfClass:NSClassFromString(@"_UIBackdropView")]) {
+        view.hidden = YES;
+      }
+    }
+  }
+  
+}
+
+- (void)pr_layoutSubviews
+{
+  if (!self.isTranslucent || self.subviews.count == 0) {
+    return;
+  }
+  
+  UIView *barBackgroundView = [[self subviews] objectAtIndex:0];
+  if (IOS10) {
+    UIView *backgroundEffectView = [barBackgroundView valueForKey:@"_backgroundEffectView"];
+    if (backgroundEffectView != nil && [self backgroundImageForBarMetrics:UIBarMetricsDefault] == nil) {
+      backgroundEffectView.alpha = 0;
+      backgroundEffectView.hidden = YES;
+    }
+  }
+  else{
+    UIView *daptiveBackdrop = [barBackgroundView valueForKey:@"_adaptiveBackdrop"];
+    UIView *backdropEffectView = [daptiveBackdrop valueForKey:@"_backdropEffectView"];
+    if (daptiveBackdrop != nil && backdropEffectView != nil ) {
+      backdropEffectView.alpha = 0;
+      backdropEffectView.hidden = YES;
+    }
+    for (UIView *view in barBackgroundView.subviews) {
+      if ([view isKindOfClass:NSClassFromString(@"_UIBackdropView")]) {
+        view.hidden = YES;
+      }
+    }
+  }
+  [self pr_layoutSubviews];
 }
 
 @end
@@ -374,7 +448,7 @@ UIColor *averageColor(UIColor *fromColor,UIColor *toColor,CGFloat percent)
     
     self.interactivePopGestureRecognizer.enabled = NO;
   }
-  
+
   [self pr_pushViewController:viewController animated:animated];
 }
 
@@ -487,11 +561,6 @@ UIColor *averageColor(UIColor *fromColor,UIColor *toColor,CGFloat percent)
 
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPushItem:(UINavigationItem *)item
 {
-  [self setNeedsStatusBarUpdateForStyle:self.topViewController.statusBarStyle];
-  [self setNeedsNavigationBarUpdateForTintColor:self.topViewController.navBarTintColor];
-  [self setNeedsNavigationBarUpdateForBarTintColor:self.topViewController.navBarBarTintColor];
-  [self setNeedsNavigationBarUpdateForBarBackgroundAlpha:self.topViewController.navBarBackgroundAlpha];
-  [self setNeedsNavigationBarUpdateForShadowImageColor:self.topViewController.navBarShadowImageColor];
   return YES;
 }
 
@@ -537,8 +606,14 @@ static char kStatusBarStyleKey;
 }
 - (void)setNavBarShadowImageColor:(UIColor *)color
 {
+  [self setNavBarShadowImageColor:color needUpdate:YES];
+}
+- (void)setNavBarShadowImageColor:(UIColor *)color needUpdate:(BOOL)need
+{
   objc_setAssociatedObject(self, &kNavBarShadowImageColorKey, color, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self.navigationController setNeedsNavigationBarUpdateForShadowImageColor:color];
+  if (need) {
+    [self.navigationController setNeedsNavigationBarUpdateForShadowImageColor:color];
+  }
 }
 
 - (UIColor *)navBarBarTintColor
@@ -548,8 +623,14 @@ static char kStatusBarStyleKey;
 }
 - (void)setNavBarBarTintColor:(UIColor *)color
 {
+  [self setNavBarBarTintColor:color needUpdate:YES];
+}
+- (void)setNavBarBarTintColor:(UIColor *)color needUpdate:(BOOL)need
+{
   objc_setAssociatedObject(self, &kNavBarBarTintColorKey, color, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self.navigationController setNeedsNavigationBarUpdateForBarTintColor:color];
+  if (need) {
+    [self.navigationController setNeedsNavigationBarUpdateForBarTintColor:color];
+  }
 }
 
 - (CGFloat)navBarBackgroundAlpha
@@ -559,8 +640,14 @@ static char kStatusBarStyleKey;
 }
 - (void)setNavBarBackgroundAlpha:(CGFloat)alpha
 {
+  [self setNavBarBackgroundAlpha:alpha needUpdate:YES];
+}
+- (void)setNavBarBackgroundAlpha:(CGFloat)alpha needUpdate:(BOOL)need
+{
   objc_setAssociatedObject(self, &kNavBarBackgroundAlphaKey, @(alpha), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self.navigationController setNeedsNavigationBarUpdateForBarBackgroundAlpha:alpha];
+  if (need) {
+    [self.navigationController setNeedsNavigationBarUpdateForBarBackgroundAlpha:alpha];
+  }
 }
   
 - (UIColor *)navBarTintColor
@@ -570,8 +657,14 @@ static char kStatusBarStyleKey;
 }
 - (void)setNavBarTintColor:(UIColor *)color
 {
+  [self setNavBarTintColor:color needUpdate:YES];
+}
+- (void)setNavBarTintColor:(UIColor *)color needUpdate:(BOOL)need
+{
   objc_setAssociatedObject(self, &kNavBarTintColorKey, color, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-  [self.navigationController setNeedsNavigationBarUpdateForTintColor:color];
+  if (need) {
+    [self.navigationController setNeedsNavigationBarUpdateForTintColor:color];
+  }
 }
   
 - (void)setStatusBarStyle:(UIStatusBarStyle)style
@@ -601,18 +694,42 @@ static char kStatusBarStyleKey;
       _SwizzleMethod([self class],
                      @selector(viewDidDisappear:),
                      @selector(pr_viewDidDisappear:));
+      _SwizzleMethod([self class],
+                     @selector(viewDidAppear:),
+                     @selector(pr_viewDidAppear:));
     });
   }
 }
 
 - (void)pr_viewDidLoad
 {
+  [self.navigationController setNeedsNavigationBarUpdateForShadowImageColor:self.navBarShadowImageColor];
+  [self.navigationController setNeedsNavigationBarUpdateForBarTintColor:self.navBarBarTintColor];
+  [self.navigationController setNeedsNavigationBarUpdateForTintColor:self.navBarTintColor];
+  [self.navigationController setNeedsStatusBarUpdateForStyle:self.statusBarStyle];
   [self pr_viewDidLoad];
 }
 
 - (void)pr_viewWillAppear:(BOOL)animated
 {
+  __weak typeof(self) weakSelf = self;
+  [UIView animateWithDuration:.250
+                        delay:.125
+                      options:UIViewAnimationOptionCurveEaseOut
+                   animations:^{
+                     __strong typeof(self) strongSelf = weakSelf;
+                     [strongSelf.navigationController setNeedsNavigationBarUpdateForBarBackgroundAlpha:self.navBarBackgroundAlpha];
+                   }
+                   completion:^(BOOL finished) {
+                     
+                   }];
   [self pr_viewWillAppear:animated];
+}
+
+- (void)pr_viewDidAppear:(BOOL)animated
+{
+  
+  [self pr_viewDidAppear:animated];
 }
 
 - (void)pr_viewDidDisappear:(BOOL)animated

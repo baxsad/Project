@@ -18,10 +18,9 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  self.navBarBarTintColor = UIColorBlue;
-  self.navBarBackgroundAlpha = 1.0;
-  self.statusBarStyle = UIStatusBarStyleLightContent;
-  
+  //self.navBarBarTintColor = UIColorBlue;
+  //self.navBarBackgroundAlpha = 1.0;
+  self.navigationItem.title = @"XX_iOS_APP";
   UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 100, 100, 50)];
   btn.backgroundColor = UIColorRed;
   [btn addTarget:self action:@selector(action) forControlEvents:UIControlEventTouchUpInside];
