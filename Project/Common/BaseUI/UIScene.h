@@ -8,11 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@class UINavigationScene;
-
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, NavBarItemPosition) {
+  NavBarItemPositionLeft,
+  NavBarItemPositionRight,
+};
+
 @interface UIScene : UIViewController
+- (void)showBarButton:(NavBarItemPosition)position
+                title:(NSString *)name;
+- (void)showBarButton:(NavBarItemPosition)position
+                title:(NSString *)name
+                color:(UIColor *)color;
+- (void)showBarButton:(NavBarItemPosition)position image:(UIImage *)image;
+- (void)showBarButton:(NavBarItemPosition)position button:(UIButton *)button;
 - (void)leftButtonTouch;
 - (void)rightButtonTouch;
 @end

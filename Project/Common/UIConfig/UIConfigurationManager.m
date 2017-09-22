@@ -79,6 +79,7 @@
   self.navBarButtonItemNormallColor = _UIColorMake(255.0,255.0,255.0,0.0);
   self.navBarButtonItemHighlightedColor = _UIColorMake(255.0,255.0,255.0,0.0);
   self.navBarButtonItemDisabledColor = _UIColorMake(255.0,255.0,255.0,0.0);
+  self.navBarButtonItemTitleFont = _UIFontMake(17);
   
   self.statusBarStyle = UIStatusBarStyleLightContent;
   

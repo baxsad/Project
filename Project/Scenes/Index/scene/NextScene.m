@@ -19,7 +19,11 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   
-  self.navigationItem.title = @"搜索";
+  self.navigationItem.titleView = ({
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    view.backgroundColor = UIColorYellow;
+    view;
+  });
   UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 100, 100, 50)];
   btn.backgroundColor = UIColorRed;
   [btn addTarget:self action:@selector(action) forControlEvents:UIControlEventTouchUpInside];

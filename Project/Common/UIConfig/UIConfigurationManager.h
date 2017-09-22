@@ -65,6 +65,7 @@
 @property(nonatomic,strong) UIColor          *navBarButtonItemNormallColor;
 @property(nonatomic,strong) UIColor          *navBarButtonItemHighlightedColor;
 @property(nonatomic,strong) UIColor          *navBarButtonItemDisabledColor;
+@property(nonatomic,strong) UIFont           *navBarButtonItemTitleFont;
 
 #pragma mark - StatusBar
 

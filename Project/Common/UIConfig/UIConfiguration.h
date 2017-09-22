@@ -55,6 +55,7 @@
 #define NavBarButtonItemNormallColor                    [UICMI navBarButtonItemNormallColor]
 #define NavBarButtonItemHighlightedColor                [UICMI navBarButtonItemHighlightedColor]
 #define NavBarButtonItemDisabledColor                   [UICMI navBarButtonItemDisabledColor]
+#define NavBarButtonItemTitleFont                       [UICMI navBarButtonItemTitleFont]
 
 #define StatusBarStyle                                  [UICMI statusBarStyle]
 
