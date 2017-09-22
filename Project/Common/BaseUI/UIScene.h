@@ -13,6 +13,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UIScene : UIViewController
+- (void)leftButtonTouch;
+- (void)rightButtonTouch;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,50 +8,32 @@
 
 #import "YGBHomeScene.h"
 #import "UITableScene.h"
+#import "YGBQRCodeScanScene.h"
 
-@interface YGBHomeScene ()<UITableViewDelegate,UITableViewDataSource>
-@property (nonatomic, strong) UITableScene *tableView;
+@interface YGBHomeScene ()
+@property (nonatomic, strong) UIButton *scanButton;
 @end
 
 @implementation YGBHomeScene
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  //self.statusBarStyle = UIStatusBarStyleLightContent;
-  //self.navBarBarTintColor = [UIColor blackColor];
-  [self setNavBarBackgroundAlpha:0 needUpdate:NO];
-  //[self setNavBarBarTintColor:UIColorYellow needUpdate:NO];
-  self.tableView = [[UITableScene alloc] init];
-  self.tableView.delegate = self;
-  self.tableView.dataSource = self;
-  [self.view addSubview:self.tableView];
   
-  @weakify(self);
-  [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-    @strongify(self);
-    make.left.right.bottom.equalTo(self.view);
-    make.top.equalTo(self.view).offset(0);
-  }];
+  _scanButton = [[UIButton alloc] initWithFrame:CGRectMake(20, 100, 100, 50)];
+  _scanButton.backgroundColor = UIColorGray;
+  [_scanButton addTarget:self action:@selector(action) forControlEvents:UIControlEventTouchUpInside];
+  [self.view addSubview:_scanButton];
+}
+
+- (void)action
+{
+  YGBQRCodeScanScene *qr = YGBQRCodeScanScene.alloc.init;
+  [self.navigationController pushViewController:qr animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
   [super viewDidAppear:animated];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-  return 99;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-  if (!cell) {
-    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-  }
-  cell.textLabel.text = [NSString stringWithFormat:@"%li",indexPath.row];
-  return cell;
 }
 
 - (void)didReceiveMemoryWarning {

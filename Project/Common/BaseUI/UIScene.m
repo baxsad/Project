@@ -19,29 +19,10 @@
   self.view.backgroundColor = SceneBackgroundColor;
   self.automaticallyAdjustsScrollViewInsets = NO;
   self.edgesForExtendedLayout = UIRectEdgeAll;
-  
-//  if (self.navigationController) {
-//    UIBarButtonItem *fixedSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-//    fixedSpace.width = -20;
-//    UIBarButtonItem *barbutton = [[UIBarButtonItem alloc] initWithImage:[NavBarBackIndicatorImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStyleBordered target:self action:@selector(leftButtonTouch)];
-//
-//    self.navigationItem.leftBarButtonItem = nil;
-//    self.navigationItem.leftBarButtonItems = @[fixedSpace,barbutton];
-//    if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] !=
-//        NSOrderedAscending) {
-//      self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-//    }
-//  }
-  
 }
 
-//- (void)leftButtonTouch
-//{
-//  [self.navigationController popViewControllerAnimated:YES];
-//}
-
-- (void)didReceiveMemoryWarning {
-  [super didReceiveMemoryWarning];
-}
+- (void)didReceiveMemoryWarning {[super didReceiveMemoryWarning];}
+- (void)leftButtonTouch{}
+- (void)rightButtonTouch{}
 
 @end

@@ -54,8 +54,6 @@
   [Bugly setUserIdentifier:[NSString stringWithFormat:@"User: %@",
                             [UIDevice currentDevice].name]];
   [Bugly setUserValue:[NSProcessInfo processInfo].processName forKey:@"Process"];
-  
-  [self performSelectorInBackground:@selector(testLogOnBackground) withObject:nil];
 }
 
 #pragma mark - BuglyDelegate
@@ -64,37 +62,6 @@
   NSLog(@"(%@:%d) %s %@",[[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __PRETTY_FUNCTION__,exception);
   
   return @"This is an attachment";
-}
-
-- (void)testLogOnBackground {
-  int cnt = 0;
-  while (1) {
-    cnt++;
-    
-    switch (cnt % 5) {
-      case 0:
-        BLYLogError(@"Test Log Print %d", cnt);
-        break;
-      case 4:
-        BLYLogWarn(@"Test Log Print %d", cnt);
-        break;
-      case 3:
-        BLYLogInfo(@"Test Log Print %d", cnt);
-        BLYLogv(BuglyLogLevelWarn, @"BLLogv: Test", NULL);
-        break;
-      case 2:
-        BLYLogDebug(@"Test Log Print %d", cnt);
-        BLYLog(BuglyLogLevelError, @"BLLog : %@", @"Test BLLog");
-        break;
-      case 1:
-      default:
-        BLYLogVerbose(@"Test Log Print %d", cnt);
-        break;
-    }
-    
-    // print log interval 1 sec.
-    sleep(1);
-  }
 }
 
 @end
