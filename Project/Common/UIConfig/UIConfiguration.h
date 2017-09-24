@@ -38,7 +38,12 @@
 #define ButtonHighlightedAlpha                          [UICMI buttonHighlightedAlpha]
 #define ButtonDisabledAlpha                             [UICMI buttonDisabledAlpha]
 
+#define ToolBarTintColor                                [UICMI toolBarTintColor]
+
+#define NavBarHighlightedAlpha                          [UICMI navBarHighlightedAlpha]
+#define NavBarDisabledAlpha                             [UICMI navBarDisabledAlpha]
 #define NavBarButtonFont                                [UICMI navBarButtonFont]
+#define NavBarButtonFontBold                            [UICMI navBarButtonFontBold]
 #define NavBarBackgroundImage                           [UICMI navBarBackgroundImage]
 #define NavBarShadowImageColor                          [UICMI navBarShadowImageColor]
 #define NavBarBarTintColor                              [UICMI navBarBarTintColor]
@@ -56,8 +61,11 @@
 #define NavBarButtonItemHighlightedColor                [UICMI navBarButtonItemHighlightedColor]
 #define NavBarButtonItemDisabledColor                   [UICMI navBarButtonItemDisabledColor]
 #define NavBarButtonItemTitleFont                       [UICMI navBarButtonItemTitleFont]
+#define NeedsBackBarButtonItemTitle                     [UICMI needsBackBarButtonItemTitle]
+#define NavigationBarHiddenInitially                    [UICMI navigationBarHiddenInitially]
+#define HidesBottomBarWhenPushedInitially               [UICMI hidesBottomBarWhenPushedInitially]
 
-#define StatusBarStyle                                  [UICMI statusBarStyle]
+#define StatusbarStyleLightInitially                    [UICMI statusbarStyleLightInitially]
 
 #define TabBarBackgroundImage                           [UICMI tabBarBackgroundImage]
 #define TabBarShadowImageColor                          [UICMI tabBarShadowImageColor]

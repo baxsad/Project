@@ -19,8 +19,8 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.navigationItem.title = @"二维码/条码";
-  [self showBarButton:NavBarItemPositionRight title:@"相册"];
-  [self setNavBarBackgroundAlpha:0.93 needUpdate:NO];
+//  [self showBarButton:NavBarItemPositionRight title:@"相册"];
+//  [self setNavBarBackgroundAlpha:0.93 needUpdate:NO];
   
 #pragma mark - setup
   [self _setupScanPriview];

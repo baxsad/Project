@@ -7,24 +7,33 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UINavigationScene.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, NavBarItemPosition) {
-  NavBarItemPositionLeft,
-  NavBarItemPositionRight,
-};
+@interface UIViewController (UI)
+@property(nullable, nonatomic, weak, readonly) UIViewController *previousViewController;
+@property(nullable, nonatomic, copy, readonly) NSString *previousViewControllerTitle;
+- (nullable UIViewController *)visibleViewControllerIfExist;
+- (BOOL)isPresented;
+- (BOOL)isViewLoadedAndVisible;
+@end
 
-@interface UIScene : UIViewController
-- (void)showBarButton:(NavBarItemPosition)position
-                title:(NSString *)name;
-- (void)showBarButton:(NavBarItemPosition)position
-                title:(NSString *)name
-                color:(UIColor *)color;
-- (void)showBarButton:(NavBarItemPosition)position image:(UIImage *)image;
-- (void)showBarButton:(NavBarItemPosition)position button:(UIButton *)button;
-- (void)leftButtonTouch;
-- (void)rightButtonTouch;
+@interface UIViewController (Runtime)
+- (BOOL)hasOverrideUIKitMethod:(_Nonnull SEL)selector;
+@end
+
+@interface UIViewController (Hooks)
+- (void)initSubviews NS_REQUIRES_SUPER;
+- (void)contentSizeCategoryDidChanged:(NSNotification *)notification;
+@end
+
+@interface UIScene : UIViewController<UINavigationSceneDelegate>
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
+- (void)didInitialized NS_REQUIRES_SUPER;
+@property(nonatomic, assign) BOOL autorotate;
+@property(nonatomic, assign) UIInterfaceOrientationMask supportedOrientationMask;
 @end
 
 NS_ASSUME_NONNULL_END

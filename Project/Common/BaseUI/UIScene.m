@@ -7,97 +7,190 @@
 //
 
 #import "UIScene.h"
+#import "UINavigationScene.h"
+#import <objc/message.h>
+#import <objc/runtime.h>
+
+@implementation UIViewController (UI)
+
+#pragma mark - Public
+
+- (UIViewController *)previousViewController {
+  if (self.navigationController.viewControllers && self.navigationController.viewControllers.count > 1 && self.navigationController.topViewController == self) {
+    NSUInteger count = self.navigationController.viewControllers.count;
+    return (UIViewController *)[self.navigationController.viewControllers objectAtIndex:count - 2];
+  }
+  return nil;
+}
+
+- (NSString *)previousViewControllerTitle {
+  UIViewController *previousViewController = [self previousViewController];
+  if (previousViewController) {
+    return previousViewController.title;
+  }
+  return nil;
+}
+
+- (BOOL)isPresented {
+  UIViewController *viewController = self;
+  if (self.navigationController) {
+    if (self.navigationController.rootViewController != self) {
+      return NO;
+    }
+    viewController = self.navigationController;
+  }
+  BOOL result = viewController.presentingViewController.presentedViewController == viewController;
+  return result;
+}
+
+- (UIViewController *)visibleViewControllerIfExist {
+  
+  if (self.presentedViewController) {
+    return [self.presentedViewController visibleViewControllerIfExist];
+  }
+  
+  if ([self isKindOfClass:[UINavigationController class]]) {
+    return [((UINavigationController *)self).visibleViewController visibleViewControllerIfExist];
+  }
+  
+  if ([self isKindOfClass:[UITabBarController class]]) {
+    return [((UITabBarController *)self).selectedViewController visibleViewControllerIfExist];
+  }
+  
+  if ([self isViewLoaded] && self.view.window) {
+    return self;
+  } else {
+    NSLog(@"visibleViewControllerIfExist:，找不到可见的viewController。self = %@, self.view.window = %@", self, self.view.window);
+    return nil;
+  }
+}
+
+- (BOOL)isViewLoadedAndVisible {
+  return self.isViewLoaded && self.view.window;
+}
+
+@end
+
+@implementation UIViewController (Runtime)
+
+- (BOOL)hasOverrideUIKitMethod:(SEL)selector {
+  NSMutableArray<Class> *viewControllerSuperclasses = [[NSMutableArray alloc] initWithObjects:
+                                                       [UIImagePickerController class],
+                                                       [UINavigationController class],
+                                                       [UITableViewController class],
+                                                       [UICollectionViewController class],
+                                                       [UITabBarController class],
+                                                       [UISplitViewController class],
+                                                       [UIPageViewController class],
+                                                       [UIViewController class],
+                                                       nil];
+  
+  if (NSClassFromString(@"UIAlertController")) {
+    [viewControllerSuperclasses addObject:[UIAlertController class]];
+  }
+  if (NSClassFromString(@"UISearchController")) {
+    [viewControllerSuperclasses addObject:[UISearchController class]];
+  }
+  for (NSInteger i = 0, l = viewControllerSuperclasses.count; i < l; i++) {
+    Class superclass = viewControllerSuperclasses[i];
+    if ([self hasOverrideMethod:selector ofSuperclass:superclass]) {
+      return YES;
+    }
+  }
+  return NO;
+}
+
+- (BOOL)hasOverrideMethod:(SEL)selector ofSuperclass:(Class)superclass {
+  if (![[self class] isSubclassOfClass:superclass]) {
+    return NO;
+  }
+  
+  if (![superclass instancesRespondToSelector:selector]) {
+    return NO;
+  }
+  
+  Method superclassMethod = class_getInstanceMethod(superclass, selector);
+  Method instanceMethod = class_getInstanceMethod([self class], selector);
+  if (!instanceMethod || instanceMethod == superclassMethod) {
+    return NO;
+  }
+  return YES;
+}
+
+@end
+
+@implementation UIViewController (Hooks)
+- (void)initSubviews {}
+- (void)contentSizeCategoryDidChanged:(NSNotification *)notification {}
+@end
 
 @interface UIScene ()
-
 @end
 
 @implementation UIScene
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
+#pragma mark - 生命周期
+
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
+{
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    [self didInitialized];
+  }
+  return self;
+}
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+  if (self = [super initWithCoder:aDecoder]) {
+    [self didInitialized];
+  }
+  return self;
+}
+- (void)didInitialized
+{
+  self.hidesBottomBarWhenPushed = HidesBottomBarWhenPushedInitially;
+  self.extendedLayoutIncludesOpaqueBars = YES;
+  self.automaticallyAdjustsScrollViewInsets = NO;
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(contentSizeCategoryDidChanged:)
+                                               name:UIContentSizeCategoryDidChangeNotification
+                                             object:nil];
+  self.autorotate = NO;
+  self.supportedOrientationMask = UIInterfaceOrientationMaskPortrait;
+}
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.view.backgroundColor = SceneBackgroundColor;
-  self.automaticallyAdjustsScrollViewInsets = NO;
-  self.edgesForExtendedLayout = UIRectEdgeAll;
 }
 
-#pragma mark - BarButtonItem
+#pragma mark - 屏幕旋转
 
-- (void)showBarButton:(NavBarItemPosition)position
-                title:(NSString *)name
-{
-  [self showBarButton:position title:name color:NavBarTintColor];
-}
-- (void)showBarButton:(NavBarItemPosition)position
-                title:(NSString *)name
-                color:(UIColor *)color
-{
-  if (NavBarItemPositionLeft == position) {
-    UIBarButtonItem *barbutton = [[UIBarButtonItem alloc] initWithTitle:name
-                                                                  style:UIBarButtonItemStyleBordered
-                                                                 target:self
-                                                                 action:@selector(leftButtonTouch)];
-    [barbutton setTitleTextAttributes:@{NSForegroundColorAttributeName:color,NSFontAttributeName:NavBarButtonItemTitleFont}
-                             forState:UIControlStateNormal];
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem = barbutton;
-  }
-  else if (NavBarItemPositionRight == position) {
-    UIBarButtonItem *barbutton = [[UIBarButtonItem alloc] initWithTitle:name
-                                                                  style:UIBarButtonItemStyleBordered
-                                                                 target:self
-                                                                 action:@selector(rightButtonTouch)];
-    [barbutton setTitleTextAttributes:@{NSForegroundColorAttributeName:color,NSFontAttributeName:NavBarButtonItemTitleFont}
-                             forState:UIControlStateNormal];
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem =barbutton;
-  }
-}
-- (void)showBarButton:(NavBarItemPosition)position image:(UIImage *)image
-{
-  if (NavBarItemPositionLeft == position) {
-    UIBarButtonItem *barbutton = [[UIBarButtonItem alloc] initWithImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
-                                                                  style:UIBarButtonItemStyleBordered
-                                                                 target:self
-                                                                 action:@selector(leftButtonTouch)];
-    
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem = barbutton;
-  }
-  else if (NavBarItemPositionRight == position) {
-    UIBarButtonItem *barbutton = [[UIBarButtonItem alloc] initWithImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
-                                                                  style:UIBarButtonItemStyleBordered
-                                                                 target:self
-                                                                 action:@selector(rightButtonTouch)];
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem = barbutton;
-  }
-}
-- (void)showBarButton:(NavBarItemPosition)position button:(UIButton *)button
-{
-  if (NavBarItemPositionLeft == position) {
-    [button addTarget:self
-               action:@selector(leftButtonTouch)
-     forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem =
-    [[UIBarButtonItem alloc] initWithCustomView:button];
-  }
-  else if (NavBarItemPositionRight == position) {
-    [button addTarget:self
-               action:@selector(rightButtonTouch)
-     forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItem =
-    [[UIBarButtonItem alloc] initWithCustomView:button];
-  }
+- (BOOL)shouldAutorotate {
+  return self.autorotate;
 }
 
-- (void)didReceiveMemoryWarning {[super didReceiveMemoryWarning];}
-- (void)leftButtonTouch{}
-- (void)rightButtonTouch{}
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+  return self.supportedOrientationMask;
+}
+
+#pragma mark - <UINavigationControllerDelegate>
+
+- (BOOL)shouldSetStatusBarStyleLight {
+  return StatusbarStyleLightInitially;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+  return StatusbarStyleLightInitially ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+}
+
+- (BOOL)preferredNavigationBarHidden {
+  return NavigationBarHiddenInitially;
+}
 
 #pragma clang diagnostic pop
 @end

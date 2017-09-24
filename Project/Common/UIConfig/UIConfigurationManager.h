@@ -46,9 +46,16 @@
 @property(nonatomic,assign) CGFloat          buttonHighlightedAlpha;
 @property(nonatomic,assign) CGFloat          buttonDisabledAlpha;
 
+#pragma mark - ToolBar
+
+@property(nonatomic,strong) UIColor          *toolBarTintColor;
+
 #pragma mark - NavigationBar
 
+@property(nonatomic,assign) CGFloat           navBarHighlightedAlpha;
+@property(nonatomic,assign) CGFloat           navBarDisabledAlpha;
 @property(nonatomic,strong) UIFont           *navBarButtonFont;
+@property(nonatomic,strong) UIFont           *navBarButtonFontBold;
 @property(nonatomic,strong) UIImage          *navBarBackgroundImage;
 @property(nonatomic,strong) UIColor          *navBarShadowImageColor;
 @property(nonatomic,strong) UIColor          *navBarBarTintColor;
@@ -66,10 +73,13 @@
 @property(nonatomic,strong) UIColor          *navBarButtonItemHighlightedColor;
 @property(nonatomic,strong) UIColor          *navBarButtonItemDisabledColor;
 @property(nonatomic,strong) UIFont           *navBarButtonItemTitleFont;
+@property(nonatomic,assign) BOOL              needsBackBarButtonItemTitle;
+@property(nonatomic,assign) BOOL              navigationBarHiddenInitially;
+@property(nonatomic,assign) BOOL              hidesBottomBarWhenPushedInitially;
 
 #pragma mark - StatusBar
 
-@property(nonatomic,assign) UIStatusBarStyle statusBarStyle;
+@property(nonatomic, assign) BOOL             statusbarStyleLightInitially;
 
 #pragma mark - TabBar
 

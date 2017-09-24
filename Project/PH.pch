@@ -12,7 +12,7 @@
 #import "NSGlobalTraking.h"
 #import "NSGlobalDeviceInfo.h"
 #import "UIConfiguration.h"
-#import "UINavigationBarTransition.h"
+//#import "UINavigationBarTransition.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <Masonry/Masonry.h>
 #import <Bugly/Bugly.h>

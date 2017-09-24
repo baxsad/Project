@@ -54,7 +54,12 @@
   self.buttonHighlightedAlpha = 0.5f;
   self.buttonDisabledAlpha = 0.5f;
   
+  self.toolBarTintColor = _UIColorMake(244,244,244,1.0);
+  
+  self.navBarHighlightedAlpha = 0.2f;
+  self.navBarDisabledAlpha = 0.2f;
   self.navBarButtonFont = _UIFontMake(15);
+  self.navBarButtonFontBold = _UIFontMediumMake(15);
   self.navBarBackgroundImage = [UIImage ui_imageWithColor:_UIColorMake(0xFF, 0xE4, 0X01, 1.0)
                                                      size:CGSizeMake(1, 1)
                                              cornerRadius:0];
@@ -65,7 +70,7 @@
   self.navBarTitleFont = _UIFontMediumMake(18);
   self.navBarSubTitleColor = _UIColorMake(0x97,0x97,0x97,1.0);
   self.navBarSubTitleFont = _UIFontMake(12);
-  self.navBarBackButtonTitlePositionAdjustment = UIOffsetMake(0, 0);
+  self.navBarBackButtonTitlePositionAdjustment = UIOffsetZero;
   self.navBarBackButtonMarginLeft = 10;
   self.navBarBackIndicatorImage = [UIImage ui_imageWithShape:UIImageShapeNavBack
                                                         size:CGSizeMake(9, 16)
@@ -80,8 +85,11 @@
   self.navBarButtonItemHighlightedColor = _UIColorMake(255.0,255.0,255.0,0.0);
   self.navBarButtonItemDisabledColor = _UIColorMake(255.0,255.0,255.0,0.0);
   self.navBarButtonItemTitleFont = _UIFontMake(17);
+  self.needsBackBarButtonItemTitle = NO;
+  self.navigationBarHiddenInitially = NO;
+  self.hidesBottomBarWhenPushedInitially = YES;
   
-  self.statusBarStyle = UIStatusBarStyleLightContent;
+  self.statusbarStyleLightInitially = YES;
   
   self.tabBarBarTintColor = _UIColorMake(40,43,53,1.0);
   self.tabBarBackgroundImage = [UIImage ui_imageWithColor:self.tabBarBarTintColor

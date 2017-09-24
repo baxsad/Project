@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B655E6471F775C8D009ECB30 /* UINavigationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B655E6461F775C8D009ECB30 /* UINavigationButton.m */; };
 		E2FF88B26EA31E72CA126D16 /* libPods-Project.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4B56543DA8231574D4B11F /* libPods-Project.a */; };
 		E52C98E01F53CCA1007D8408 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C98DF1F53CCA1007D8408 /* main.m */; };
 		E52C98E31F53CCA1007D8408 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C98E21F53CCA1007D8408 /* AppDelegate.m */; };
@@ -16,7 +17,6 @@
 		E52C98EE1F53CCA1007D8408 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E52C98EC1F53CCA1007D8408 /* LaunchScreen.storyboard */; };
 		E52C98F91F53CCA1007D8408 /* ProjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C98F81F53CCA1007D8408 /* ProjectTests.m */; };
 		E52C99041F53CCA1007D8408 /* ProjectUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C99031F53CCA1007D8408 /* ProjectUITests.m */; };
-		E52C992D1F53CD0C007D8408 /* UINavigationBarTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C99141F53CD0C007D8408 /* UINavigationBarTransition.m */; };
 		E52C992E1F53CD0C007D8408 /* UINavigationScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C99161F53CD0C007D8408 /* UINavigationScene.m */; };
 		E52C992F1F53CD0C007D8408 /* UIScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C99181F53CD0C007D8408 /* UIScene.m */; };
 		E52C99301F53CD0C007D8408 /* UITabBarScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E52C991A1F53CD0C007D8408 /* UITabBarScene.m */; };
@@ -63,6 +63,8 @@
 /* Begin PBXFileReference section */
 		6366276834E1B334ADAF7613 /* Pods-Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project.release.xcconfig"; path = "Pods/Target Support Files/Pods-Project/Pods-Project.release.xcconfig"; sourceTree = "<group>"; };
 		85860AAA7ADE0964B1CAEE3B /* Pods-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Project/Pods-Project.debug.xcconfig"; sourceTree = "<group>"; };
+		B655E6451F775C8D009ECB30 /* UINavigationButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UINavigationButton.h; sourceTree = "<group>"; };
+		B655E6461F775C8D009ECB30 /* UINavigationButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UINavigationButton.m; sourceTree = "<group>"; };
 		E52C98DB1F53CCA1007D8408 /* Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E52C98DF1F53CCA1007D8408 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E52C98E11F53CCA1007D8408 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -79,8 +81,6 @@
 		E52C98FF1F53CCA1007D8408 /* ProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E52C99031F53CCA1007D8408 /* ProjectUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProjectUITests.m; sourceTree = "<group>"; };
 		E52C99051F53CCA1007D8408 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E52C99131F53CD0C007D8408 /* UINavigationBarTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationBarTransition.h; sourceTree = "<group>"; };
-		E52C99141F53CD0C007D8408 /* UINavigationBarTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationBarTransition.m; sourceTree = "<group>"; };
 		E52C99151F53CD0C007D8408 /* UINavigationScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationScene.h; sourceTree = "<group>"; };
 		E52C99161F53CD0C007D8408 /* UINavigationScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationScene.m; sourceTree = "<group>"; };
 		E52C99171F53CD0C007D8408 /* UIScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScene.h; sourceTree = "<group>"; };
@@ -260,8 +260,6 @@
 		E52C99121F53CD0C007D8408 /* BaseUI */ = {
 			isa = PBXGroup;
 			children = (
-				E52C99131F53CD0C007D8408 /* UINavigationBarTransition.h */,
-				E52C99141F53CD0C007D8408 /* UINavigationBarTransition.m */,
 				E52C99151F53CD0C007D8408 /* UINavigationScene.h */,
 				E52C99161F53CD0C007D8408 /* UINavigationScene.m */,
 				E52C99171F53CD0C007D8408 /* UIScene.h */,
@@ -270,6 +268,8 @@
 				E52C991A1F53CD0C007D8408 /* UITabBarScene.m */,
 				E53D636B1F737EDE0023FE1D /* UITableScene.h */,
 				E53D636C1F737EDE0023FE1D /* UITableScene.m */,
+				B655E6451F775C8D009ECB30 /* UINavigationButton.h */,
+				B655E6461F775C8D009ECB30 /* UINavigationButton.m */,
 			);
 			path = BaseUI;
 			sourceTree = "<group>";
@@ -664,12 +664,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E52C992D1F53CD0C007D8408 /* UINavigationBarTransition.m in Sources */,
 				E52C99351F53CD0C007D8408 /* MineScene.m in Sources */,
 				E52C99331F53CD0C007D8408 /* IndexScene.m in Sources */,
 				E5EE376E1F6BE24A00B179F5 /* MainDelegate.m in Sources */,
 				E5EE37791F6BE54300B179F5 /* SCContext.m in Sources */,
 				E571DCAB1F57B2DB005511A3 /* NSGlobalDeviceInfo.m in Sources */,
+				B655E6471F775C8D009ECB30 /* UINavigationButton.m in Sources */,
 				E54F4AC21F74E81C001417F3 /* YGBQRCodeScanScene.m in Sources */,
 				E52C98E61F53CCA1007D8408 /* ViewController.m in Sources */,
 				E52C99461F53CE79007D8408 /* YGBError.m in Sources */,
