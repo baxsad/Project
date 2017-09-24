@@ -60,7 +60,7 @@
   if ([self isViewLoaded] && self.view.window) {
     return self;
   } else {
-    NSLog(@"visibleViewControllerIfExist:，找不到可见的viewController。self = %@, self.view.window = %@", self, self.view.window);
+    NSLog(@"visibleViewControllerIfExist:，找不到可见的viewController。self = %@", self);
     return nil;
   }
 }

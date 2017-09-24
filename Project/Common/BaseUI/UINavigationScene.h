@@ -10,10 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UINavigationController (UI) <UIGestureRecognizerDelegate>
-- (nullable UIViewController *)rootViewController;
-@end
-
 @interface UINavigationScene : UINavigationController<UINavigationControllerDelegate>
 - (void)didInitialized NS_REQUIRES_SUPER;
 @end

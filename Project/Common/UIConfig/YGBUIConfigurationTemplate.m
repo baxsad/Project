@@ -199,7 +199,7 @@
   UICMI.navigationBarHiddenInitially = NO;
 }
 
-#pragma mark - <QDThemeProtocol>
+#pragma mark - <ThemeProtocol>
 
 - (UIColor *)themeTintColor {
   return UIColorTheme9;
