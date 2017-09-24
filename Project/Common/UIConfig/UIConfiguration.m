@@ -184,8 +184,8 @@
   self.tableViewGroupedSectionFooterContentInset = UIEdgeInsetsMake(8, 15, 2, 15);
   
 #pragma mark - UIWindowLevel
-  self.windowLevelQMUIAlertView = UIWindowLevelAlert - 4.0;
-  self.windowLevelQMUIImagePreviewView = UIWindowLevelStatusBar + 1;
+  self.windowLevelUIAlertView = UIWindowLevelAlert - 4.0;
+  self.windowLevelUIImagePreviewView = UIWindowLevelStatusBar + 1;
   
 #pragma mark - Others
   

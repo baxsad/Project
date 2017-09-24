@@ -186,8 +186,8 @@
   UICMI.tableViewGroupedSectionFooterContentInset = UIEdgeInsetsMake(8, 15, 2, 15);
   
 #pragma mark - UIWindowLevel
-  UICMI.windowLevelQMUIAlertView = UIWindowLevelAlert - 4.0;
-  UICMI.windowLevelQMUIImagePreviewView = UIWindowLevelStatusBar + 1.0;
+  UICMI.windowLevelUIAlertView = UIWindowLevelAlert - 4.0;
+  UICMI.windowLevelUIImagePreviewView = UIWindowLevelStatusBar + 1.0;
   
 #pragma mark - Others
   

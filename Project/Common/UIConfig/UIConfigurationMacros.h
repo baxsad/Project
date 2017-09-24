@@ -170,8 +170,8 @@
 #define TableViewCellDetailLabelColor              [UICMI tableViewCellDetailLabelColor]
 
 #pragma mark - UIWindowLevel
-#define UIWindowLevelQMUIAlertView                  [UICMI windowLevelQMUIAlertView]
-#define UIWindowLevelQMUIImagePreviewView           [UICMI windowLevelQMUIImagePreviewView]
+#define UIWindowLevelUIAlertView                  [UICMI windowLevelUIAlertView]
+#define UIWindowLevelUIImagePreviewView           [UICMI windowLevelUIImagePreviewView]
 
 #pragma mark - Others
 
