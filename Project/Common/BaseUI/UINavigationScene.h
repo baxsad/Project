@@ -42,13 +42,4 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)shouldCustomNavigationBarTransitionWhenPopDisappearing;
 @end
 
-@protocol UINavigationControllerBackButtonHandlerProtocol <NSObject>
-@optional
-- (BOOL)shouldHoldBackButtonEvent;
-- (BOOL)canPopViewController;
-@end
-
-@interface UIViewController (BackBarButtonSupport) <UINavigationControllerBackButtonHandlerProtocol>
-@end
-
 NS_ASSUME_NONNULL_END

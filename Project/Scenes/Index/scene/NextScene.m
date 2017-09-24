@@ -41,4 +41,14 @@
   [super didReceiveMemoryWarning];
 }
 
+- (BOOL)shouldHoldBackButtonEvent
+{
+  return YES;
+}
+
+- (BOOL)canPopViewController
+{
+  return YES;
+}
+
 @end

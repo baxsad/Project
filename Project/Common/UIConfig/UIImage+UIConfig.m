@@ -167,6 +167,11 @@
   return resultImage;
 }
 
++ (UIImage *)ui_imageWithColor:(UIColor *)color
+{
+  return [self ui_imageWithColor:color size:CGSizeMake(1, 1) cornerRadius:0];
+}
+
 - (UIImage *)ui_imageWithSpacingExtensionInsets:(UIEdgeInsets)extension {
   CGSize contextSize = CGSizeMake(self.size.width + UIEdgeInsetsGetHorizontalValue(extension), self.size.height + UIEdgeInsetsGetVerticalValue(extension));
   UIGraphicsBeginImageContextWithOptions(contextSize, NO, self.scale);
@@ -199,6 +204,74 @@
   UIGraphicsEndImageContext();
   
   return newImage;
+}
+
+CG_INLINE CGFloat
+flatSpecificScale(CGFloat floatValue, CGFloat scale) {
+  floatValue = floatValue == CGFLOAT_MIN ? 0 : floatValue;
+  scale = scale == 0 ? [[UIScreen mainScreen] scale] : scale;
+  CGFloat flattedValue = ceil(floatValue * scale) / scale;
+  return flattedValue;
+}
+#define AngleWithDegrees(deg) (M_PI * (deg) / 180.0)
+
+- (UIImage *)ui_imageWithOrientation:(UIImageOrientation)orientation {
+  if (orientation == UIImageOrientationUp) {
+    return self;
+  }
+  
+  CGSize contextSize = self.size;
+  if (orientation == UIImageOrientationLeft || orientation == UIImageOrientationRight) {
+    contextSize = CGSizeMake(contextSize.height, contextSize.width);
+  }
+  
+  contextSize = CGSizeMake(flatSpecificScale(contextSize.width, self.scale),
+                           flatSpecificScale(contextSize.height, self.scale));
+  
+  UIGraphicsBeginImageContextWithOptions(contextSize, NO, self.scale);
+  CGContextRef context = UIGraphicsGetCurrentContext();
+  CGContextInspectContext(context);
+  
+  // 画布的原点在左上角，旋转后可能图片就飞到画布外了，所以旋转前先把图片摆到特定位置再旋转，图片刚好就落在画布里
+  switch (orientation) {
+    case UIImageOrientationUp:
+      // 上
+      break;
+    case UIImageOrientationDown:
+      // 下
+      CGContextTranslateCTM(context, contextSize.width, contextSize.height);
+      CGContextRotateCTM(context, AngleWithDegrees(180));
+      break;
+    case UIImageOrientationLeft:
+      // 左
+      CGContextTranslateCTM(context, 0, contextSize.height);
+      CGContextRotateCTM(context, AngleWithDegrees(-90));
+      break;
+    case UIImageOrientationRight:
+      // 右
+      CGContextTranslateCTM(context, contextSize.width, 0);
+      CGContextRotateCTM(context, AngleWithDegrees(90));
+      break;
+    case UIImageOrientationUpMirrored:
+    case UIImageOrientationDownMirrored:
+      // 向上、向下翻转是一样的
+      CGContextTranslateCTM(context, 0, contextSize.height);
+      CGContextScaleCTM(context, 1, -1);
+      break;
+    case UIImageOrientationLeftMirrored:
+    case UIImageOrientationRightMirrored:
+      // 向左、向右翻转是一样的
+      CGContextTranslateCTM(context, contextSize.width, 0);
+      CGContextScaleCTM(context, -1, 1);
+      break;
+  }
+  
+  // 在前面画布的旋转、移动的结果上绘制自身即可，这里不用考虑旋转带来的宽高置换的问题
+  [self drawInRect:CGRectMake(0, 0, self.size.width, self.size.height)];
+  
+  UIImage *imageOut = UIGraphicsGetImageFromCurrentImageContext();
+  UIGraphicsEndImageContext();
+  return imageOut;
 }
 
 #pragma mark - 

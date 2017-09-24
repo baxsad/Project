@@ -165,7 +165,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  self.view.backgroundColor = SceneBackgroundColor;
+  self.view.backgroundColor = UIColorForBackground;
 }
 
 #pragma mark - 屏幕旋转

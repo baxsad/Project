@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "UIThemeManager.h"
+#import "YGBUIConfigurationTemplate.h"
 
 @interface AppDelegate ()<BuglyDelegate>
 
@@ -18,8 +20,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   
-  [UICMI initDefaultConfiguration];
-  [UICMI renderGlobalAppearances];
+  [UIThemeManager sharedInstance].currentTheme = [[YGBUIConfigurationTemplate alloc] init];
   [NSGlobalTraking track];
   [self _setupBugly];
   
@@ -28,8 +29,7 @@
   self.window.rootViewController = root;
   [self.window makeKeyAndVisible];
   
-  [super application:application didFinishLaunchingWithOptions:launchOptions];
-  return YES;
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (void)_setupBugly

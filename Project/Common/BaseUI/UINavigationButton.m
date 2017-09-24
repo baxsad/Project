@@ -161,7 +161,7 @@ UIEdgeInsetsSetRight(UIEdgeInsets insets, CGFloat right) {
       // @warning 这些数值都是每个iOS版本核对过没问题的，如果修改则要检查要每个版本里与系统UIBarButtonItem的布局是否一致
       if (useForBarButtonItem) {
         UIOffset titleOffsetBaseOnSystem = UIOffsetMake([[[UIDevice currentDevice] systemVersion] floatValue] >= 11.0 ? 6 : 7, 0);// 经过这些数值的调整后，自定义返回按钮的位置才能和系统默认返回按钮的位置对准，而配置表里设置的值是在这个调整的基础上再调整
-        UIOffset configurationOffset = NavBarBackButtonTitlePositionAdjustment;
+        UIOffset configurationOffset = NavBarBarBackButtonTitlePositionAdjustment;
         self.titleEdgeInsets = UIEdgeInsetsMake(titleOffsetBaseOnSystem.vertical + configurationOffset.vertical, titleOffsetBaseOnSystem.horizontal + configurationOffset.horizontal, -titleOffsetBaseOnSystem.vertical - configurationOffset.vertical, -titleOffsetBaseOnSystem.horizontal - configurationOffset.horizontal);
         self.contentEdgeInsets = UIEdgeInsetsMake([[[UIDevice currentDevice] systemVersion] floatValue] >= 11.0 ? 0 : 1,// iOS 11 以前的自定义返回按钮要特地往下偏移一点才会和系统的一模一样
                                                   [[[UIDevice currentDevice] systemVersion] floatValue] >= 11.0 ? -8 : 0,// iOS 11 使用了自定义按钮后整个按钮都会强制被往右边挪 8pt，所以这里要通过 contentEdgeInsets.left 偏移回来

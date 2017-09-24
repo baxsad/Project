@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UINavigationScene.h"
+#import "UINavigationScene+UI.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

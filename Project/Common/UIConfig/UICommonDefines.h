@@ -10,6 +10,11 @@
 #import <objc/runtime.h>
 
 #define ScreenScale ([[UIScreen mainScreen] scale])
+#define UIColorMake(r, g, b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0]
+#define UIColorMakeWithRGBA(r, g, b, a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a/1.0]
+#define UIFontMake(size) [UIFont systemFontOfSize:size]
+#define UIFontBoldMake(size) [UIFont boldSystemFontOfSize:size]
+#define UIFontMediumMake(fontSize) [UIFont fontWithName:[[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0 ? @"PingFangSC-Medium" : @"HelveticaNeue-Medium" size:fontSize]
 
 CG_INLINE float
 floorfInPixel(float floatValue) {

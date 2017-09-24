@@ -36,11 +36,15 @@ typedef NS_ENUM(NSInteger, UIImageShape) {
                           size:(CGSize)size
                      lineWidth:(CGFloat)lineWidth
                      tintColor:(UIColor *)tintColor;
-  
+
 + (UIImage *)ui_imageWithColor:(UIColor *)color
                           size:(CGSize)size
                   cornerRadius:(CGFloat)cornerRadius;
-  
+
++ (UIImage *)ui_imageWithColor:(UIColor *)color;
+
+- (UIImage *)ui_imageWithOrientation:(UIImageOrientation)orientation;
+
 - (UIImage *)ui_imageWithSpacingExtensionInsets:(UIEdgeInsets)extension;
   
 - (UIImage *)ui_imageByApplyingAlpha:(CGFloat)alpha;
