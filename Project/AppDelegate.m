@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "UIThemeManager.h"
 #import "YGBUIConfigurationTemplate.h"
 
 @interface AppDelegate ()<BuglyDelegate>

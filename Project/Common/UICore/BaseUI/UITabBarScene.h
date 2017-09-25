@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface UITabBarScene : UITabBarController
-
+- (void)didInitialized NS_REQUIRES_SUPER;
 @end

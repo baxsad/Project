@@ -19,7 +19,7 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   
-  self.navigationItem.title = @"搜索";
+  self.titleView.title = @"搜索";
   UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 100, 100, 50)];
   btn.backgroundColor = UIColorRed;
   [btn addTarget:self action:@selector(action) forControlEvents:UIControlEventTouchUpInside];
@@ -39,16 +39,6 @@
 
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
-}
-
-- (BOOL)shouldHoldBackButtonEvent
-{
-  return YES;
-}
-
-- (BOOL)canPopViewController
-{
-  return YES;
 }
 
 @end

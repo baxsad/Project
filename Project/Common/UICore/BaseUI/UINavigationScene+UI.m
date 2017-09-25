@@ -7,19 +7,10 @@
 //
 
 #import "UINavigationScene+UI.h"
+#import "UIScene+UI.h"
+#import "UICommonDefines.h"
 #import <objc/runtime.h>
-
-CG_INLINE void
-ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
-  Method oriMethod = class_getInstanceMethod(_class, _originSelector);
-  Method newMethod = class_getInstanceMethod(_class, _newSelector);
-  BOOL isAddedMethod = class_addMethod(_class, _originSelector, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));
-  if (isAddedMethod) {
-    class_replaceMethod(_class, _newSelector, method_getImplementation(oriMethod), method_getTypeEncoding(oriMethod));
-  } else {
-    method_exchangeImplementations(oriMethod, newMethod);
-  }
-}
+#import <objc/message.h>
 
 @interface UINavigationController (BackButtonHandlerProtocol)
 - (nullable UIViewController *)tmp_topViewController;
@@ -69,8 +60,6 @@ static char originGestureDelegateKey;
 }
 
 - (BOOL)ui_navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
-  
-  // 如果nav的vc栈中有两个vc，第一个是root，第二个是second。这是second页面如果点击系统的返回按钮，topViewController获取的栈顶vc是second，而如果是直接代码写的pop操作，则获取的栈顶vc是root。也就是说只要代码写了pop操作，则系统会直接将顶层vc也就是second出栈，然后才回调的，所以这时我们获取到的顶层vc就是root了。然而不管哪种方式，参数中的item都是second的item。
   BOOL isPopedByCoding = item != [self topViewController].navigationItem;
   BOOL canPopViewController = !isPopedByCoding && [self canPopViewController:self.tmp_topViewController ?: [self topViewController]];
   
@@ -155,6 +144,8 @@ static char originGestureDelegateKey;
 
 @end
 
-@implementation UIViewController (BackBarButtonSupport)
-
+@implementation UINavigationController (Hooks)
+- (void)willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {}
+- (void)didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {}
 @end
+

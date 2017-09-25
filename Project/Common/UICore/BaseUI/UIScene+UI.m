@@ -1,13 +1,13 @@
 //
-//  UIScene.m
-//  XX_iOS_APP
+//  UIScene+UI.m
+//  Project
 //
-//  Created by pmo on 2017/8/16.
-//  Copyright © 2017年 pmo. All rights reserved.
+//  Created by jearoc on 2017/9/25.
+//  Copyright © 2017年 jearoc. All rights reserved.
 //
 
-#import "UIScene.h"
-#import "UINavigationScene.h"
+#import "UIScene+UI.h"
+#import "UINavigationScene+UI.h"
 #import <objc/message.h>
 #import <objc/runtime.h>
 
@@ -16,7 +16,9 @@
 #pragma mark - Public
 
 - (UIViewController *)previousViewController {
-  if (self.navigationController.viewControllers && self.navigationController.viewControllers.count > 1 && self.navigationController.topViewController == self) {
+  if (self.navigationController.viewControllers &&
+      self.navigationController.viewControllers.count > 1 &&
+      self.navigationController.topViewController == self) {
     NSUInteger count = self.navigationController.viewControllers.count;
     return (UIViewController *)[self.navigationController.viewControllers objectAtIndex:count - 2];
   }
@@ -57,10 +59,10 @@
     return [((UITabBarController *)self).selectedViewController visibleViewControllerIfExist];
   }
   
-  if ([self isViewLoaded] && self.view.window) {
+  if ([self isViewLoadedAndVisible]) {
     return self;
   } else {
-    NSLog(@"visibleViewControllerIfExist:，找不到可见的viewController。self = %@", self);
+    NSLog(@"visibleViewControllerIfExist:，找不到可见的viewController。self = %@, window = %@", self,self.view.window);
     return nil;
   }
 }
@@ -119,78 +121,17 @@
 
 @end
 
-@implementation UIViewController (Hooks)
+@implementation UIScene (Hooks)
 - (void)initSubviews {}
+- (void)setNavigationItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated {
+  self.navigationItem.titleView = self.titleView;
+}
+- (void)setToolbarItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated {}
 - (void)contentSizeCategoryDidChanged:(NSNotification *)notification {}
 @end
 
-@interface UIScene ()
-@end
-
-@implementation UIScene
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-
-#pragma mark - 生命周期
-
-- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
-{
-  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-    [self didInitialized];
-  }
-  return self;
-}
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-  if (self = [super initWithCoder:aDecoder]) {
-    [self didInitialized];
-  }
-  return self;
-}
-- (void)didInitialized
-{
-  self.hidesBottomBarWhenPushed = HidesBottomBarWhenPushedInitially;
-  self.extendedLayoutIncludesOpaqueBars = YES;
-  self.automaticallyAdjustsScrollViewInsets = NO;
-  [[NSNotificationCenter defaultCenter] addObserver:self
-                                           selector:@selector(contentSizeCategoryDidChanged:)
-                                               name:UIContentSizeCategoryDidChangeNotification
-                                             object:nil];
-  self.autorotate = NO;
-  self.supportedOrientationMask = UIInterfaceOrientationMaskPortrait;
-}
-- (void)dealloc {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)viewDidLoad {
-  [super viewDidLoad];
-  self.view.backgroundColor = UIColorForBackground;
-}
-
-#pragma mark - 屏幕旋转
-
-- (BOOL)shouldAutorotate {
-  return self.autorotate;
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-  return self.supportedOrientationMask;
-}
-
-#pragma mark - <UINavigationControllerDelegate>
-
-- (BOOL)shouldSetStatusBarStyleLight {
-  return StatusbarStyleLightInitially;
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-  return StatusbarStyleLightInitially ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
-}
-
-- (BOOL)preferredNavigationBarHidden {
-  return NavigationBarHiddenInitially;
-}
-
-#pragma clang diagnostic pop
+@implementation UIViewController (Handler)
+- (BOOL)shouldHoldBackButtonEven{ return NO;}
+- (BOOL)canPopViewController{ return YES;}
+- (BOOL)forceEnableInteractivePopGestureRecognizer{ return NO;}
 @end

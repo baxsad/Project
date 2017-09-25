@@ -11,8 +11,7 @@
 
 #import "NSGlobalTraking.h"
 #import "NSGlobalDeviceInfo.h"
-#import "UIConfigurationMacros.h"
-//#import "UINavigationBarTransition.h"
+#import "UICore.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import <Masonry/Masonry.h>
 #import <Bugly/Bugly.h>

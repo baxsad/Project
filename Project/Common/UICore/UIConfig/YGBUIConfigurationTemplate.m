@@ -12,26 +12,6 @@
 #import "UIImage+UIConfig.h"
 #import "UIHelper.h"
 
-#define UIColorGray1 UIColorMake(53, 60, 70)
-#define UIColorGray2 UIColorMake(73, 80, 90)
-#define UIColorGray3 UIColorMake(93, 100, 110)
-#define UIColorGray4 UIColorMake(113, 120, 130)
-#define UIColorGray5 UIColorMake(133, 140, 150)
-#define UIColorGray6 UIColorMake(153, 160, 170)
-#define UIColorGray7 UIColorMake(173, 180, 190)
-#define UIColorGray8 UIColorMake(196, 200, 208)
-#define UIColorGray9 UIColorMake(216, 220, 228)
-
-#define UIColorTheme1 UIColorMake(239, 83, 98) // Grapefruit
-#define UIColorTheme2 UIColorMake(254, 109, 75) // Bittersweet
-#define UIColorTheme3 UIColorMake(255, 207, 71) // Sunflower
-#define UIColorTheme4 UIColorMake(159, 214, 97) // Grass
-#define UIColorTheme5 UIColorMake(63, 208, 173) // Mint
-#define UIColorTheme6 UIColorMake(49, 189, 243) // Aqua
-#define UIColorTheme7 UIColorMake(90, 154, 239) // Blue Jeans
-#define UIColorTheme8 UIColorMake(172, 143, 239) // Lavender
-#define UIColorTheme9 UIColorMake(238, 133, 193) // Pink Rose
-
 @implementation YGBUIConfigurationTemplate
 
 - (void)setupConfigurationTemplate {
@@ -43,13 +23,13 @@
   UICMI.clearColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0];
   UICMI.whiteColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
   UICMI.blackColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
-  UICMI.grayColor = UIColorGray4;
-  UICMI.grayDarkenColor = UIColorGray3;
-  UICMI.grayLightenColor = UIColorGray7;
+  UICMI.grayColor = UIColorMake(113, 120, 130);
+  UICMI.grayDarkenColor = UIColorMake(93, 100, 110);
+  UICMI.grayLightenColor = UIColorMake(173, 180, 190);
   UICMI.redColor = UIColorMake(250, 58, 58);
-  UICMI.greenColor = UIColorTheme4;
+  UICMI.greenColor = UIColorMake(159, 214, 97);
   UICMI.blueColor = UIColorMake(49, 189, 243);
-  UICMI.yellowColor = UIColorTheme3;
+  UICMI.yellowColor = UIColorMake(255, 207, 71);
   
   UICMI.linkColor = UIColorMake(56, 116, 171);
   UICMI.disabledColor = UIColorGray;
@@ -58,7 +38,7 @@
   UICMI.maskLightColor = UIColorMakeWithRGBA(255, 255, 255, .5f);
   UICMI.separatorColor = UIColorMake(222, 224, 226);
   UICMI.separatorDashedColor = UIColorMake(17, 17, 17);
-  UICMI.placeholderColor = UIColorGray8;
+  UICMI.placeholderColor = UIColorMake(196, 200, 208);
   
   // 测试用的颜色
   UICMI.testColorRed = UIColorMakeWithRGBA(255, 0, 0, .3);
@@ -120,7 +100,7 @@
   UICMI.tabBarBarTintColor = nil;
   UICMI.tabBarShadowImageColor = UIColorSeparator;
   UICMI.tabBarTintColor = self.themeTintColor;
-  UICMI.tabBarItemTitleColor = UIColorGray6;
+  UICMI.tabBarItemTitleColor = UIColorMake(153, 160, 170);
   UICMI.tabBarItemTitleColorSelected = TabBarTintColor;
   UICMI.tabBarItemTitleFont = nil;
   
@@ -159,8 +139,8 @@
   UICMI.tableViewSeparatorColor = UIColorSeparator;
   
   UICMI.tableViewCellNormalHeight = 56;
-  UICMI.tableViewCellTitleLabelColor = UIColorGray3;
-  UICMI.tableViewCellDetailLabelColor = UIColorGray5;
+  UICMI.tableViewCellTitleLabelColor = UIColorMake(93, 100, 110);
+  UICMI.tableViewCellDetailLabelColor = UIColorMake(133, 140, 150);
   UICMI.tableViewCellBackgroundColor = UIColorWhite;
   UICMI.tableViewCellSelectedBackgroundColor = UIColorMake(238, 239, 241);
   UICMI.tableViewCellWarningBackgroundColor = UIColorYellow;
@@ -172,7 +152,7 @@
   UICMI.tableViewSectionFooterBackgroundColor = UIColorMake(244, 244, 244);
   UICMI.tableViewSectionHeaderFont = UIFontBoldMake(12);
   UICMI.tableViewSectionFooterFont = UIFontBoldMake(12);
-  UICMI.tableViewSectionHeaderTextColor = UIColorGray5;
+  UICMI.tableViewSectionHeaderTextColor = UIColorMake(133, 140, 150);
   UICMI.tableViewSectionFooterTextColor = UIColorGray;
   UICMI.tableViewSectionHeaderContentInset = UIEdgeInsetsMake(4, 15, 4, 15);
   UICMI.tableViewSectionFooterContentInset = UIEdgeInsetsMake(4, 15, 4, 15);
@@ -202,7 +182,7 @@
 #pragma mark - <ThemeProtocol>
 
 - (UIColor *)themeTintColor {
-  return UIColorTheme9;
+  return UIColorMake(238, 133, 193);
 }
 
 - (UIColor *)themeListTextColor {

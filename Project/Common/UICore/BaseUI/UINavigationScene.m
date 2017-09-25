@@ -6,22 +6,14 @@
 //  Copyright © 2017年 pmo. All rights reserved.
 //
 
+#import "UICommonDefines.h"
 #import "UINavigationScene.h"
+#import "UINavigationScene+UI.h"
 #import "UIScene.h"
+#import "UIScene+UI.h"
 #import "UINavigationButton.h"
 #import <objc/runtime.h>
 
-CG_INLINE void
-ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
-  Method oriMethod = class_getInstanceMethod(_class, _originSelector);
-  Method newMethod = class_getInstanceMethod(_class, _newSelector);
-  BOOL isAddedMethod = class_addMethod(_class, _originSelector, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));
-  if (isAddedMethod) {
-    class_replaceMethod(_class, _newSelector, method_getImplementation(oriMethod), method_getTypeEncoding(oriMethod));
-  } else {
-    method_exchangeImplementations(oriMethod, newMethod);
-  }
-}
 
 @interface UIViewController (UINavigationScene)
 @property(nonatomic, assign) BOOL isViewWillAppear;
@@ -58,11 +50,6 @@ ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
   [self didChangeValueForKey:@"isViewWillAppear"];
 }
 
-@end
-
-@implementation UINavigationController (Hooks)
-- (void)willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {}
-- (void)didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {}
 @end
 
 @interface UINavigationScene ()
@@ -117,8 +104,6 @@ ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated {
-  // 从横屏界面pop 到竖屏界面，系统会调用两次 popViewController，如果这里加这个 if 判断，会误拦第二次 pop，导致错误
-  
   if (self.viewControllers.count < 2) {
     return [super popViewControllerAnimated:animated];
   }
@@ -149,26 +134,21 @@ ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
   }
   
   self.viewControllerPopping = self.topViewController;
-  
   for (NSInteger i = self.viewControllers.count - 1; i > 0; i--) {
     UIViewController *viewControllerPopping = self.viewControllers[i];
     if (viewControllerPopping == viewController) {
       break;
     }
-    
     if ([viewControllerPopping respondsToSelector:@selector(willPopInNavigationControllerWithAnimated:)]) {
-      // 只有当前可视的那个 viewController 的 animated 是跟随参数走的，其他 viewController 由于不可视，不管参数的值为多少，都认为是无动画地 pop
       BOOL animatedArgument = i == self.viewControllers.count - 1 ? animated : NO;
       [((UIViewController<UINavigationSceneDelegate> *)viewControllerPopping) willPopInNavigationControllerWithAnimated:animatedArgument];
     }
   }
   
   NSArray<UIViewController *> *poppedViewControllers = [super popToViewController:viewController animated:animated];
-  
   for (NSInteger i = poppedViewControllers.count - 1; i >= 0; i--) {
     UIViewController *viewControllerPopped = poppedViewControllers[i];
     if ([viewControllerPopped respondsToSelector:@selector(didPopInNavigationControllerWithAnimated:)]) {
-      // 只有当前可视的那个 viewController 的 animated 是跟随参数走的，其他 viewController 由于不可视，不管参数的值为多少，都认为是无动画地 pop
       BOOL animatedArgument = i == poppedViewControllers.count - 1 ? animated : NO;
       [((UIViewController<UINavigationSceneDelegate> *)viewControllerPopped) didPopInNavigationControllerWithAnimated:animatedArgument];
     }
@@ -187,22 +167,18 @@ ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
   }
   
   self.viewControllerPopping = self.topViewController;
-  
   for (NSInteger i = self.viewControllers.count - 1; i > 0; i--) {
     UIViewController *viewControllerPopping = self.viewControllers[i];
     if ([viewControllerPopping respondsToSelector:@selector(willPopInNavigationControllerWithAnimated:)]) {
-      // 只有当前可视的那个 viewController 的 animated 是跟随参数走的，其他 viewController 由于不可视，不管参数的值为多少，都认为是无动画地 pop
       BOOL animatedArgument = i == self.viewControllers.count - 1 ? animated : NO;
       [((UIViewController<UINavigationSceneDelegate> *)viewControllerPopping) willPopInNavigationControllerWithAnimated:animatedArgument];
     }
   }
   
   NSArray<UIViewController *> * poppedViewControllers = [super popToRootViewControllerAnimated:animated];
-  
   for (NSInteger i = poppedViewControllers.count - 1; i >= 0; i--) {
     UIViewController *viewControllerPopped = poppedViewControllers[i];
     if ([viewControllerPopped respondsToSelector:@selector(didPopInNavigationControllerWithAnimated:)]) {
-      // 只有当前可视的那个 viewController 的 animated 是跟随参数走的，其他 viewController 由于不可视，不管参数的值为多少，都认为是无动画地 pop
       BOOL animatedArgument = i == poppedViewControllers.count - 1 ? animated : NO;
       [((UIViewController<UINavigationSceneDelegate> *)viewControllerPopped) didPopInNavigationControllerWithAnimated:animatedArgument];
     }
@@ -217,7 +193,6 @@ ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
   [viewControllersPopping removeObjectsInArray:viewControllers];
   [viewControllersPopping enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     if ([obj respondsToSelector:@selector(willPopInNavigationControllerWithAnimated:)]) {
-      // 只有当前可视的那个 viewController 的 animated 是跟随参数走的，其他 viewController 由于不可视，不管参数的值为多少，都认为是无动画地 pop
       BOOL animatedArgument = obj == topViewController ? animated : NO;
       [((UIViewController<UINavigationSceneDelegate> *)obj) willPopInNavigationControllerWithAnimated:animatedArgument];
     }
@@ -227,13 +202,11 @@ ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
   
   [viewControllersPopping enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     if ([obj respondsToSelector:@selector(didPopInNavigationControllerWithAnimated:)]) {
-      // 只有当前可视的那个 viewController 的 animated 是跟随参数走的，其他 viewController 由于不可视，不管参数的值为多少，都认为是无动画地 pop
       BOOL animatedArgument = obj == topViewController ? animated : NO;
       [((UIViewController<UINavigationSceneDelegate> *)obj) didPopInNavigationControllerWithAnimated:animatedArgument];
     }
   }];
   
-  // 操作前后 topViewController 没发生变化
   if (topViewController == viewControllers.lastObject) {
     if ([topViewController respondsToSelector:@selector(viewControllerKeepingAppearWhenSetViewControllersWithAnimated:)]) {
       [((UIViewController<UINavigationSceneDelegate> *)topViewController) viewControllerKeepingAppearWhenSetViewControllersWithAnimated:animated];
@@ -279,8 +252,8 @@ ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
   [super setDelegate:delegate ? self : nil];
 }
 
-// 重写这个方法才能让 viewControllers 对 statusBar 的控制生效
 - (UIViewController *)childViewControllerForStatusBarStyle {
+  ///< 重写这个方法才能让 viewControllers 对 statusBar 的控制生效
   return self.topViewController;
 }
 

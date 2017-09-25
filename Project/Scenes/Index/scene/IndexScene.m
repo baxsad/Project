@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  self.navigationItem.title = @"熒光棒";
+  self.titleView.needsLoadingView = YES;
   
   UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 100, 100, 50)];
   btn.backgroundColor = UIColorRed;
@@ -28,8 +28,10 @@
   TestView *test = [[TestView alloc] initWithFrame:CGRectMake(20, 200, 100, 50)];
   test.backgroundColor = UIColorGreen;
   [self.view addSubview:test];
+  @weakify(self);
   [[test rac_signalForSelector:@selector(buttonClick)] subscribeNext:^(id x) {
-    
+    @strongify(self);
+    self.titleView.loadingViewHidden = !self.titleView.loadingViewHidden;
   }];
   
   UIButton *btn3 = [[UIButton alloc] initWithFrame:CGRectMake(20, 300, 100, 50)];
@@ -42,6 +44,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
   [super viewWillAppear:animated];
+}
+
+- (void)setNavigationItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated {
+  [super setNavigationItemsIsInEditMode:isInEditMode animated:animated];
+  self.title = @"熒光棒";
 }
   
 - (void)action

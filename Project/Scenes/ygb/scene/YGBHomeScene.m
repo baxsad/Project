@@ -9,6 +9,7 @@
 #import "YGBHomeScene.h"
 #import "UITableScene.h"
 #import "YGBQRCodeScanScene.h"
+#import "UIImage+UIConfig.h"
 
 @interface YGBHomeScene ()
 @property (nonatomic, strong) UIButton *scanButton;

@@ -1,22 +1,29 @@
 //
-//  UINavigationScene.h
-//  XX_iOS_APP
+//  UINavigationScene+UI.h
+//  Project
 //
-//  Created by pmo on 2017/8/16.
-//  Copyright © 2017年 pmo. All rights reserved.
+//  Created by pmo on 2017/9/24.
+//  Copyright © 2017年 jearoc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UINavigationScene : UINavigationController<UINavigationControllerDelegate>
-- (void)didInitialized NS_REQUIRES_SUPER;
+@interface UINavigationController (UI)
+- (nullable UIViewController *)rootViewController;
 @end
 
 @interface UINavigationController (Hooks)
-- (void)willShowViewController:(nonnull UIViewController *)viewController animated:(BOOL)animated NS_REQUIRES_SUPER;
-- (void)didShowViewController:(nonnull UIViewController *)viewController animated:(BOOL)animated NS_REQUIRES_SUPER;
+- (void)willShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
+- (void)didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
+@end
+
+@protocol UINavigationControllerBackButtonHandlerProtocol <NSObject>
+@optional
+- (BOOL)shouldHoldBackButtonEvent;
+- (BOOL)canPopViewController;
+- (BOOL)forceEnableInteractivePopGestureRecognizer;
 @end
 
 @protocol UINavigationSceneDelegate <NSObject>
@@ -36,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)shouldCustomNavigationBarTransitionWhenPushDisappearing;
 - (BOOL)shouldCustomNavigationBarTransitionWhenPopAppearing;
 - (BOOL)shouldCustomNavigationBarTransitionWhenPopDisappearing;
+- (nullable UIColor *)containerViewBackgroundColorWhenTransitioning;
+- (BOOL)shouldCustomNavigationBarTransitionIfBarHiddenable;
 @end
 
 NS_ASSUME_NONNULL_END

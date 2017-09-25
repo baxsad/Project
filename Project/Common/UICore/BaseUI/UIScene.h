@@ -9,25 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "UINavigationScene.h"
 #import "UINavigationScene+UI.h"
+#import "UINavigationTitleView.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface UIViewController (UI)
-@property(nullable, nonatomic, weak, readonly) UIViewController *previousViewController;
-@property(nullable, nonatomic, copy, readonly) NSString *previousViewControllerTitle;
-- (nullable UIViewController *)visibleViewControllerIfExist;
-- (BOOL)isPresented;
-- (BOOL)isViewLoadedAndVisible;
-@end
-
-@interface UIViewController (Runtime)
-- (BOOL)hasOverrideUIKitMethod:(_Nonnull SEL)selector;
-@end
-
-@interface UIViewController (Hooks)
-- (void)initSubviews NS_REQUIRES_SUPER;
-- (void)contentSizeCategoryDidChanged:(NSNotification *)notification;
-@end
 
 @interface UIScene : UIViewController<UINavigationSceneDelegate>
 - (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER;
@@ -35,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)didInitialized NS_REQUIRES_SUPER;
 @property(nonatomic, assign) BOOL autorotate;
 @property(nonatomic, assign) UIInterfaceOrientationMask supportedOrientationMask;
+@property(nonatomic, strong, readonly) UINavigationTitleView *titleView;
 @end
 
 NS_ASSUME_NONNULL_END

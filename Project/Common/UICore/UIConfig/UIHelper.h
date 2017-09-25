@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface UIHelper : NSObject
 + (instancetype _Nonnull)sharedInstance;
 @end
@@ -37,3 +39,29 @@
 + (UIViewAnimationCurve)keyboardAnimationCurveWithNotification:(nullable NSNotification *)notification;
 + (UIViewAnimationOptions)keyboardAnimationOptionsWithNotification:(nullable NSNotification *)notification;
 @end
+
+@interface UIHelper (UITabBarItem)
++ (UITabBarItem *)tabBarItemWithTitle:(NSString *)title image:(UIImage *)image selectedImage:(UIImage *)selectedImage tag:(NSInteger)tag;
+@end
+
+@interface UIHelper (Device)
++ (BOOL)isIPad;
++ (BOOL)isIPadPro;
++ (BOOL)isIPod;
++ (BOOL)isIPhone;
++ (BOOL)isSimulator;
+
++ (BOOL)is58InchScreen;
++ (BOOL)is55InchScreen;
++ (BOOL)is47InchScreen;
++ (BOOL)is40InchScreen;
++ (BOOL)is35InchScreen;
+
++ (CGSize)screenSizeFor58Inch;
++ (CGSize)screenSizeFor55Inch;
++ (CGSize)screenSizeFor47Inch;
++ (CGSize)screenSizeFor40Inch;
++ (CGSize)screenSizeFor35Inch;
+@end
+
+NS_ASSUME_NONNULL_END
