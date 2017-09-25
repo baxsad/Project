@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIKeyboardManager.h"
 #import "UINavigationScene.h"
 #import "UINavigationScene+UI.h"
 #import "UINavigationTitleView.h"
@@ -20,6 +21,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) BOOL autorotate;
 @property(nonatomic, assign) UIInterfaceOrientationMask supportedOrientationMask;
 @property(nonatomic, strong, readonly) UINavigationTitleView *titleView;
+@end
+
+@interface UIScene (UIKeyboard)
+@property(nonatomic, strong, readonly) UITapGestureRecognizer *hideKeyboardTapGestureRecognizer;
+@property(nonatomic, strong, readonly) UIKeyboardManager *hideKeyboardManager;
+- (BOOL)shouldHideKeyboardWhenTouchInView:(UIView *)view;
 @end
 
 NS_ASSUME_NONNULL_END

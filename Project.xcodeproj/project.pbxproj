@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B66405401F794599003F31DD /* HintsScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B664053E1F794599003F31DD /* HintsScene.m */; };
+		B66405411F794599003F31DD /* HintsScene.xib in Resources */ = {isa = PBXBuildFile; fileRef = B664053F1F794599003F31DD /* HintsScene.xib */; };
+		B66405451F794675003F31DD /* UIKeyboardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B66405441F794675003F31DD /* UIKeyboardManager.m */; };
 		E2FF88B26EA31E72CA126D16 /* libPods-Project.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4B56543DA8231574D4B11F /* libPods-Project.a */; };
 		E507D8951F78DAD0004D6DC0 /* UINavigationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E507D8701F78DAD0004D6DC0 /* UINavigationButton.m */; };
 		E507D8961F78DAD0004D6DC0 /* UINavigationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = E507D8721F78DAD0004D6DC0 /* UINavigationTitleView.m */; };
@@ -73,6 +76,11 @@
 /* Begin PBXFileReference section */
 		6366276834E1B334ADAF7613 /* Pods-Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project.release.xcconfig"; path = "Pods/Target Support Files/Pods-Project/Pods-Project.release.xcconfig"; sourceTree = "<group>"; };
 		85860AAA7ADE0964B1CAEE3B /* Pods-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Project/Pods-Project.debug.xcconfig"; sourceTree = "<group>"; };
+		B664053D1F794599003F31DD /* HintsScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HintsScene.h; sourceTree = "<group>"; };
+		B664053E1F794599003F31DD /* HintsScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HintsScene.m; sourceTree = "<group>"; };
+		B664053F1F794599003F31DD /* HintsScene.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HintsScene.xib; sourceTree = "<group>"; };
+		B66405431F794675003F31DD /* UIKeyboardManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIKeyboardManager.h; sourceTree = "<group>"; };
+		B66405441F794675003F31DD /* UIKeyboardManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKeyboardManager.m; sourceTree = "<group>"; };
 		E507D86F1F78DAD0004D6DC0 /* UINavigationButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationButton.h; sourceTree = "<group>"; };
 		E507D8701F78DAD0004D6DC0 /* UINavigationButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UINavigationButton.m; sourceTree = "<group>"; };
 		E507D8711F78DAD0004D6DC0 /* UINavigationTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationTitleView.h; sourceTree = "<group>"; };
@@ -289,6 +297,8 @@
 			children = (
 				E507D8A81F791673004D6DC0 /* UIModalPresentationViewController.h */,
 				E507D8A91F791673004D6DC0 /* UIModalPresentationViewController.m */,
+				B66405431F794675003F31DD /* UIKeyboardManager.h */,
+				B66405441F794675003F31DD /* UIKeyboardManager.m */,
 			);
 			path = UIComponents;
 			sourceTree = "<group>";
@@ -417,6 +427,9 @@
 			children = (
 				E52C992B1F53CD0C007D8408 /* MineScene.h */,
 				E52C992C1F53CD0C007D8408 /* MineScene.m */,
+				B664053D1F794599003F31DD /* HintsScene.h */,
+				B664053E1F794599003F31DD /* HintsScene.m */,
+				B664053F1F794599003F31DD /* HintsScene.xib */,
 			);
 			path = scene;
 			sourceTree = "<group>";
@@ -667,6 +680,7 @@
 				E52C98EE1F53CCA1007D8408 /* LaunchScreen.storyboard in Resources */,
 				E52C98EB1F53CCA1007D8408 /* Assets.xcassets in Resources */,
 				E52C98E91F53CCA1007D8408 /* Main.storyboard in Resources */,
+				B66405411F794599003F31DD /* HintsScene.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -772,10 +786,12 @@
 				E52C99341F53CD0C007D8408 /* NextScene.m in Sources */,
 				E507D8961F78DAD0004D6DC0 /* UINavigationTitleView.m in Sources */,
 				E507D8951F78DAD0004D6DC0 /* UINavigationButton.m in Sources */,
+				B66405401F794599003F31DD /* HintsScene.m in Sources */,
 				E507D89C1F78DAD1004D6DC0 /* UIScene.m in Sources */,
 				E5654D491F6B7782002DAA18 /* UIResponder+ResponderChain.m in Sources */,
 				E507D89E1F78DAD1004D6DC0 /* UITableScene.m in Sources */,
 				E507D8A21F78DAD1004D6DC0 /* UIImage+UIConfig.m in Sources */,
+				B66405451F794675003F31DD /* UIKeyboardManager.m in Sources */,
 				E59C4B4B1F711EB30006D69B /* YGBHomeScene.m in Sources */,
 				E507D8A01F78DAD1004D6DC0 /* UIConfiguration.m in Sources */,
 				E507D8A11F78DAD1004D6DC0 /* UIHelper.m in Sources */,
@@ -936,7 +952,7 @@
 				INFOPLIST_FILE = Project/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = code.com.rui.Project;
+				PRODUCT_BUNDLE_IDENTIFIER = code.com.rui.Project66GHJV;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -955,7 +971,7 @@
 				INFOPLIST_FILE = Project/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = code.com.rui.Project;
+				PRODUCT_BUNDLE_IDENTIFIER = code.com.rui.Project66GHJV;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";

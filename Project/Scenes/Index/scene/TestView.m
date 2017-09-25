@@ -33,13 +33,13 @@
 {
   if (self = [super initWithFrame:frame]) {
     
-    UIButton *button = [[UIButton alloc] initWithFrame:self.bounds];
-    [self addSubview:button];
-    [[button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-      [self buttonClick];
-    }];
-    
-    self.object = [TestObject new];
+//    UIButton *button = [[UIButton alloc] initWithFrame:self.bounds];
+//    [self addSubview:button];
+//    [[button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+//      [self buttonClick];
+//    }];
+//
+//    self.object = [TestObject new];
     
   }
   return self;

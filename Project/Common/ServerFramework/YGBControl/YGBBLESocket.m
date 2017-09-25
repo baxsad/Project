@@ -260,7 +260,7 @@ static CBPeripheral *willConnectingPeripheral;
 
 - (void)sendData:(nullable NSData *)data characteristic:(CBCharacteristic *)characteristic error:(NSError **)error
 {
-  if (data == nil) {
+  if (characteristic == nil) {
     NSString *message = @"特征不能为空";
     if (error) {
       *error = YGBErrorWithCodeDescription(YGBErrorCodeCharacteristicNill, message);

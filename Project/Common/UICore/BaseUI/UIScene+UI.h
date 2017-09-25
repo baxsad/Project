@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIViewController (Runtime)
 - (BOOL)hasOverrideUIKitMethod:(_Nonnull SEL)selector;
+- (BOOL)hasOverrideMethod:(SEL)selector ofSuperclass:(Class)superclass;
 @end
 
 @interface UIScene (Hooks)

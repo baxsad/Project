@@ -12,6 +12,7 @@
 #import "TestView.h"
 
 @interface IndexScene ()
+@property(nonatomic,strong) TestView *test;
 @end
 
 @implementation IndexScene
@@ -28,15 +29,10 @@
   TestView *test = [[TestView alloc] initWithFrame:CGRectMake(20, 200, 100, 50)];
   test.backgroundColor = UIColorGreen;
   [self.view addSubview:test];
-  @weakify(self);
-  [[test rac_signalForSelector:@selector(buttonClick)] subscribeNext:^(id x) {
-    @strongify(self);
-    self.titleView.loadingViewHidden = !self.titleView.loadingViewHidden;
-  }];
+  self.test = test;
   
-  UIButton *btn3 = [[UIButton alloc] initWithFrame:CGRectMake(20, 300, 100, 50)];
+  UITextView *btn3 = [[UITextView alloc] initWithFrame:CGRectMake(20, 300, 100, 50)];
   btn3.backgroundColor = UIColorGrayLighten;
-  [btn3 addTarget:self action:@selector(action3) forControlEvents:UIControlEventTouchUpInside];
   [self.view addSubview:btn3];
   
 }
@@ -57,14 +53,16 @@
   [self.navigationController pushViewController:next animated:YES];
 }
 
-- (void)action3
-{
-  YGBHomeScene *ygb = [[YGBHomeScene alloc] init];
-  [self.navigationController pushViewController:ygb animated:YES];
-}
-
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
+}
+
+- (BOOL)shouldHideKeyboardWhenTouchInView:(UIView *)view
+{
+  if ([view isEqual:self.test]) {
+    return YES;
+  }
+  return NO;
 }
 
 @end
