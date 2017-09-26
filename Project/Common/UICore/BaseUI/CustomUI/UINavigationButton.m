@@ -7,37 +7,10 @@
 //
 
 #import "UINavigationButton.h"
+#import "UICommonDefines.h"
 #import "UIImage+UIConfig.h"
 #import "UIScene.h"
 #import "UIScene+UI.h"
-
-CG_INLINE CGFloat
-flatSpecificScale(CGFloat floatValue, CGFloat scale) {
-  floatValue = floatValue == CGFLOAT_MIN ? 0 : floatValue;
-  scale = scale == 0 ? [[UIScreen mainScreen] scale] : scale;
-  CGFloat flattedValue = ceil(floatValue * scale) / scale;
-  return flattedValue;
-}
-CG_INLINE UIEdgeInsets
-UIEdgeInsetsSetTop(UIEdgeInsets insets, CGFloat top) {
-  insets.top = flatSpecificScale(top,0);
-  return insets;
-}
-CG_INLINE UIEdgeInsets
-UIEdgeInsetsSetLeft(UIEdgeInsets insets, CGFloat left) {
-  insets.left = flatSpecificScale(left,0);
-  return insets;
-}
-CG_INLINE UIEdgeInsets
-UIEdgeInsetsSetBottom(UIEdgeInsets insets, CGFloat bottom) {
-  insets.bottom = flatSpecificScale(bottom,0);
-  return insets;
-}
-CG_INLINE UIEdgeInsets
-UIEdgeInsetsSetRight(UIEdgeInsets insets, CGFloat right) {
-  insets.right = flatSpecificScale(right,0);
-  return insets;
-}
 
 @interface UINavigationButton()
 @property(nonatomic, assign) UINavigationButtonPosition buttonPosition;

@@ -64,4 +64,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (CGSize)screenSizeFor35Inch;
 @end
 
+@interface UIHelper (UIGraphic)
+/// 获取一像素的大小
++ (CGFloat)pixelOne;
+/// 判断size是否超出范围
++ (void)inspectContextSize:(CGSize)size;
+/// context是否合法
++ (void)inspectContextIfInvalidatedInDebugMode:(CGContextRef _Nonnull)context;
++ (BOOL)inspectContextIfInvalidatedInReleaseMode:(CGContextRef _Nonnull)context;
+@end
+
 NS_ASSUME_NONNULL_END

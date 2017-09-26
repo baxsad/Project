@@ -8,14 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define CGContextInspectSize(size) [UIImage inspectContextSize:size]
-
-#ifdef DEBUG
-#define CGContextInspectContext(context) [UIImage inspectContextIfInvalidatedInDebugMode:context]
-#else
-#define CGContextInspectContext(context) if(![UIImage inspectContextIfInvalidatedInReleaseMode:context]){return nil;}
-#endif
-
 typedef NS_ENUM(NSInteger, UIImageShape) {
   UIImageShapeOval,                 // 椭圆
   UIImageShapeTriangle,             // 三角形

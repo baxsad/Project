@@ -22,6 +22,14 @@
 #define UIViewAnimationOptionsCurveOut (7<<16)
 #define UIViewAnimationOptionsCurveIn (8<<16)
 
+#define CGContextInspectSize(size) [UIHelper inspectContextSize:size]
+
+#ifdef DEBUG
+#define CGContextInspectContext(context) [UIHelper inspectContextIfInvalidatedInDebugMode:context]
+#else
+#define CGContextInspectContext(context) if(![UIHelper inspectContextIfInvalidatedInReleaseMode:context]){return nil;}
+#endif
+
 // 是否横竖屏
 // 用户界面横屏了才会返回YES
 #define IS_LANDSCAPE UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])
@@ -78,8 +86,9 @@ floorInPixel(CGFloat floatValue) {
 
 CG_INLINE float
 flatfSpecificScale(float floatValue, float scale) {
-  scale = scale == 0 ? ScreenScale : scale;
-  CGFloat flattedValue = ceilf(floatValue * scale) / scale;
+  floatValue = floatValue == CGFLOAT_MIN ? 0 : floatValue;
+  scale = scale == 0 ? [[UIScreen mainScreen] scale] : scale;
+  CGFloat flattedValue = ceil(floatValue * scale) / scale;
   return flattedValue;
 }
 
@@ -193,4 +202,25 @@ CG_INLINE CGPoint
 CGPointToFixed(CGPoint point, NSUInteger precision) {
   CGPoint result = CGPointMake(CGFloatToFixed(point.x, precision), CGFloatToFixed(point.y, precision));
   return result;
+}
+
+CG_INLINE UIEdgeInsets
+UIEdgeInsetsSetTop(UIEdgeInsets insets, CGFloat top) {
+  insets.top = flatfSpecificScale(top,0);
+  return insets;
+}
+CG_INLINE UIEdgeInsets
+UIEdgeInsetsSetLeft(UIEdgeInsets insets, CGFloat left) {
+  insets.left = flatfSpecificScale(left,0);
+  return insets;
+}
+CG_INLINE UIEdgeInsets
+UIEdgeInsetsSetBottom(UIEdgeInsets insets, CGFloat bottom) {
+  insets.bottom = flatfSpecificScale(bottom,0);
+  return insets;
+}
+CG_INLINE UIEdgeInsets
+UIEdgeInsetsSetRight(UIEdgeInsets insets, CGFloat right) {
+  insets.right = flatfSpecificScale(right,0);
+  return insets;
 }

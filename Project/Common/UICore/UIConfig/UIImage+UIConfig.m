@@ -8,6 +8,7 @@
 
 #import "UIImage+UIConfig.h"
 #import "UICommonDefines.h"
+#import "UIHelper.h"
 
 @implementation UIImage (UIConfig)
 
@@ -272,27 +273,6 @@ flatSpecificScale(CGFloat floatValue, CGFloat scale) {
   UIImage *imageOut = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
   return imageOut;
-}
-
-#pragma mark - 
-  
-+ (void)inspectContextSize:(CGSize)size {
-  if (size.width < 0 || size.height < 0) {
-    NSAssert(NO, @"UI CGPostError, %@:%d %s, 非法的size：%@\n%@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __PRETTY_FUNCTION__, NSStringFromCGSize(size), [NSThread callStackSymbols]);
-  }
-}
-  
-+ (void)inspectContextIfInvalidatedInDebugMode:(CGContextRef)context {
-  if (!context) {
-    NSAssert(NO, @"UI CGPostError, %@:%d %s, 非法的context：%@\n%@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __PRETTY_FUNCTION__, context, [NSThread callStackSymbols]);
-  }
-}
-  
-+ (BOOL)inspectContextIfInvalidatedInReleaseMode:(CGContextRef)context {
-  if (context) {
-    return YES;
-  }
-  return NO;
 }
   
 @end

@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B63E3A501F7AB435004390A3 /* UITextField+UIKeyboardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B63E3A4F1F7AB435004390A3 /* UITextField+UIKeyboardManager.m */; };
+		B63E3A531F7AB609004390A3 /* UITextView+UIKeyboardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B63E3A521F7AB609004390A3 /* UITextView+UIKeyboardManager.m */; };
+		B63E3A561F7AB7AF004390A3 /* UIView+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = B63E3A551F7AB7AF004390A3 /* UIView+UI.m */; };
+		B63E3A591F7AB8E4004390A3 /* NSObject+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = B63E3A581F7AB8E4004390A3 /* NSObject+UI.m */; };
+		B63E3A5C1F7ABAD1004390A3 /* UIImage+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = B63E3A5B1F7ABAD1004390A3 /* UIImage+UI.m */; };
 		B66405451F794675003F31DD /* UIKeyboardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B66405441F794675003F31DD /* UIKeyboardManager.m */; };
 		E2FF88B26EA31E72CA126D16 /* libPods-Project.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4B56543DA8231574D4B11F /* libPods-Project.a */; };
 		E507D8951F78DAD0004D6DC0 /* UINavigationButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E507D8701F78DAD0004D6DC0 /* UINavigationButton.m */; };
@@ -80,6 +85,16 @@
 /* Begin PBXFileReference section */
 		6366276834E1B334ADAF7613 /* Pods-Project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project.release.xcconfig"; path = "Pods/Target Support Files/Pods-Project/Pods-Project.release.xcconfig"; sourceTree = "<group>"; };
 		85860AAA7ADE0964B1CAEE3B /* Pods-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Project/Pods-Project.debug.xcconfig"; sourceTree = "<group>"; };
+		B63E3A4E1F7AB435004390A3 /* UITextField+UIKeyboardManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+UIKeyboardManager.h"; sourceTree = "<group>"; };
+		B63E3A4F1F7AB435004390A3 /* UITextField+UIKeyboardManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+UIKeyboardManager.m"; sourceTree = "<group>"; };
+		B63E3A511F7AB609004390A3 /* UITextView+UIKeyboardManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextView+UIKeyboardManager.h"; sourceTree = "<group>"; };
+		B63E3A521F7AB609004390A3 /* UITextView+UIKeyboardManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextView+UIKeyboardManager.m"; sourceTree = "<group>"; };
+		B63E3A541F7AB7AF004390A3 /* UIView+UI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+UI.h"; sourceTree = "<group>"; };
+		B63E3A551F7AB7AF004390A3 /* UIView+UI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+UI.m"; sourceTree = "<group>"; };
+		B63E3A571F7AB8E4004390A3 /* NSObject+UI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+UI.h"; sourceTree = "<group>"; };
+		B63E3A581F7AB8E4004390A3 /* NSObject+UI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+UI.m"; sourceTree = "<group>"; };
+		B63E3A5A1F7ABAD1004390A3 /* UIImage+UI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+UI.h"; sourceTree = "<group>"; };
+		B63E3A5B1F7ABAD1004390A3 /* UIImage+UI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UI.m"; sourceTree = "<group>"; };
 		B66405431F794675003F31DD /* UIKeyboardManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIKeyboardManager.h; sourceTree = "<group>"; };
 		B66405441F794675003F31DD /* UIKeyboardManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKeyboardManager.m; sourceTree = "<group>"; };
 		E507D86F1F78DAD0004D6DC0 /* UINavigationButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UINavigationButton.h; sourceTree = "<group>"; };
@@ -327,6 +342,7 @@
 		E50B22521F79EDB7008B7BF6 /* UIExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				E50B22721F7A5453008B7BF6 /* UIExtensions.h */,
 				E50B22591F79F2BA008B7BF6 /* UINavigationScene+UI.h */,
 				E50B22571F79F2B9008B7BF6 /* UINavigationScene+UI.m */,
 				E50B22561F79F2B9008B7BF6 /* UIScene+UI.h */,
@@ -335,7 +351,16 @@
 				E50B22541F79EDD1008B7BF6 /* UITableScene+UI.m */,
 				E50B226F1F7A53CD008B7BF6 /* UIScrollView+UI.h */,
 				E50B22701F7A53CD008B7BF6 /* UIScrollView+UI.m */,
-				E50B22721F7A5453008B7BF6 /* UIExtensions.h */,
+				B63E3A4E1F7AB435004390A3 /* UITextField+UIKeyboardManager.h */,
+				B63E3A4F1F7AB435004390A3 /* UITextField+UIKeyboardManager.m */,
+				B63E3A511F7AB609004390A3 /* UITextView+UIKeyboardManager.h */,
+				B63E3A521F7AB609004390A3 /* UITextView+UIKeyboardManager.m */,
+				B63E3A541F7AB7AF004390A3 /* UIView+UI.h */,
+				B63E3A551F7AB7AF004390A3 /* UIView+UI.m */,
+				B63E3A571F7AB8E4004390A3 /* NSObject+UI.h */,
+				B63E3A581F7AB8E4004390A3 /* NSObject+UI.m */,
+				B63E3A5A1F7ABAD1004390A3 /* UIImage+UI.h */,
+				B63E3A5B1F7ABAD1004390A3 /* UIImage+UI.m */,
 			);
 			path = UIExtensions;
 			sourceTree = "<group>";
@@ -664,7 +689,7 @@
 				TargetAttributes = {
 					E52C98DA1F53CCA1007D8408 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 7524R5UJ2G;
+						DevelopmentTeam = 5D844S57RU;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -799,11 +824,14 @@
 				E50B22781F7A58F4008B7BF6 /* UILabelScene.m in Sources */,
 				E54F4AC21F74E81C001417F3 /* YGBQRCodeScanScene.m in Sources */,
 				E52C98E61F53CCA1007D8408 /* ViewController.m in Sources */,
+				B63E3A531F7AB609004390A3 /* UITextView+UIKeyboardManager.m in Sources */,
+				B63E3A501F7AB435004390A3 /* UITextField+UIKeyboardManager.m in Sources */,
 				E507D89F1F78DAD1004D6DC0 /* UIColor+UIConfig.m in Sources */,
 				E52C99461F53CE79007D8408 /* YGBError.m in Sources */,
 				E5EE37761F6BE53500B179F5 /* SCCenter.m in Sources */,
 				E52C98E31F53CCA1007D8408 /* AppDelegate.m in Sources */,
 				E52C99451F53CE79007D8408 /* YGBBLESocket.m in Sources */,
+				B63E3A591F7AB8E4004390A3 /* NSObject+UI.m in Sources */,
 				E5A96B211F58FC0900266055 /* TestView.m in Sources */,
 				E571DCA71F57A9D9005511A3 /* NSGlobalTraking.m in Sources */,
 				E54F4ABF1F74C147001417F3 /* QRCodeScanner.m in Sources */,
@@ -811,6 +839,7 @@
 				E50B22711F7A53CD008B7BF6 /* UIScrollView+UI.m in Sources */,
 				E52C99441F53CE79007D8408 /* NSData+Resolve.m in Sources */,
 				E52C98E01F53CCA1007D8408 /* main.m in Sources */,
+				B63E3A5C1F7ABAD1004390A3 /* UIImage+UI.m in Sources */,
 				E50B226E1F7A5187008B7BF6 /* UIListScene.m in Sources */,
 				E507D8971F78DAD0004D6DC0 /* UINavigationBar+Transition.m in Sources */,
 				E50B225A1F79F2BA008B7BF6 /* UINavigationScene+UI.m in Sources */,
@@ -827,6 +856,7 @@
 				E5654D491F6B7782002DAA18 /* UIResponder+ResponderChain.m in Sources */,
 				E50B22751F7A5719008B7BF6 /* UIEmptyView.m in Sources */,
 				E507D89E1F78DAD1004D6DC0 /* UITableScene.m in Sources */,
+				B63E3A561F7AB7AF004390A3 /* UIView+UI.m in Sources */,
 				E507D8A21F78DAD1004D6DC0 /* UIImage+UIConfig.m in Sources */,
 				B66405451F794675003F31DD /* UIKeyboardManager.m in Sources */,
 				E59C4B4B1F711EB30006D69B /* YGBHomeScene.m in Sources */,
@@ -985,7 +1015,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7524R5UJ2G;
+				DEVELOPMENT_TEAM = 5D844S57RU;
 				GCC_PREFIX_HEADER = Project/PH.pch;
 				INFOPLIST_FILE = Project/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1004,7 +1034,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7524R5UJ2G;
+				DEVELOPMENT_TEAM = 5D844S57RU;
 				GCC_PREFIX_HEADER = Project/PH.pch;
 				INFOPLIST_FILE = Project/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

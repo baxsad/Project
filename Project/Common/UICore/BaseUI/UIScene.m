@@ -10,6 +10,7 @@
 #import "UIScene+UI.h"
 #import "UINavigationScene.h"
 #import "UIKeyboardManager.h"
+#import "NSObject+UI.h"
 
 @interface UISceneHideKeyboardDelegateObject : NSObject <UIGestureRecognizerDelegate, UIKeyboardManagerDelegate>
 @property(nonatomic, weak) UIScene *scene;

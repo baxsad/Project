@@ -285,3 +285,36 @@ static NSInteger is35InchScreen = -1;
   return CGSizeMake(320, 480);
 }
 @end
+
+@implementation UIHelper (UIGraphic)
+
+static CGFloat pixelOne = -1.0f;
++ (CGFloat)pixelOne {
+  if (pixelOne < 0) {
+    pixelOne = 1 / [[UIScreen mainScreen] scale];
+  }
+  return pixelOne;
+}
+
++ (void)inspectContextSize:(CGSize)size {
+  if (size.width < 0 || size.height < 0) {
+    NSAssert(NO, @"CGPostError, %@:%d %s, 非法的size：%@\n%@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __PRETTY_FUNCTION__, NSStringFromCGSize(size), [NSThread callStackSymbols]);
+  }
+}
+
++ (void)inspectContextIfInvalidatedInDebugMode:(CGContextRef)context {
+  if (!context) {
+    // crash了就找zhoon或者molice
+    NSAssert(NO, @"CGPostError, %@:%d %s, 非法的context：%@\n%@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, __PRETTY_FUNCTION__, context, [NSThread callStackSymbols]);
+  }
+}
+
++ (BOOL)inspectContextIfInvalidatedInReleaseMode:(CGContextRef)context {
+  if (context) {
+    return YES;
+  }
+  return NO;
+}
+
+@end
+

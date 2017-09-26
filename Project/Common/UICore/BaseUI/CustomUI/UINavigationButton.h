@@ -26,19 +26,49 @@ typedef NS_ENUM(NSUInteger, UINavigationButtonType) {
 @interface UINavigationButton : UIButton
 @property(nonatomic, assign, readonly) UINavigationButtonType type;
 @property(nonatomic, assign) BOOL useForBarButtonItem;
-- (instancetype)initWithType:(UINavigationButtonType)type title:(nullable NSString *)title;
+- (instancetype)initWithType:(UINavigationButtonType)type
+                       title:(nullable NSString *)title;
 - (instancetype)initWithType:(UINavigationButtonType)type;
 - (instancetype)initWithImage:(nullable UIImage *)image;
-+ (nullable UIBarButtonItem *)backBarButtonItemWithTarget:(nullable id)target action:(nullable SEL)selector tintColor:(nullable UIColor *)tintColor;
-+ (nullable UIBarButtonItem *)backBarButtonItemWithTarget:(nullable id)target action:(nullable SEL)selector;
-+ (UIBarButtonItem *)closeBarButtonItemWithTarget:(nullable id)target action:(nullable SEL)selector tintColor:(nullable UIColor *)tintColor;
-+ (UIBarButtonItem *)closeBarButtonItemWithTarget:(nullable id)target action:(nullable SEL)selector;
-+ (nullable UIBarButtonItem *)barButtonItemWithType:(UINavigationButtonType)type title:(nullable NSString *)title tintColor:(nullable UIColor *)tintColor position:(UINavigationButtonPosition)position target:(nullable id)target action:(nullable SEL)selector;
-+ (nullable UIBarButtonItem *)barButtonItemWithType:(UINavigationButtonType)type title:(nullable NSString *)title position:(UINavigationButtonPosition)position target:(nullable id)target action:(nullable SEL)selector;
-+ (nullable UIBarButtonItem *)barButtonItemWithNavigationButton:(UINavigationButton *)button tintColor:(nullable UIColor *)tintColor position:(UINavigationButtonPosition)position target:(nullable id)target action:(nullable SEL)selector;
-+ (nullable UIBarButtonItem *)barButtonItemWithNavigationButton:(UINavigationButton *)button position:(UINavigationButtonPosition)position target:(nullable id)target action:(nullable SEL)selector;
-+ (nullable UIBarButtonItem *)barButtonItemWithImage:(nullable UIImage *)image tintColor:(nullable UIColor *)tintColor position:(UINavigationButtonPosition)position target:(nullable id)target action:(nullable SEL)selector;
-+ (nullable UIBarButtonItem *)barButtonItemWithImage:(nullable UIImage *)image position:(UINavigationButtonPosition)position target:(nullable id)target action:(nullable SEL)selector;
++ (nullable UIBarButtonItem *)backBarButtonItemWithTarget:(nullable id)target
+                                                   action:(nullable SEL)selector
+                                                tintColor:(nullable UIColor *)tintColor;
++ (nullable UIBarButtonItem *)backBarButtonItemWithTarget:(nullable id)target
+                                                   action:(nullable SEL)selector;
++ (UIBarButtonItem *)closeBarButtonItemWithTarget:(nullable id)target
+                                           action:(nullable SEL)selector
+                                        tintColor:(nullable UIColor *)tintColor;
++ (UIBarButtonItem *)closeBarButtonItemWithTarget:(nullable id)target
+                                           action:(nullable SEL)selector;
++ (nullable UIBarButtonItem *)barButtonItemWithType:(UINavigationButtonType)type
+                                              title:(nullable NSString *)title
+                                          tintColor:(nullable UIColor *)tintColor
+                                           position:(UINavigationButtonPosition)position
+                                             target:(nullable id)target
+                                             action:(nullable SEL)selector;
++ (nullable UIBarButtonItem *)barButtonItemWithType:(UINavigationButtonType)type
+                                              title:(nullable NSString *)title
+                                           position:(UINavigationButtonPosition)position
+                                             target:(nullable id)target
+                                             action:(nullable SEL)selector;
++ (nullable UIBarButtonItem *)barButtonItemWithNavigationButton:(UINavigationButton *)button
+                                                      tintColor:(nullable UIColor *)tintColor
+                                                       position:(UINavigationButtonPosition)position
+                                                         target:(nullable id)target
+                                                         action:(nullable SEL)selector;
++ (nullable UIBarButtonItem *)barButtonItemWithNavigationButton:(UINavigationButton *)button
+                                                       position:(UINavigationButtonPosition)position
+                                                         target:(nullable id)target
+                                                         action:(nullable SEL)selector;
++ (nullable UIBarButtonItem *)barButtonItemWithImage:(nullable UIImage *)image
+                                           tintColor:(nullable UIColor *)tintColor
+                                            position:(UINavigationButtonPosition)position
+                                              target:(nullable id)target
+                                              action:(nullable SEL)selector;
++ (nullable UIBarButtonItem *)barButtonItemWithImage:(nullable UIImage *)image
+                                            position:(UINavigationButtonPosition)position
+                                              target:(nullable id)target
+                                              action:(nullable SEL)selector;
 @end
 
 NS_ASSUME_NONNULL_END
