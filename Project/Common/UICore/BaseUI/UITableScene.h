@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UITableSceneProtocols.h"
 
 @interface UITableScene : UITableView
-
+@property(nonatomic, weak) id<UITableSceneDelegate> delegate;
+@property(nonatomic, weak) id<UITableSceneDataSource> dataSource;
 @end

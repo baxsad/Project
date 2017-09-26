@@ -22,6 +22,7 @@
 #import "UIScene+UI.h"
 #import "UITabBarScene.h"
 #import "UITableScene.h"
+#import "UITableScene+UI.h"
 #import "UINavigationButton.h"
 #import "UINavigationTitleView.h"
 #import "NavigationBarTransition.h"

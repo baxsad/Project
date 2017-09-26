@@ -53,6 +53,18 @@ ReplaceMethod(Class _class, SEL _originSelector, SEL _newSelector) {
 }
 
 CG_INLINE CGFloat
+CGFloatToFixed(CGFloat value, NSUInteger precision) {
+  NSString *formatString = [NSString stringWithFormat:@"%%.%@f", @(precision)];
+  NSString *toString = [NSString stringWithFormat:formatString, value];
+#if defined(__LP64__) && __LP64__
+  CGFloat result = [toString doubleValue];
+#else
+  CGFloat result = [toString floatValue];
+#endif
+  return result;
+}
+
+CG_INLINE CGFloat
 removeFloatMin(CGFloat floatValue) {
   return floatValue == CGFLOAT_MIN ? 0 : floatValue;
 }
@@ -147,6 +159,15 @@ CGRectSetSize(CGRect rect, CGSize size) {
   return rect;
 }
 
+CG_INLINE CGRect
+CGRectToFixed(CGRect rect, NSUInteger precision) {
+  CGRect result = CGRectMake(CGFloatToFixed(CGRectGetMinX(rect), precision),
+                             CGFloatToFixed(CGRectGetMinY(rect), precision),
+                             CGFloatToFixed(CGRectGetWidth(rect), precision),
+                             CGFloatToFixed(CGRectGetHeight(rect), precision));
+  return result;
+}
+
 CG_INLINE CGFloat
 UIEdgeInsetsGetHorizontalValue(UIEdgeInsets insets) {
   return insets.left + insets.right;
@@ -160,4 +181,10 @@ UIEdgeInsetsGetVerticalValue(UIEdgeInsets insets) {
 CG_INLINE CGFloat
 CGFloatGetCenter(CGFloat parent, CGFloat child) {
   return flatf((parent - child) / 2.0);
+}
+
+CG_INLINE CGPoint
+CGPointToFixed(CGPoint point, NSUInteger precision) {
+  CGPoint result = CGPointMake(CGFloatToFixed(point.x, precision), CGFloatToFixed(point.y, precision));
+  return result;
 }

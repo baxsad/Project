@@ -7,39 +7,42 @@
 //
 
 #import "UITableScene.h"
+#import "UITableScene+UI.h"
 
 @implementation UITableScene
 
-- (instancetype)init
-{
-  if (self = [super init]) {
-    [self setup];
-  }
-  return self;
-}
+@dynamic delegate;
+@dynamic dataSource;
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-  if (self = [super initWithFrame:frame]) {
-    [self setup];
-  }
-  return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
-{
+- (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
   if (self = [super initWithFrame:frame style:style]) {
-    [self setup];
+    [self didInitialized];
   }
   return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
   if (self = [super initWithCoder:aDecoder]) {
-    [self setup];
+    [self didInitialized];
   }
   return self;
+}
+
+- (void)didInitialized {
+  [self renderGlobalStyle];
+}
+
+- (void)dealloc {
+  self.delegate = nil;
+  self.dataSource = nil;
+}
+
+// 保证一直存在tableFooterView，以去掉列表内容不满一屏时尾部的空白分割线
+- (void)setTableFooterView:(UIView *)tableFooterView {
+  if (!tableFooterView) {
+    tableFooterView = [[UIView alloc] init];
+  }
+  [super setTableFooterView:tableFooterView];
 }
 
 #pragma mark - setup
@@ -54,5 +57,21 @@
     self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
   }
 }
+
+#ifdef DEBUG
+
+- (void)setContentOffset:(CGPoint)contentOffset {
+  [super setContentOffset:contentOffset];
+}
+
+- (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated {
+  [super setContentOffset:contentOffset animated:animated];
+}
+
+- (void)setContentInset:(UIEdgeInsets)contentInset {
+  [super setContentInset:contentInset];
+}
+
+#endif
 
 @end

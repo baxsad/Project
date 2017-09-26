@@ -45,7 +45,7 @@
   [self titleView_navigationBarLayoutSubviews];
   
   if (titleView) {
-    NSLog(@"【%@】系统布局后\ntitleView = %@", NSStringFromClass(titleView.class), titleView);
+    //NSLog(@"【%@】系统布局后\ntitleView = %@", NSStringFromClass(titleView.class), titleView);
   }
 }
 

@@ -41,4 +41,28 @@
   [super didReceiveMemoryWarning];
 }
 
+- (BOOL)shouldCustomNavigationBarTransitionWhenPopAppearing
+{
+  return YES;
+}
+
+- (BOOL)shouldCustomNavigationBarTransitionWhenPushAppearing
+{
+  return YES;
+}
+
+- (BOOL)shouldCustomNavigationBarTransitionWhenPopDisappearing
+{
+  return YES;
+}
+
+- (BOOL)shouldCustomNavigationBarTransitionWhenPushDisappearing
+{
+  return YES;
+}
+
+- (UIImage *)navigationBarBackgroundImage
+{
+  return [UIImage ui_imageWithColor:UIColorGreen];
+}
 @end
