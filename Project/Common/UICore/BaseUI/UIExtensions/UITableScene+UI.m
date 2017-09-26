@@ -8,6 +8,7 @@
 
 #import "UITableScene+UI.h"
 #import "UIConfigurationMacros.h"
+#import "UIScrollView+UI.h"
 
 @implementation UITableScene (UI)
 
@@ -70,18 +71,18 @@
   return -1;
 }
 
-- (UITableScenCellPosition)positionForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableCellScenePosition)positionForRowAtIndexPath:(NSIndexPath *)indexPath {
   NSInteger numberOfRowsInSection = [self.dataSource tableView:self numberOfRowsInSection:indexPath.section];
   if (numberOfRowsInSection == 1) {
-    return UITableScenCellPositionSingleInSection;
+    return UITableCellScenePositionSingleInSection;
   }
   if (indexPath.row == 0) {
-    return UITableScenCellPositionFirstInSection;
+    return UITableCellScenePositionFirstInSection;
   }
   if (indexPath.row == numberOfRowsInSection - 1) {
-    return UITableScenCellPositionLastInSection;
+    return UITableCellScenePositionLastInSection;
   }
-  return UITableScenCellPositionMiddleInSection;
+  return UITableCellScenePositionMiddleInSection;
 }
 
 - (BOOL)cellVisibleAtIndexPath:(NSIndexPath *)indexPath {
@@ -114,7 +115,7 @@
     [self setContentOffset:CGPointMake(self.contentOffset.x, CGRectGetMinY(rectForRow) - offsetY) animated:animated];
   } else {
     if ([self canScroll]) {
-      [self setContentOffset:CGPointMake(self.contentOffset.x, self.contentSize.height + self.contentInset.bottom - CGRectGetHeight(self.bounds)) animated:animated];
+      [self scrollToBottomAnimated:animated];
     }
   }
 }

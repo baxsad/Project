@@ -7,31 +7,26 @@
 //
 
 #import "MineScene.h"
-#import "HintsScene.h"
+#import "YGBHomeScene.h"
 
 @interface MineScene ()
-
+@property(nonatomic, strong) NSArray<NSString *> *dataSource;
 @end
 
 @implementation MineScene
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-  [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-  [super viewDidAppear:animated];
+  self.dataSource = @[@"Fluorescent bar test",
+                      @"连接",
+                      @"控制",
+                      @"断开",
+                      ];
 }
 
 - (void)setNavigationItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated {
   [super setNavigationItemsIsInEditMode:isInEditMode animated:animated];
-  self.title = @"實驗室";
+  self.title = @"Laboratory";
   self.navigationItem.rightBarButtonItem = [UINavigationButton barButtonItemWithImage:UIImageMake(@"icon_nav_about")
                                                                              position:UINavigationButtonPositionRight
                                                                                target:self
@@ -78,8 +73,49 @@
   [modalViewController showWithAnimated:YES completion:nil];
 }
 
+- (void)didSelectCellWithTitle:(NSString *)title {
+  UIViewController *scene;
+  if ([title isEqualToString:@"Fluorescent bar test"]) {
+    scene = [[YGBHomeScene alloc] init];
+  }
+  
+  if (scene) {
+    [self.navigationController pushViewController:scene animated:YES];
+  }
+}
+
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
+}
+
+#pragma mark - UITableView Delegate & DataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+  return self.dataSource.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  static NSString *identifierNormal = @"cellNormal";
+  UITableCellScene *cell = [tableView dequeueReusableCellWithIdentifier:identifierNormal];
+  if (!cell) {
+    cell = [[UITableCellScene alloc] initForTableView:self.tableView withStyle:UITableViewCellStyleValue1 reuseIdentifier:identifierNormal];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+  }
+  cell.textLabel.text = [self.dataSource objectAtIndex:indexPath.row];
+  cell.textLabel.font = UIFontMake(15);
+  cell.detailTextLabel.font = UIFontMake(13);
+  [cell updateCellAppearanceWithIndexPath:indexPath];
+  return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+  return TableViewCellNormalHeight;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  NSString *title = nil;
+  title = [self.dataSource objectAtIndex:indexPath.row];
+  [self didSelectCellWithTitle:title];
 }
 
 @end

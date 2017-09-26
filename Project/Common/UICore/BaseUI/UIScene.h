@@ -11,6 +11,7 @@
 #import "UINavigationScene.h"
 #import "UINavigationScene+UI.h"
 #import "UINavigationTitleView.h"
+#import "UIEmptyView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +22,27 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) BOOL autorotate;
 @property(nonatomic, assign) UIInterfaceOrientationMask supportedOrientationMask;
 @property(nonatomic, strong, readonly) UINavigationTitleView *titleView;
+@property(nonatomic, strong) UIEmptyView *emptyView;
+@property(nonatomic, assign, readonly, getter = isEmptyViewShowing) BOOL emptyViewShowing;
+- (void)showEmptyView;
+- (void)showEmptyViewWithLoading;
+- (void)showEmptyViewWithText:(NSString *)text
+                   detailText:(NSString *)detailText
+                  buttonTitle:(NSString *)buttonTitle
+                 buttonAction:(SEL)action;
+- (void)showEmptyViewWithImage:(UIImage *)image
+                          text:(NSString *)text
+                    detailText:(NSString *)detailText
+                   buttonTitle:(NSString *)buttonTitle
+                  buttonAction:(SEL)action;
+- (void)showEmptyViewWithLoading:(BOOL)showLoading
+                           image:(UIImage *)image
+                            text:(NSString *)text
+                      detailText:(NSString *)detailText
+                     buttonTitle:(NSString *)buttonTitle
+                    buttonAction:(SEL)action;
+- (void)hideEmptyView;
+- (BOOL)layoutEmptyView;
 @end
 
 @interface UIScene (UIKeyboard)

@@ -6,8 +6,8 @@
 //  Copyright © 2017年 pmo. All rights reserved.
 //
 
-#import "UIScene.h"
+#import "UIListScene.h"
 
-@interface MineScene : UIScene
+@interface MineScene : UIListScene
 
 @end

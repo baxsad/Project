@@ -168,6 +168,12 @@ CGRectToFixed(CGRect rect, NSUInteger precision) {
   return result;
 }
 
+/// 计算view的垂直居中，传入父view和子view的frame，返回子view在垂直居中时的y值
+CG_INLINE CGFloat
+CGRectGetMinYVerticallyCenterInParentRect(CGRect parentRect, CGRect childRect) {
+  return flatf((CGRectGetHeight(parentRect) - CGRectGetHeight(childRect)) / 2.0);
+}
+
 CG_INLINE CGFloat
 UIEdgeInsetsGetHorizontalValue(UIEdgeInsets insets) {
   return insets.left + insets.right;

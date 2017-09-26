@@ -7,8 +7,6 @@
 //
 
 #import "NextScene.h"
-#import "UIImage+UIConfig.h"
-#import "YGBHomeScene.h"
 
 @interface NextScene ()
 
@@ -18,18 +16,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  
   self.titleView.title = @"搜索";
-  UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20, 100, 100, 50)];
-  btn.backgroundColor = UIColorRed;
-  [btn addTarget:self action:@selector(action) forControlEvents:UIControlEventTouchUpInside];
-  [self.view addSubview:btn];
-}
-
-- (void)action
-{
-  YGBHomeScene *scene = [[YGBHomeScene alloc] init];
-  [self.navigationController pushViewController:scene animated:YES];
 }
   
 - (void)viewWillAppear:(BOOL)animated
