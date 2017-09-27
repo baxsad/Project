@@ -57,8 +57,8 @@
                                            selector:@selector(contentSizeCategoryDidChanged:)
                                                name:UIContentSizeCategoryDidChangeNotification
                                              object:nil];
-  self.autorotate = NO;
-  self.supportedOrientationMask = UIInterfaceOrientationMaskPortrait;
+  self.autorotate = YES;
+  self.supportedOrientationMask = SupportedOrientationMask;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

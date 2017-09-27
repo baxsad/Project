@@ -22,3 +22,4 @@
 #import "UIColor+UI.h"
 #import "UIControl+UI.h"
 #import "NSMutableParagraphStyle+UI.h"
+#import "CALayer+UI.h"

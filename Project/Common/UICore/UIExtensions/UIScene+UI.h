@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable UIViewController *)visibleViewControllerIfExist;
 - (BOOL)isPresented;
 - (BOOL)isViewLoadedAndVisible;
+@property(nonatomic, assign, readonly) CGFloat navigationBarMaxYInViewCoordinator;
+@property(nonatomic, assign, readonly) CGFloat toolbarSpacingInViewCoordinator;
+@property(nonatomic, assign, readonly) CGFloat tabBarSpacingInViewCoordinator;
 @end
 
 @interface UIViewController (Runtime)
@@ -30,6 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setNavigationItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated;
 - (void)setToolbarItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated;
 - (void)contentSizeCategoryDidChanged:(NSNotification *)notification;
+@end
+
+@interface UIViewController (Data)
+@property(nullable, nonatomic, copy) void (^didAppearAndLoadDataBlock)(void);
+@property(nonatomic, assign, getter = isDataLoaded) BOOL dataLoaded;
 @end
 
 @interface UIViewController (Handler)<UINavigationControllerBackButtonHandlerProtocol>

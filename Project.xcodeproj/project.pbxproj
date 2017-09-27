@@ -62,6 +62,8 @@
 		E57415611F7B71B70022C5B8 /* UIColor+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = E57415601F7B71B70022C5B8 /* UIColor+UI.m */; };
 		E57415641F7B76E30022C5B8 /* UIControl+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = E57415631F7B76E30022C5B8 /* UIControl+UI.m */; };
 		E57415671F7B797E0022C5B8 /* NSMutableParagraphStyle+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = E57415661F7B797E0022C5B8 /* NSMutableParagraphStyle+UI.m */; };
+		E574156D1F7B9F020022C5B8 /* UICustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E574156C1F7B9F020022C5B8 /* UICustomButton.m */; };
+		E57415701F7BA1720022C5B8 /* CALayer+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = E574156F1F7BA1720022C5B8 /* CALayer+UI.m */; };
 		E59C4B4B1F711EB30006D69B /* YGBHomeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E59C4B491F711EB30006D69B /* YGBHomeScene.m */; };
 		E5A96B211F58FC0900266055 /* TestView.m in Sources */ = {isa = PBXBuildFile; fileRef = E5A96B201F58FC0900266055 /* TestView.m */; };
 		E5EE376E1F6BE24A00B179F5 /* MainDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EE376D1F6BE24A00B179F5 /* MainDelegate.m */; };
@@ -215,6 +217,10 @@
 		E57415631F7B76E30022C5B8 /* UIControl+UI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIControl+UI.m"; sourceTree = "<group>"; };
 		E57415651F7B797E0022C5B8 /* NSMutableParagraphStyle+UI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableParagraphStyle+UI.h"; sourceTree = "<group>"; };
 		E57415661F7B797E0022C5B8 /* NSMutableParagraphStyle+UI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableParagraphStyle+UI.m"; sourceTree = "<group>"; };
+		E574156B1F7B9F020022C5B8 /* UICustomButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UICustomButton.h; sourceTree = "<group>"; };
+		E574156C1F7B9F020022C5B8 /* UICustomButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UICustomButton.m; sourceTree = "<group>"; };
+		E574156E1F7BA1720022C5B8 /* CALayer+UI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CALayer+UI.h"; sourceTree = "<group>"; };
+		E574156F1F7BA1720022C5B8 /* CALayer+UI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CALayer+UI.m"; sourceTree = "<group>"; };
 		E59C4B481F711EB30006D69B /* YGBHomeScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YGBHomeScene.h; sourceTree = "<group>"; };
 		E59C4B491F711EB30006D69B /* YGBHomeScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YGBHomeScene.m; sourceTree = "<group>"; };
 		E5A96B1F1F58FC0900266055 /* TestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestView.h; sourceTree = "<group>"; };
@@ -544,6 +550,8 @@
 				E57415631F7B76E30022C5B8 /* UIControl+UI.m */,
 				E57415651F7B797E0022C5B8 /* NSMutableParagraphStyle+UI.h */,
 				E57415661F7B797E0022C5B8 /* NSMutableParagraphStyle+UI.m */,
+				E574156E1F7BA1720022C5B8 /* CALayer+UI.h */,
+				E574156F1F7BA1720022C5B8 /* CALayer+UI.m */,
 			);
 			path = UIExtensions;
 			sourceTree = "<group>";
@@ -591,6 +599,8 @@
 				E57415471F7B6FA90022C5B8 /* UINavigationButton.m */,
 				E57415481F7B6FA90022C5B8 /* UINavigationTitleView.h */,
 				E57415491F7B6FA90022C5B8 /* UINavigationTitleView.m */,
+				E574156B1F7B9F020022C5B8 /* UICustomButton.h */,
+				E574156C1F7B9F020022C5B8 /* UICustomButton.m */,
 			);
 			path = CustomUI;
 			sourceTree = "<group>";
@@ -863,12 +873,14 @@
 				E5EE376E1F6BE24A00B179F5 /* MainDelegate.m in Sources */,
 				E507D8A41F78DAD1004D6DC0 /* YGBUIConfigurationTemplate.m in Sources */,
 				E5EE37791F6BE54300B179F5 /* SCContext.m in Sources */,
+				E57415701F7BA1720022C5B8 /* CALayer+UI.m in Sources */,
 				E57415271F7B6F9E0022C5B8 /* UIFont+UI.m in Sources */,
 				E571DCAB1F57B2DB005511A3 /* NSGlobalDeviceInfo.m in Sources */,
 				E574154E1F7B6FA90022C5B8 /* UITabBarScene.m in Sources */,
 				E54F4AC21F74E81C001417F3 /* YGBQRCodeScanScene.m in Sources */,
 				E57415541F7B6FA90022C5B8 /* UINavigationTitleView.m in Sources */,
 				E52C98E61F53CCA1007D8408 /* ViewController.m in Sources */,
+				E574156D1F7B9F020022C5B8 /* UICustomButton.m in Sources */,
 				E574152E1F7B6F9E0022C5B8 /* UITextView+UIKeyboardManager.m in Sources */,
 				E57415251F7B6F9E0022C5B8 /* NSString+UI.m in Sources */,
 				E52C99461F53CE79007D8408 /* YGBError.m in Sources */,

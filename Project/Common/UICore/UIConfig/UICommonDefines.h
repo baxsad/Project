@@ -19,6 +19,8 @@
 #define UIImageMakeWithFile(name) UIImageMakeWithFileAndSuffix(name, @"png")
 #define UIImageMakeWithFileAndSuffix(name, suffix) [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.%@", [[NSBundle mainBundle] resourcePath], name, suffix]]
 
+#define PixelOne [UIHelper pixelOne]
+
 #define UIViewAnimationOptionsCurveOut (7<<16)
 #define UIViewAnimationOptionsCurveIn (8<<16)
 
@@ -112,18 +114,14 @@ CGSizeFlatted(CGSize size) {
   return CGSizeMake(flatf(size.width), flatf(size.height));
 }
 
-static CGFloat onePixel = -1.0f;
-CG_INLINE float
-PixelOne() {
-  if (onePixel < 0) {
-    onePixel = 1 / [[UIScreen mainScreen] scale];
-  }
-  return onePixel;
-}
-
 CG_INLINE CGFloat
 CGRectGetMinXHorizontallyCenterInParentRect(CGRect parentRect, CGRect childRect) {
   return flatf((CGRectGetWidth(parentRect) - CGRectGetWidth(childRect)) / 2.0);
+}
+
+CG_INLINE CGRect
+CGRectFlatted(CGRect rect) {
+  return CGRectMake(flatf(rect.origin.x), flatf(rect.origin.y), flatf(rect.size.width), flatf(rect.size.height));
 }
 
 CG_INLINE CGRect
@@ -228,4 +226,9 @@ CG_INLINE UIEdgeInsets
 UIEdgeInsetsSetRight(UIEdgeInsets insets, CGFloat right) {
   insets.right = flatfSpecificScale(right,0);
   return insets;
+}
+CG_INLINE UIEdgeInsets
+UIEdgeInsetsRemoveFloatMin(UIEdgeInsets insets) {
+  UIEdgeInsets result = UIEdgeInsetsMake(removeFloatMin(insets.top), removeFloatMin(insets.left), removeFloatMin(insets.bottom), removeFloatMin(insets.right));
+  return result;
 }
