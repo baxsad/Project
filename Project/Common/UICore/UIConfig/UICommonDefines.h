@@ -121,6 +121,11 @@ PixelOne() {
   return onePixel;
 }
 
+CG_INLINE CGFloat
+CGRectGetMinXHorizontallyCenterInParentRect(CGRect parentRect, CGRect childRect) {
+  return flatf((CGRectGetWidth(parentRect) - CGRectGetWidth(childRect)) / 2.0);
+}
+
 CG_INLINE CGRect
 CGRectFlatMake(CGFloat x, CGFloat y, CGFloat width, CGFloat height) {
   return CGRectMake(flatf(x), flatf(y), flatf(width), flatf(height));

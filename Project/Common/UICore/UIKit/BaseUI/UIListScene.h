@@ -8,8 +8,9 @@
 
 #import "UIScene.h"
 #import "UITableScene.h"
+#import "UIThemeManager.h"
 
-@interface UIListScene : UIScene<UITableSceneDelegate, UITableSceneDataSource>
+@interface UIListScene : UIScene<UITableSceneDelegate, UITableSceneDataSource, UIChangingThemeDelegate>
 - (instancetype)initWithStyle:(UITableViewStyle)style NS_DESIGNATED_INITIALIZER;
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 - (void)didInitializedWithStyle:(UITableViewStyle)style NS_REQUIRES_SUPER;

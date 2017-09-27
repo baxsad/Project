@@ -9,7 +9,7 @@
 #import "UIHelper.h"
 #import "UIScene.h"
 #import "UIScene+UI.h"
-#import "UIColor+UIConfig.h"
+#import "UIColor+UI.h"
 #import <objc/runtime.h>
 
 @implementation UIHelper (Theme)
@@ -21,7 +21,7 @@
   
   UIGraphicsBeginImageContextWithOptions(size, YES, 0);
   CGContextRef context = UIGraphicsGetCurrentContext();
-  CGGradientRef gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)@[(id)color.CGColor, (id)[color ui_colorWithAlphaAddedToWhite:.86].CGColor], NULL);
+  CGGradientRef gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), (CFArrayRef)@[(id)color.CGColor, (id)[color colorWithAlphaAddedToWhite:.86].CGColor], NULL);
   CGContextDrawLinearGradient(context, gradient, CGPointZero, CGPointMake(0, size.height), kCGGradientDrawsBeforeStartLocation);
   
   resultImage = UIGraphicsGetImageFromCurrentImageContext();

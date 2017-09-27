@@ -9,7 +9,7 @@
 #import "UIConfiguration.h"
 #import "UICommonDefines.h"
 #import "UIConfiguration.h"
-#import "UIImage+UIConfig.h"
+#import "UIImage+UI.h"
 #import "UIHelper.h"
 
 @implementation UIConfiguration
@@ -102,12 +102,12 @@
   self.navBarTitleFont = nil;
   self.navBarBackButtonTitlePositionAdjustment = UIOffsetZero;
   self.navBarBackIndicatorImage = nil;
-  self.navBarCloseButtonImage = [UIImage ui_imageWithShape:UIImageShapeNavClose size:CGSizeMake(16, 16) tintColor:self.navBarTintColor];
+  self.navBarCloseButtonImage = [UIImage imageWithShape:UIImageShapeNavClose size:CGSizeMake(16, 16) tintColor:self.navBarTintColor];
   
   self.navBarLoadingMarginRight = 3;
   self.navBarAccessoryViewMarginLeft = 5;
   self.navBarActivityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-  self.navBarAccessoryViewTypeDisclosureIndicatorImage = [[UIImage ui_imageWithShape:UIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:self.navBarTitleColor] ui_imageWithOrientation:UIImageOrientationDown];
+  self.navBarAccessoryViewTypeDisclosureIndicatorImage = [[UIImage imageWithShape:UIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:self.navBarTitleColor] imageWithOrientation:UIImageOrientationDown];
   
 #pragma mark - TabBar
   
@@ -182,6 +182,9 @@
   self.tableViewGroupedSectionFooterDefaultHeight = UITableViewAutomaticDimension;
   self.tableViewGroupedSectionHeaderContentInset = UIEdgeInsetsMake(16, 15, 8, 15);
   self.tableViewGroupedSectionFooterContentInset = UIEdgeInsetsMake(8, 15, 2, 15);
+  
+#pragma mark - CollectionView
+  self.collectionViewBackgroundColor = nil;
   
 #pragma mark - UIWindowLevel
   self.windowLevelUIAlertView = UIWindowLevelAlert - 4.0;
@@ -275,10 +278,10 @@
     CGSize customBackIndicatorImageSize = _navBarBackIndicatorImage.size;
     if (!CGSizeEqualToSize(customBackIndicatorImageSize, systemBackIndicatorImageSize)) {
       CGFloat imageExtensionVerticalFloat = CGFloatGetCenter(systemBackIndicatorImageSize.height, customBackIndicatorImageSize.height);
-      _navBarBackIndicatorImage = [_navBarBackIndicatorImage ui_imageWithSpacingExtensionInsets:UIEdgeInsetsMake(imageExtensionVerticalFloat,
-                                                                                                                 0,
-                                                                                                                 imageExtensionVerticalFloat,
-                                                                                                                 systemBackIndicatorImageSize.width - customBackIndicatorImageSize.width)];
+      _navBarBackIndicatorImage = [_navBarBackIndicatorImage imageWithSpacingExtensionInsets:UIEdgeInsetsMake(imageExtensionVerticalFloat,
+                                                                                                              0,
+                                                                                                              imageExtensionVerticalFloat,
+                                                                                                              systemBackIndicatorImageSize.width - customBackIndicatorImageSize.width)];
     }
     
     navBarAppearance.backIndicatorImage = _navBarBackIndicatorImage;
@@ -324,7 +327,9 @@
 - (void)setToolBarShadowImageColor:(UIColor *)toolBarShadowImageColor {
   _toolBarShadowImageColor = toolBarShadowImageColor;
   if (_toolBarShadowImageColor) {
-    UIImage *shadowImage = [UIImage ui_imageWithColor:_toolBarShadowImageColor size:CGSizeMake(1, 1 / [[UIScreen mainScreen] scale]) cornerRadius:0];
+    UIImage *shadowImage = [UIImage imageWithColor:_toolBarShadowImageColor
+                                              size:CGSizeMake(1, 1 / [[UIScreen mainScreen] scale])
+                                      cornerRadius:0];
     [[UIToolbar appearance] setShadowImage:shadowImage forToolbarPosition:UIBarPositionAny];
     [[UIHelper visibleViewController].navigationController.toolbar setShadowImage:shadowImage forToolbarPosition:UIBarPositionAny];
   }
@@ -356,7 +361,9 @@
 - (void)setTabBarShadowImageColor:(UIColor *)tabBarShadowImageColor {
   _tabBarShadowImageColor = tabBarShadowImageColor;
   if (_tabBarShadowImageColor) {
-    UIImage *shadowImage = [UIImage ui_imageWithColor:_tabBarShadowImageColor size:CGSizeMake(1, 1 / [[UIScreen mainScreen] scale]) cornerRadius:0];
+    UIImage *shadowImage = [UIImage imageWithColor:_tabBarShadowImageColor
+                                              size:CGSizeMake(1, 1 / [[UIScreen mainScreen] scale])
+                                      cornerRadius:0];
     [[UITabBar appearance] setShadowImage:shadowImage];
     [UIHelper visibleViewController].tabBarController.tabBar.shadowImage = shadowImage;
   }

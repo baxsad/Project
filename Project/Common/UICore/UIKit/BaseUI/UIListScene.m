@@ -7,7 +7,7 @@
 //
 
 #import "UIListScene.h"
-#import "UILabelScene.h"
+#import "UICustomLable.h"
 #import "UIScrollView+UI.h"
 
 const UIEdgeInsets UIListSceneInitialContentInsetNotSet = {-1, -1, -1, -1};
@@ -50,12 +50,27 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
   self.hasHideTableHeaderViewInitial = NO;
   self.tableViewInitialContentInset = UIListSceneInitialContentInsetNotSet;
   self.tableViewInitialScrollIndicatorInsets = UIListSceneInitialContentInsetNotSet;
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(handleThemeChangedNotification:)
+                                               name:UIThemeChangedNotification object:nil];
+}
+
+- (void)handleThemeChangedNotification:(NSNotification *)notification {
+  NSObject<UIThemeProtocol> *themeBeforeChanged = notification.userInfo[UIThemeBeforeChangedName];
+  themeBeforeChanged = [themeBeforeChanged isKindOfClass:[NSNull class]] ? nil : themeBeforeChanged;
+  
+  NSObject<UIThemeProtocol> *themeAfterChanged = notification.userInfo[UIThemeAfterChangedName];
+  themeAfterChanged = [themeAfterChanged isKindOfClass:[NSNull class]] ? nil : themeAfterChanged;
+  
+  [self themeBeforeChanged:themeBeforeChanged afterChanged:themeAfterChanged];
 }
 
 - (void)dealloc {
   // 用下划线而不是self.xxx来访问tableView，避免dealloc时self.view尚未被加载，此时调用self.tableView反而会触发loadView
   _tableView.delegate = nil;
   _tableView.dataSource = nil;
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIThemeChangedNotification object:nil];
 }
 
 - (NSString *)description {
@@ -226,7 +241,7 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
   NSString *title = [self tableView:tableView realTitleForHeaderInSection:section];
   if (title) {
     UITableViewHeaderFooterView *headerFooterView = [self tableHeaderFooterLabelInTableView:tableView identifier:@"headerTitle"];
-    UILabelScene *label = (UILabelScene *)[headerFooterView.contentView viewWithTag:kSectionHeaderFooterLabelTag];
+    UICustomLable *label = (UICustomLable *)[headerFooterView.contentView viewWithTag:kSectionHeaderFooterLabelTag];
     label.text = title;
     label.contentEdgeInsets = tableView.style == UITableViewStylePlain ? TableViewSectionHeaderContentInset : TableViewGroupedSectionHeaderContentInset;
     label.font = tableView.style == UITableViewStylePlain ? TableViewSectionHeaderFont : TableViewGroupedSectionHeaderFont;
@@ -243,7 +258,7 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 - (UITableViewHeaderFooterView *)tableHeaderFooterLabelInTableView:(UITableView *)tableView identifier:(NSString *)identifier {
   UITableViewHeaderFooterView *headerFooterView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
   if (!headerFooterView) {
-    UILabelScene *label = [[UILabelScene alloc] init];
+    UICustomLable *label = [[UICustomLable alloc] init];
     label.tag = kSectionHeaderFooterLabelTag;
     label.numberOfLines = 0;
     headerFooterView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:identifier];
@@ -304,6 +319,12 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
   return TableViewCellNormalHeight;
+}
+
+#pragma mark - <UIChangingThemeDelegate>
+
+- (void)themeBeforeChanged:(NSObject<UIThemeProtocol> *)themeBeforeChanged afterChanged:(NSObject<UIThemeProtocol> *)themeAfterChanged {
+  [self.tableView reloadData];
 }
 
 @end

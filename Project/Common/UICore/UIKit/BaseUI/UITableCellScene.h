@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UITableScene.h"
+#import "UICustomLable.h"
 #import "UITableScene+UI.h"
 
 @interface UITableCellScene : UITableViewCell

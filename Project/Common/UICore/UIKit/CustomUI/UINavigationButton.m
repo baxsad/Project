@@ -8,7 +8,7 @@
 
 #import "UINavigationButton.h"
 #import "UICommonDefines.h"
-#import "UIImage+UIConfig.h"
+#import "UIImage+UI.h"
 #import "UIScene.h"
 #import "UIScene+UI.h"
 
@@ -115,8 +115,8 @@
         return;
       }
       [self setImage:backIndicatorImage forState:UIControlStateNormal];
-      [self setImage:[backIndicatorImage ui_imageByApplyingAlpha:NavBarHighlightedAlpha] forState:UIControlStateHighlighted];
-      [self setImage:[backIndicatorImage ui_imageByApplyingAlpha:NavBarDisabledAlpha] forState:UIControlStateDisabled];
+      [self setImage:[backIndicatorImage imageByApplyingAlpha:NavBarHighlightedAlpha] forState:UIControlStateHighlighted];
+      [self setImage:[backIndicatorImage imageByApplyingAlpha:NavBarDisabledAlpha] forState:UIControlStateDisabled];
     }
       break;
       

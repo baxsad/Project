@@ -169,6 +169,9 @@
 #define TableViewCellTitleLabelColor               [UICMI tableViewCellTitleLabelColor]
 #define TableViewCellDetailLabelColor              [UICMI tableViewCellDetailLabelColor]
 
+#pragma mark - CollectionView
+#define CollectionViewBackgroundColor              [UICMI collectionViewBackgroundColor]
+
 #pragma mark - UIWindowLevel
 #define UIWindowLevelUIAlertView                  [UICMI windowLevelUIAlertView]
 #define UIWindowLevelUIImagePreviewView           [UICMI windowLevelUIImagePreviewView]

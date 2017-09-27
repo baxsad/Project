@@ -31,6 +31,13 @@
   self.sectionIndexColor = TableSectionIndexColor;
   self.sectionIndexTrackingBackgroundColor = TableSectionIndexTrackingBackgroundColor;
   self.sectionIndexBackgroundColor = TableSectionIndexBackgroundColor;
+  
+  if (@available(iOS 11,*)) {
+    self.estimatedRowHeight = 0;
+    self.estimatedSectionHeaderHeight = 0;
+    self.estimatedSectionFooterHeight = 0;
+    self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
+  }
 }
 
 - (NSIndexPath *)indexPathForRowAtView:(UIView *)view {

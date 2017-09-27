@@ -9,7 +9,7 @@
 #import "YGBUIConfigurationTemplate.h"
 #import "UIConfigurationMacros.h"
 #import "UICommonDefines.h"
-#import "UIImage+UIConfig.h"
+#import "UIImage+UI.h"
 #import "UIHelper.h"
 
 @implementation YGBUIConfigurationTemplate
@@ -86,17 +86,17 @@
   UICMI.navBarTitleColor = NavBarTintColor;
   UICMI.navBarTitleFont = UIFontBoldMake(17);
   UICMI.navBarBackButtonTitlePositionAdjustment = UIOffsetZero;
-  UICMI.navBarBackIndicatorImage = [UIImage ui_imageWithShape:UIImageShapeNavBack size:CGSizeMake(12, 20) tintColor:NavBarTintColor];
-  UICMI.navBarCloseButtonImage = [UIImage ui_imageWithShape:UIImageShapeNavClose size:CGSizeMake(16, 16) tintColor:NavBarTintColor];
+  UICMI.navBarBackIndicatorImage = [UIImage imageWithShape:UIImageShapeNavBack size:CGSizeMake(12, 20) tintColor:NavBarTintColor];
+  UICMI.navBarCloseButtonImage = [UIImage imageWithShape:UIImageShapeNavClose size:CGSizeMake(16, 16) tintColor:NavBarTintColor];
   
   UICMI.navBarLoadingMarginRight = 3;
   UICMI.navBarAccessoryViewMarginLeft = 5;
   UICMI.navBarActivityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-  UICMI.navBarAccessoryViewTypeDisclosureIndicatorImage = [UIImage ui_imageWithShape:UIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:UIColorWhite];
+  UICMI.navBarAccessoryViewTypeDisclosureIndicatorImage = [UIImage imageWithShape:UIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:UIColorWhite];
   
 #pragma mark - TabBar
   
-  UICMI.tabBarBackgroundImage = [UIImage ui_imageWithColor:UIColorMake(249, 249, 249)];
+  UICMI.tabBarBackgroundImage = [UIImage imageWithColor:UIColorMake(249, 249, 249)];
   UICMI.tabBarBarTintColor = nil;
   UICMI.tabBarShadowImageColor = UIColorSeparator;
   UICMI.tabBarTintColor = self.themeTintColor;
@@ -131,7 +131,7 @@
   
 #pragma mark - TableView / TableViewCell
   
-  UICMI.tableViewBackgroundColor = nil;
+  UICMI.tableViewBackgroundColor = UIColorMake(255, 255, 255);
   UICMI.tableViewGroupedBackgroundColor = UIColorMake(246, 246, 246);
   UICMI.tableSectionIndexColor = UIColorGrayDarken;
   UICMI.tableSectionIndexBackgroundColor = UIColorClear;
@@ -144,8 +144,8 @@
   UICMI.tableViewCellBackgroundColor = UIColorWhite;
   UICMI.tableViewCellSelectedBackgroundColor = UIColorMake(238, 239, 241);
   UICMI.tableViewCellWarningBackgroundColor = UIColorYellow;
-  UICMI.tableViewCellDisclosureIndicatorImage = [UIImage ui_imageWithShape:UIImageShapeDisclosureIndicator size:CGSizeMake(6, 10) lineWidth:1 tintColor:UIColorMake(173, 180, 190)];
-  UICMI.tableViewCellCheckmarkImage = [UIImage ui_imageWithShape:UIImageShapeCheckmark size:CGSizeMake(15, 12) tintColor:self.themeTintColor];
+  UICMI.tableViewCellDisclosureIndicatorImage = [UIImage imageWithShape:UIImageShapeDisclosureIndicator size:CGSizeMake(6, 10) lineWidth:1 tintColor:UIColorMake(173, 180, 190)];
+  UICMI.tableViewCellCheckmarkImage = [UIImage imageWithShape:UIImageShapeCheckmark size:CGSizeMake(15, 12) tintColor:self.themeTintColor];
   UICMI.tableViewCellSpacingBetweenDetailButtonAndDisclosureIndicator = 12;
   
   UICMI.tableViewSectionHeaderBackgroundColor = UIColorMake(244, 244, 244);
@@ -164,6 +164,9 @@
   UICMI.tableViewGroupedSectionHeaderDefaultHeight = UITableViewAutomaticDimension;
   UICMI.tableViewGroupedSectionFooterDefaultHeight = UITableViewAutomaticDimension;
   UICMI.tableViewGroupedSectionFooterContentInset = UIEdgeInsetsMake(8, 15, 2, 15);
+  
+#pragma mark - UIWindowLevel
+  UICMI.collectionViewBackgroundColor = UIColorMake(255, 255, 255);
   
 #pragma mark - UIWindowLevel
   UICMI.windowLevelUIAlertView = UIWindowLevelAlert - 4.0;

@@ -61,19 +61,6 @@
   return YES;
 }
 
-#pragma mark - setup
-
-- (void)setup
-{
-  self.backgroundColor = TableViewBackgroundColor;
-  if (@available(iOS 11,*)) {
-    self.estimatedRowHeight = 0;
-    self.estimatedSectionHeaderHeight = 0;
-    self.estimatedSectionFooterHeight = 0;
-    self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-  }
-}
-
 #ifdef DEBUG
 
 - (void)setContentOffset:(CGPoint)contentOffset {

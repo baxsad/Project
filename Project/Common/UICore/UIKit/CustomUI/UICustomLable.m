@@ -1,20 +1,20 @@
 //
-//  UILabelScene.m
+//  UICustomLable.m
 //  Project
 //
 //  Created by jearoc on 2017/9/26.
 //  Copyright © 2017年 jearoc. All rights reserved.
 //
 
-#import "UILabelScene.h"
+#import "UICustomLable.h"
 #import "UICommonDefines.h"
 
-@interface UILabelScene ()
+@interface UICustomLable ()
 @property(nonatomic, strong) UIColor *tempBackgroundColor;
 @property(nonatomic, strong) UILongPressGestureRecognizer *longGestureRecognizer;
 @end
 
-@implementation UILabelScene
+@implementation UICustomLable
 
 - (void)dealloc {
   [[NSNotificationCenter defaultCenter] removeObserver:self];

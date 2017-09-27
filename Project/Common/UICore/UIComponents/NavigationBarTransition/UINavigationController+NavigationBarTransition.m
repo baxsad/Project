@@ -9,7 +9,7 @@
 #import "UINavigationController+NavigationBarTransition.h"
 #import "UINavigationBar+Transition.h"
 #import "UICommonDefines.h"
-#import "UIImage+UIConfig.h"
+#import "UIImage+UI.h"
 #import "UINavigationScene+UI.h"
 #import "UIHelper.h"
 #import "UIScene.h"
@@ -151,7 +151,7 @@
   }
   UIImage *backgroundImage = [originBar backgroundImageForBarMetrics:UIBarMetricsDefault];
   if (backgroundImage && CGSizeEqualToSize(backgroundImage.size, CGSizeZero)) {
-    backgroundImage = [UIImage ui_imageWithColor:UIColorClear];
+    backgroundImage = [UIImage imageWithColor:UIColorClear];
   }
   [customBar setBackgroundImage:backgroundImage forBarMetrics:UIBarMetricsDefault];
   [customBar setShadowImage:originBar.shadowImage];

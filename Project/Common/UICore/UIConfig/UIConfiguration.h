@@ -161,6 +161,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) UIEdgeInsets       tableViewGroupedSectionHeaderContentInset;
 @property(nonatomic, assign) UIEdgeInsets       tableViewGroupedSectionFooterContentInset;
 
+#pragma mark - CollectionView
+
+@property(nonatomic, strong, nullable) UIColor  *collectionViewBackgroundColor;
+
 #pragma mark - UIWindowLevel
 
 @property(nonatomic, assign) CGFloat            windowLevelUIAlertView;

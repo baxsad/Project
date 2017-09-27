@@ -1,47 +1,68 @@
 //
-//  UIImage+UIConfig.m
-//  XX_iOS_APP
+//  UIImage+UI.m
+//  Project
 //
-//  Created by pmo on 2017/8/16.
-//  Copyright © 2017年 pmo. All rights reserved.
+//  Created by pmo on 2017/9/26.
+//  Copyright © 2017年 jearoc. All rights reserved.
 //
 
-#import "UIImage+UIConfig.h"
+#import "UIImage+UI.h"
 #import "UICommonDefines.h"
 #import "UIHelper.h"
 
-@implementation UIImage (UIConfig)
+@implementation UIImage (UI)
++ (UIImage *)imageWithView:(UIView *)view {
+  CGContextInspectSize(view.bounds.size);
+  UIImage *resultImage = nil;
+  UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0);
+  CGContextRef context = UIGraphicsGetCurrentContext();
+  CGContextInspectContext(context);
+  [view.layer renderInContext:context];
+  resultImage = UIGraphicsGetImageFromCurrentImageContext();
+  UIGraphicsEndImageContext();
+  return resultImage;
+}
 
-+ (UIImage *)ui_imageWithShape:(UIImageShape)shape
-                          size:(CGSize)size
-                     tintColor:(UIColor *)tintColor {
++ (UIImage *)imageWithView:(UIView *)view afterScreenUpdates:(BOOL)afterUpdates {
+  // iOS 7 截图新方式，性能好会好一点，不过不一定适用，因为这个方法的使用条件是：界面要已经render完，否则截到得图将会是empty。
+  UIImage *resultImage = nil;
+  UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0);
+  [view drawViewHierarchyInRect:CGRectMakeWithSize(view.bounds.size) afterScreenUpdates:afterUpdates];
+  resultImage = UIGraphicsGetImageFromCurrentImageContext();
+  UIGraphicsEndImageContext();
+  return resultImage;
+}
+
++ (UIImage *)imageWithShape:(UIImageShape)shape
+                       size:(CGSize)size
+                  tintColor:(UIColor *)tintColor {
   CGFloat lineWidth = 0;
   switch (shape) {
     case UIImageShapeNavBack:
-    lineWidth = 2;
-    break;
+      lineWidth = 2;
+      break;
     case UIImageShapeDisclosureIndicator:
-    lineWidth = 2;
-    break;
+      lineWidth = 2;
+      break;
     case UIImageShapeCheckmark:
-    lineWidth = 2;
-    break;
+      lineWidth = 2;
+      break;
     case UIImageShapeNavClose:
-    lineWidth = 2;
-    break;
+      lineWidth = 2;
+      break;
     case UIImageShapeNavAdd:
-    lineWidth = 2;
-    break;
+      lineWidth = 2;
+      break;
     default:
-    break;
+      break;
   }
-  return [UIImage ui_imageWithShape:shape size:size lineWidth:lineWidth tintColor:tintColor];
+  return [UIImage imageWithShape:shape size:size lineWidth:lineWidth tintColor:tintColor];
 }
-  
-+ (UIImage *)ui_imageWithShape:(UIImageShape)shape
-                          size:(CGSize)size
-                     lineWidth:(CGFloat)lineWidth
-                     tintColor:(UIColor *)tintColor {
+
++ (UIImage *)imageWithShape:(UIImageShape)shape
+                       size:(CGSize)size
+                  lineWidth:(CGFloat)lineWidth
+                  tintColor:(UIColor *)tintColor {
   size = CGSizeFlatted(size);
   CGContextInspectSize(size);
   
@@ -59,7 +80,7 @@
     case UIImageShapeOval: {
       path = [UIBezierPath bezierPathWithOvalInRect:CGRectMakeWithSize(size)];
     }
-    break;
+      break;
     case UIImageShapeTriangle: {
       path = [UIBezierPath bezierPath];
       [path moveToPoint:CGPointMake(0, size.height)];
@@ -67,7 +88,7 @@
       [path addLineToPoint:CGPointMake(size.width, size.height)];
       [path closePath];
     }
-    break;
+      break;
     case UIImageShapeNavBack: {
       drawByStroke = YES;
       path = [UIBezierPath bezierPath];
@@ -76,7 +97,7 @@
       [path addLineToPoint:CGPointMake(0 + drawOffset, size.height / 2.0)];
       [path addLineToPoint:CGPointMake(size.width - drawOffset, size.height - drawOffset)];
     }
-    break;
+      break;
     case UIImageShapeDisclosureIndicator: {
       path = [UIBezierPath bezierPath];
       drawByStroke = YES;
@@ -85,7 +106,7 @@
       [path addLineToPoint:CGPointMake(size.width - drawOffset, size.height / 2)];
       [path addLineToPoint:CGPointMake(drawOffset, size.height - drawOffset)];
     }
-    break;
+      break;
     case UIImageShapeCheckmark: {
       CGFloat lineAngle = M_PI_4;
       path = [UIBezierPath bezierPath];
@@ -97,7 +118,7 @@
       [path addLineToPoint:CGPointMake(lineWidth * sin(lineAngle), size.height / 2 - lineWidth * sin(lineAngle))];
       [path closePath];
     }
-    break;
+      break;
     case UIImageShapeNavClose: {
       drawByStroke = YES;
       path = [UIBezierPath bezierPath];
@@ -110,7 +131,7 @@
       path.lineWidth = lineWidth;
       path.lineCapStyle = kCGLineCapRound;
     }
-    break;
+      break;
     case UIImageShapeNavAdd: {
       drawByStroke = YES;
       path = [UIBezierPath bezierPath];
@@ -123,9 +144,9 @@
       path.lineWidth = lineWidth;
       path.lineCapStyle = kCGLineCapRound;
     }
-    break;
+      break;
     default:
-    break;
+      break;
   }
   
   if (drawByStroke) {
@@ -141,10 +162,10 @@
   
   return resultImage;
 }
-  
-+ (UIImage *)ui_imageWithColor:(UIColor *)color
-                          size:(CGSize)size
-                  cornerRadius:(CGFloat)cornerRadius {
+
++ (UIImage *)imageWithColor:(UIColor *)color
+                       size:(CGSize)size
+               cornerRadius:(CGFloat)cornerRadius {
   size = CGSizeFlatted(size);
   CGContextInspectSize(size);
   
@@ -168,12 +189,12 @@
   return resultImage;
 }
 
-+ (UIImage *)ui_imageWithColor:(UIColor *)color
++ (UIImage *)imageWithColor:(UIColor *)color
 {
-  return [self ui_imageWithColor:color size:CGSizeMake(1, 1) cornerRadius:0];
+  return [self imageWithColor:color size:CGSizeMake(1, 1) cornerRadius:0];
 }
 
-- (UIImage *)ui_imageWithSpacingExtensionInsets:(UIEdgeInsets)extension {
+- (UIImage *)imageWithSpacingExtensionInsets:(UIEdgeInsets)extension {
   CGSize contextSize = CGSizeMake(self.size.width + UIEdgeInsetsGetHorizontalValue(extension), self.size.height + UIEdgeInsetsGetVerticalValue(extension));
   UIGraphicsBeginImageContextWithOptions(contextSize, NO, self.scale);
   [self drawAtPoint:CGPointMake(extension.left, extension.top)];
@@ -181,8 +202,8 @@
   UIGraphicsEndImageContext();
   return finalImage;
 }
-  
-- (UIImage *)ui_imageByApplyingAlpha:(CGFloat)alpha
+
+- (UIImage *)imageByApplyingAlpha:(CGFloat)alpha
 {
   UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0f);
   
@@ -207,16 +228,9 @@
   return newImage;
 }
 
-CG_INLINE CGFloat
-flatSpecificScale(CGFloat floatValue, CGFloat scale) {
-  floatValue = floatValue == CGFLOAT_MIN ? 0 : floatValue;
-  scale = scale == 0 ? [[UIScreen mainScreen] scale] : scale;
-  CGFloat flattedValue = ceil(floatValue * scale) / scale;
-  return flattedValue;
-}
 #define AngleWithDegrees(deg) (M_PI * (deg) / 180.0)
 
-- (UIImage *)ui_imageWithOrientation:(UIImageOrientation)orientation {
+- (UIImage *)imageWithOrientation:(UIImageOrientation)orientation {
   if (orientation == UIImageOrientationUp) {
     return self;
   }
@@ -226,8 +240,8 @@ flatSpecificScale(CGFloat floatValue, CGFloat scale) {
     contextSize = CGSizeMake(contextSize.height, contextSize.width);
   }
   
-  contextSize = CGSizeMake(flatSpecificScale(contextSize.width, self.scale),
-                           flatSpecificScale(contextSize.height, self.scale));
+  contextSize = CGSizeMake(flatfSpecificScale(contextSize.width, self.scale),
+                           flatfSpecificScale(contextSize.height, self.scale));
   
   UIGraphicsBeginImageContextWithOptions(contextSize, NO, self.scale);
   CGContextRef context = UIGraphicsGetCurrentContext();
@@ -274,5 +288,5 @@ flatSpecificScale(CGFloat floatValue, CGFloat scale) {
   UIGraphicsEndImageContext();
   return imageOut;
 }
-  
+
 @end

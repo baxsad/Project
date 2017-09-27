@@ -1,5 +1,5 @@
 //
-//  UILabelScene.h
+//  UICustomLable.h
 //  Project
 //
 //  Created by jearoc on 2017/9/26.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UILabelScene : UILabel
+@interface UICustomLable : UILabel
 @property(nonatomic,assign) UIEdgeInsets contentEdgeInsets;
 @property(nonatomic,assign) IBInspectable BOOL canPerformCopyAction;
 @property(nonatomic,strong) IBInspectable UIColor *highlightedBackgroundColor;
