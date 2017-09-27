@@ -149,6 +149,7 @@
 }
 - (void)setToolbarItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated {}
 - (void)contentSizeCategoryDidChanged:(NSNotification *)notification {}
+- (void)currentLocaleDidChange:(NSNotification *)notification{}
 @end
 
 @implementation UIViewController (Handler)

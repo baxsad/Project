@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B66405451F794675003F31DD /* UIKeyboardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B66405441F794675003F31DD /* UIKeyboardManager.m */; };
+		B66A9E5F1F7BEA1F00FF5887 /* NSDate+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = B66A9E5E1F7BEA1F00FF5887 /* NSDate+UI.m */; };
 		E2FF88B26EA31E72CA126D16 /* libPods-Project.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4B56543DA8231574D4B11F /* libPods-Project.a */; };
 		E507D8A01F78DAD1004D6DC0 /* UIConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = E507D88A1F78DAD0004D6DC0 /* UIConfiguration.m */; };
 		E507D8A11F78DAD1004D6DC0 /* UIHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E507D88D1F78DAD0004D6DC0 /* UIHelper.m */; };
@@ -94,6 +95,8 @@
 		85860AAA7ADE0964B1CAEE3B /* Pods-Project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Project/Pods-Project.debug.xcconfig"; sourceTree = "<group>"; };
 		B66405431F794675003F31DD /* UIKeyboardManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIKeyboardManager.h; sourceTree = "<group>"; };
 		B66405441F794675003F31DD /* UIKeyboardManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIKeyboardManager.m; sourceTree = "<group>"; };
+		B66A9E5D1F7BEA1F00FF5887 /* NSDate+UI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+UI.h"; sourceTree = "<group>"; };
+		B66A9E5E1F7BEA1F00FF5887 /* NSDate+UI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+UI.m"; sourceTree = "<group>"; };
 		E507D8881F78DAD0004D6DC0 /* UICommonDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICommonDefines.h; sourceTree = "<group>"; };
 		E507D8891F78DAD0004D6DC0 /* UIConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIConfiguration.h; sourceTree = "<group>"; };
 		E507D88A1F78DAD0004D6DC0 /* UIConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIConfiguration.m; sourceTree = "<group>"; };
@@ -552,6 +555,8 @@
 				E57415661F7B797E0022C5B8 /* NSMutableParagraphStyle+UI.m */,
 				E574156E1F7BA1720022C5B8 /* CALayer+UI.h */,
 				E574156F1F7BA1720022C5B8 /* CALayer+UI.m */,
+				B66A9E5D1F7BEA1F00FF5887 /* NSDate+UI.h */,
+				B66A9E5E1F7BEA1F00FF5887 /* NSDate+UI.m */,
 			);
 			path = UIExtensions;
 			sourceTree = "<group>";
@@ -738,7 +743,7 @@
 				TargetAttributes = {
 					E52C98DA1F53CCA1007D8408 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = 7524R5UJ2G;
+						DevelopmentTeam = 5D844S57RU;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -917,6 +922,7 @@
 				E574154B1F7B6FA90022C5B8 /* UIListScene.m in Sources */,
 				E507D8A11F78DAD1004D6DC0 /* UIHelper.m in Sources */,
 				E57415521F7B6FA90022C5B8 /* UIEmptyView.m in Sources */,
+				B66A9E5F1F7BEA1F00FF5887 /* NSDate+UI.m in Sources */,
 				E57415501F7B6FA90022C5B8 /* UITableScene.m in Sources */,
 				E574154C1F7B6FA90022C5B8 /* UINavigationScene.m in Sources */,
 				E507D8A31F78DAD1004D6DC0 /* UIThemeManager.m in Sources */,
@@ -1071,7 +1077,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7524R5UJ2G;
+				DEVELOPMENT_TEAM = 5D844S57RU;
 				GCC_PREFIX_HEADER = Project/PH.pch;
 				INFOPLIST_FILE = Project/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1090,7 +1096,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7524R5UJ2G;
+				DEVELOPMENT_TEAM = 5D844S57RU;
 				GCC_PREFIX_HEADER = Project/PH.pch;
 				INFOPLIST_FILE = Project/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

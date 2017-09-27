@@ -11,6 +11,9 @@
 @interface UIView (UI)
 - (instancetype)initWithSize:(CGSize)size;
 - (void)removeAllSubviews;
+- (void)setLayerShadow:(UIColor*)color offset:(CGSize)offset radius:(CGFloat)radius;
+- (UIViewController *)viewController;
+- (CGFloat)visibleAlpha;
 + (void)animateWithAnimated:(BOOL)animated
                    duration:(NSTimeInterval)duration
                       delay:(NSTimeInterval)delay
@@ -31,6 +34,10 @@
 @end
 
 @interface UIView (Layout)
+@property (nonatomic) CGFloat centerX;
+@property (nonatomic) CGFloat centerY;
+@property (nonatomic) CGPoint origin;
+@property(nonatomic, assign) CGSize size;
 @property(nonatomic, assign) CGFloat top;
 @property(nonatomic, assign) CGFloat left;
 @property(nonatomic, assign) CGFloat bottom;

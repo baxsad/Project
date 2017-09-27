@@ -57,6 +57,10 @@
                                            selector:@selector(contentSizeCategoryDidChanged:)
                                                name:UIContentSizeCategoryDidChangeNotification
                                              object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(significantTimeChange:)
+                                               name:UIApplicationSignificantTimeChangeNotification
+                                             object:nil];
   self.autorotate = YES;
   self.supportedOrientationMask = SupportedOrientationMask;
 }
