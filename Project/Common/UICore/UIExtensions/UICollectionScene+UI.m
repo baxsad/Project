@@ -19,7 +19,7 @@
   self.backgroundView = [[UIView alloc] init];
   
   if (@available(iOS 11,*)) {
-    self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
   }
 }
 

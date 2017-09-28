@@ -52,7 +52,6 @@
   
   self.hidesBottomBarWhenPushed = HidesBottomBarWhenPushedInitially;
   self.extendedLayoutIncludesOpaqueBars = YES;
-  self.automaticallyAdjustsScrollViewInsets = NO;
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(contentSizeCategoryDidChanged:)
                                                name:UIContentSizeCategoryDidChangeNotification
@@ -104,7 +103,7 @@
   [self initSubviews];
 }
 
-#pragma mark - 空列表视图 QMUIEmptyView
+#pragma mark - 空列表视图 UIEmptyView
 
 - (void)showEmptyView {
   if (!self.emptyView) {

@@ -155,7 +155,7 @@
 }
 
 - (void)updateDetailTextLabelWithText:(NSString *)text {
-  if (self.detailTextLabelFont && self.detailTextLabelTextColor && text) {
+  if (self.detailTextLabelFont && self.detailTextLabelTextColor && text && text.length > 0) {
     NSAttributedString *string = [[NSAttributedString alloc] initWithString:text attributes:@{
                                                                                               NSFontAttributeName: self.detailTextLabelFont,
                                                                                               NSForegroundColorAttributeName: self.detailTextLabelTextColor,
@@ -163,7 +163,7 @@
                                                                                               }];
     self.detailTextLabel.attributedText = string;
   }
-  self.detailTextLabel.hidden = !text;
+  self.detailTextLabel.hidden = !text || text.length == 0;
   [self setNeedsLayout];
 }
 
@@ -186,13 +186,13 @@
 
 - (void)setImage:(UIImage *)image {
   self.imageView.image = image;
-  self.imageView.hidden = !image;
+  self.imageView.hidden = !image || CGSizeIsEmpty(image.size);
   [self setNeedsLayout];
 }
 
 - (void)setTextLabelText:(NSString *)text {
   self.textLabel.text = text;
-  self.textLabel.hidden = !text;
+  self.textLabel.hidden = !text || text.length == 0;
   [self setNeedsLayout];
 }
 

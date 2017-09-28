@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setNavigationItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated;
 - (void)setToolbarItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated;
 - (void)contentSizeCategoryDidChanged:(NSNotification *)notification;
-- (void)currentLocaleDidChange:(NSNotification *)notification;
+- (void)significantTimeChange:(NSNotification *)notification;
 @end
 
 @interface UIViewController (Data)

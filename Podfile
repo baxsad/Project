@@ -9,4 +9,5 @@ target ‘Project’ do
     pod 'KVOController'
     pod 'BabyBluetooth'
     pod 'Bugly'
+    pod 'WCDB'
 end

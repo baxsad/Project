@@ -79,7 +79,7 @@
   
   CGSize descSizeFit = [self.descSubTitleLable sizeThatFits:CGSizeMake(self.exhibitionContentView.width, CGFLOAT_MAX)];
   self.descSubTitleLable.size = descSizeFit;
-  self.descSubTitleLable.bottom = self.exhibitionContentView.top - 30;
+  self.descSubTitleLable.bottom = self.exhibitionContentView.top - 15;
   self.descSubTitleLable.centerX = self.exhibitionContentView.centerX;
   
   CGSize timeTitleSizeFit = [self.timeTitleLable sizeThatFits:CGSizeMake(self.exhibitionContentView.width, CGFLOAT_MAX)];
@@ -87,8 +87,8 @@
   self.timeTitleLable.bottom = self.descSubTitleLable.top - 15;
   self.timeTitleLable.centerX = self.exhibitionContentView.centerX;
   
-  self.scanButton.left = 50;
-  self.scanButton.width = SCREEN_WIDTH - 100;
+  self.scanButton.left = 30;
+  self.scanButton.width = SCREEN_WIDTH - 60;
   self.scanButton.height = 50;
   self.scanButton.top = self.exhibitionContentView.bottom + 30;
   
@@ -135,7 +135,7 @@
 
 - (UIImage *)navigationBarBackgroundImage
 {
-  return [UIImage imageWithColor:UIColorMake(36, 38, 47)];
+  return [UIImage imageWithColor:UIColorClear];
 }
 
 @end

@@ -24,6 +24,11 @@
                       ];
 }
 
+- (void)initTableView
+{
+  [super initTableView];
+}
+
 - (void)setNavigationItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated {
   [super setNavigationItemsIsInEditMode:isInEditMode animated:animated];
   self.title = @"Laboratory";
