@@ -6,8 +6,8 @@
 //  Copyright © 2017年 pmo. All rights reserved.
 //
 
-#import "UIScene.h"
+#import "SSUIViewController.h"
 
-@interface IndexScene : UIScene
+@interface IndexScene : SSUIViewController
 
 @end

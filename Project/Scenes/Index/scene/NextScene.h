@@ -6,8 +6,8 @@
 //  Copyright © 2017年 pmo. All rights reserved.
 //
 
-#import "UIScene.h"
+#import "SSUICollectionViewController.h"
 
-@interface NextScene : UIScene
+@interface NextScene : SSUICollectionViewController
 
 @end

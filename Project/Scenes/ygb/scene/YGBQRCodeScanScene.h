@@ -6,8 +6,8 @@
 //  Copyright © 2017年 jearoc. All rights reserved.
 //
 
-#import "UIScene.h"
+#import "SSUIViewController.h"
 
-@interface YGBQRCodeScanScene : UIScene
+@interface YGBQRCodeScanScene : SSUIViewController
 
 @end

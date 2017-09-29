@@ -6,8 +6,8 @@
 //  Copyright © 2017年 pmo. All rights reserved.
 //
 
-#import "UIListScene.h"
+#import "SSUIListViewController.h"
 
-@interface MineScene : UIListScene
+@interface MineScene : SSUIListViewController
 
 @end

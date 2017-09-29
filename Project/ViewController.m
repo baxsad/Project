@@ -8,8 +8,6 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "UINavigationScene.h"
-#import "UITabBarScene.h"
 #import "IndexScene.h"
 #import "MineScene.h"
 
@@ -24,15 +22,15 @@
   
   IndexScene *index = IndexScene.alloc.init;
   index.hidesBottomBarWhenPushed = NO;
-  UINavigationScene *indexNavigation = [UINavigationScene.alloc initWithRootViewController:index];
+  SSUINavigationController *indexNavigation = [SSUINavigationController.alloc initWithRootViewController:index];
   indexNavigation.tabBarItem = [UIHelper tabBarItemWithTitle:@"Examples" image:UIImageMake(@"icon_tabbar_component") selectedImage:UIImageMake(@"icon_tabbar_component_selected") tag:0];
   
   MineScene *mine = MineScene.alloc.init;
   mine.hidesBottomBarWhenPushed = NO;
-  UINavigationScene *mineNavigation = [UINavigationScene.alloc initWithRootViewController:mine];
+  SSUINavigationController *mineNavigation = [SSUINavigationController.alloc initWithRootViewController:mine];
   mineNavigation.tabBarItem = [UIHelper tabBarItemWithTitle:@"Laboratory" image:UIImageMake(@"icon_tabbar_lab") selectedImage:UIImageMake(@"icon_tabbar_lab_selected") tag:1];
   
-  UITabBarScene *tab = UITabBarScene.alloc.init;
+  SSUITabBarController *tab = SSUITabBarController.alloc.init;
   tab.viewControllers = @[indexNavigation,mineNavigation];
   
   [((AppDelegate *)[UIApplication sharedApplication].delegate).window setRootViewController:tab];

@@ -7,8 +7,8 @@
 //
 
 #import "YGBHomeScene.h"
-#import "UITableScene.h"
 #import "YGBQRCodeScanScene.h"
+#import "NextScene.h"
 
 @interface YGBHomeScene ()
 @property (nonatomic, strong) UICustomLable *timeTitleLable;
@@ -100,8 +100,10 @@
 
 - (void)scanButtonTouchAction:(id)sender
 {
-  YGBQRCodeScanScene *qr = YGBQRCodeScanScene.alloc.init;
-  [self.navigationController pushViewController:qr animated:YES];
+//  YGBQRCodeScanScene *qr = YGBQRCodeScanScene.alloc.init;
+//  [self.navigationController pushViewController:qr animated:YES];
+  NextScene *next = NextScene.alloc.init;
+  [self.navigationController pushViewController:next animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated

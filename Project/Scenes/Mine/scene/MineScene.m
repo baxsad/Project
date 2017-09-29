@@ -101,9 +101,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   static NSString *identifierNormal = @"cellNormal";
-  UITableCellScene *cell = [tableView dequeueReusableCellWithIdentifier:identifierNormal];
+  SSUITableCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierNormal];
   if (!cell) {
-    cell = [[UITableCellScene alloc] initForTableView:self.tableView withStyle:UITableViewCellStyleValue1 reuseIdentifier:identifierNormal];
+    cell = [[SSUITableCell alloc] initForTableView:self.tableView withStyle:UITableViewCellStyleValue1 reuseIdentifier:identifierNormal];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
   cell.textLabel.text = [self.dataSource objectAtIndex:indexPath.row];
