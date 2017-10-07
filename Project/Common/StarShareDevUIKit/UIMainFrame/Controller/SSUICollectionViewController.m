@@ -8,6 +8,7 @@
 
 #import "SSUICollectionViewController.h"
 #import "UIExtensions.h"
+#import "UICore.h"
 
 const UIEdgeInsets SSUICollectionViewControllerInitialContentInsetNotSet = {-1, -1, -1, -1};
 

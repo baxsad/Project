@@ -9,15 +9,31 @@
 #import "NextScene.h"
 
 @interface SSCollectionCell : UICollectionViewCell
-
+@property(nonatomic, strong, readonly) UILabel *contentLabel;
 @end
 
 @implementation SSCollectionCell
+- (instancetype)initWithFrame:(CGRect)frame {
+  self = [super initWithFrame:frame];
+  if (self) {
+    self.layer.cornerRadius = 3;
+    
+    _contentLabel = [[UILabel alloc] initWithFont:UIFontLightMake(100) textColor:UIColorWhite];
+    self.contentLabel.textAlignment = NSTextAlignmentCenter;
+    [self.contentView addSubview:self.contentLabel];
+  }
+  return self;
+}
 
+- (void)layoutSubviews {
+  [super layoutSubviews];
+  [self.contentLabel sizeToFit];
+  self.contentLabel.center = CGPointMake(CGRectGetWidth(self.contentView.bounds) / 2, CGRectGetHeight(self.contentView.bounds) / 2);
+}
 @end
 
-@interface NextScene ()
-
+@interface NextScene ()<UICollectionViewDelegateFlowLayout>
+@property(nonatomic, strong) UICollectionViewPagingLayout *collectionViewLayout;
 @end
 
 @implementation NextScene
@@ -31,48 +47,41 @@
 {
   [super initCollectionView];
   
-  //self.collectionViewInitialContentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-  //self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-  UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-  layout.itemSize = CGSizeMake(100, 60);
-  layout.minimumLineSpacing = 10;
-  layout.minimumInteritemSpacing = 10;
-  [self.collectionView setCollectionViewLayout:layout animated:NO completion:nil];
-  [self.collectionView registerClass:[SSCollectionCell class] forCellWithReuseIdentifier:@"SSCollectionCell"];
-}
-  
-- (void)viewWillAppear:(BOOL)animated
-{
-  [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-  [super viewDidAppear:animated];
-  NSLog(@"%@",self.collectionView);
-  
+  self.collectionViewLayout = [[UICollectionViewPagingLayout alloc] initWithStyle:UICollectionViewPagingLayoutStyleDefault];
+  [self.collectionView setCollectionViewLayout:self.collectionViewLayout animated:NO completion:nil];
+  [self.collectionView registerClass:[SSCollectionCell class] forCellWithReuseIdentifier:@"cell"];
+  self.collectionView.decelerationRate = UIScrollViewDecelerationRateFast;
+  self.collectionViewLayout.sectionInset = UIEdgeInsetsMake(36, 36, 36, 36);
+  self.collectionViewLayout.allowsMultipleItemScroll = NO;
 }
 
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
 }
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
+#pragma mark - <UICollectionViewDelegate, UICollectionViewDataSource>
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
   return 1;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-  return 5;
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+  return 20;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-  SSCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"SSCollectionCell" forIndexPath:indexPath];
-  
-  cell.contentView.backgroundColor = UIColorRed;
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+  SSCollectionCell *cell = (SSCollectionCell *)[self.collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+  cell.contentLabel.text = [NSString stringWithNSInteger:indexPath.item];
+  cell.backgroundColor = [UIColor randomColor];
+  [cell setNeedsLayout];
   return cell;
+}
+
+#pragma mark - <UICollectionViewDelegateFlowLayout>
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+  CGSize size = CGSizeMake(CGRectGetWidth(collectionView.bounds) - UIEdgeInsetsGetHorizontalValue(self.collectionViewLayout.sectionInset), CGRectGetHeight(collectionView.bounds) - UIEdgeInsetsGetVerticalValue(self.collectionViewLayout.sectionInset) - self.navigationBarMaxYInViewCoordinator);
+  return size;
 }
 
 @end

@@ -92,7 +92,6 @@
   UICMI.navBarLoadingMarginRight = 3;
   UICMI.navBarAccessoryViewMarginLeft = 5;
   UICMI.navBarActivityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-  UICMI.navBarAccessoryViewTypeDisclosureIndicatorImage = [UIImage imageWithShape:UIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:UIColorWhite];
   
 #pragma mark - TabBar
   

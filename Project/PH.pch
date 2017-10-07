@@ -1,13 +1,4 @@
-//
-//  PH.pch
-//  XX_iOS_APP
-//
-//  Created by pmo on 2017/8/16.
-//  Copyright © 2017年 pmo. All rights reserved.
-//
 
-#ifndef PH_pch
-#define PH_pch
 
 #import "NSGlobalTraking.h"
 #import "NSGlobalDeviceInfo.h"
@@ -16,4 +7,3 @@
 #import <Masonry/Masonry.h>
 #import <Bugly/Bugly.h>
 
-#endif /* PH_pch */
