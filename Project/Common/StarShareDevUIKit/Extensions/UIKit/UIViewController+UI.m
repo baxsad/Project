@@ -11,7 +11,6 @@
 #import "NSObject+UI.h"
 #import <objc/message.h>
 #import <objc/runtime.h>
-#import "UICore.h"
 
 @interface UIViewController ()
 @property(nonatomic, assign) BOOL ss_isViewDidAppear;

@@ -8,7 +8,7 @@
 
 #import "SSUITextView.h"
 #import "UICore.h"
-#import "UICustomLable.h"
+#import "UIComponents.h"
 #import "UIExtensions.h"
 
 /// 系统 textView 默认的字号大小，用于 placeholder 默认的文字大小。实测得到，请勿修改。

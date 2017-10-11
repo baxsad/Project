@@ -145,6 +145,8 @@
   UICMI.tableViewCellWarningBackgroundColor = UIColorYellow;
   UICMI.tableViewCellDisclosureIndicatorImage = [UIImage imageWithShape:UIImageShapeDisclosureIndicator size:CGSizeMake(6, 10) lineWidth:1 tintColor:UIColorMake(173, 180, 190)];
   UICMI.tableViewCellCheckmarkImage = [UIImage imageWithShape:UIImageShapeCheckmark size:CGSizeMake(15, 12) tintColor:self.themeTintColor];
+  UICMI.tableViewCellDetailButtonImage = [UIImage imageWithShape:UIImageShapeDetailButtonImage size:CGSizeMake(20, 20) tintColor:self.themeTintColor];
+  UICMI.tableViewCellDoneButtonImage = [UIImage imageWithShape:UIImageShapeDoneButtonImage size:CGSizeMake(20, 20) tintColor:self.themeTintColor];
   UICMI.tableViewCellSpacingBetweenDetailButtonAndDisclosureIndicator = 12;
   
   UICMI.tableViewSectionHeaderBackgroundColor = UIColorMake(244, 244, 244);

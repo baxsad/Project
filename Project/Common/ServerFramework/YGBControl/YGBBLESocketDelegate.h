@@ -25,12 +25,22 @@
 
 /**
  蓝牙状态改变，蓝牙断开连接的同时当前连接的外设也会断开连接
-
+ 
  @param state 蓝牙状态
  @param socket socket
  */
 - (void)readyStateUpdate:(YGBBLEReadyState)state
                   socket:(YGBBLESocket *)socket;
+
+/**
+ 搜索外设时的回调
+ 
+ @param peripheral 搜索到的外设
+ @param socket socket
+ */
+- (void)findPeripheral:(CBPeripheral *)peripheral
+                socket:(YGBBLESocket *)socket
+                  RSSI:(NSNumber *)RSSI;
 
 /**
  连接上外设时的回调
@@ -102,22 +112,16 @@
                      error:(NSError *)error;
 
 /**
- 请求成功
+ 数据有更新时的回调
 
  @param data data
- @param peripheral 当前连接的外设
+ @param peripheral 外设
+ @param characteristic 特征
  */
-- (void)requestSucceed:(NSData *)data
-            peripheral:(CBPeripheral *)peripheral;
+- (void)characteristicDidWritValue:(NSData *)data
+                        peripheral:(CBPeripheral *)peripheral
+                    characteristic:(CBCharacteristic *)characteristic;
 
-/**
- 请求失败
-
- @param error error
- @param peripheral 当前连接的外设
- */
-- (void)requestFailed:(NSError *)error
-           peripheral:(CBPeripheral *)peripheral;
 
 
 @end

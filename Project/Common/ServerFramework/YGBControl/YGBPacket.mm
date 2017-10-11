@@ -9,6 +9,62 @@
 #import "YGBPacket.h"
 #import "YGBPot.h"
 
+@implementation NSData (YGBPacket)
+- (void)getMode:(nullable unsigned int *)mode
+            ctr:(nullable unsigned int *)ctr
+            tik:(nullable unsigned int *)tik
+            red:(nullable unsigned int *)red
+          green:(nullable unsigned int *)green
+           blue:(nullable unsigned int *)blue
+{
+  NSString *hex = [self convertDataToHex];
+  if (hex.length < 18) return;
+  *mode  = [NSData intComponentFromHex:hex start:8  length:2];
+  *ctr   = [NSData intComponentFromHex:hex start:6  length:2];
+  *tik   = [NSData intComponentFromHex:hex start:10 length:2];
+  *red   = [NSData intComponentFromHex:hex start:12 length:2];
+  *green = [NSData intComponentFromHex:hex start:14 length:2];
+  *blue  = [NSData intComponentFromHex:hex start:16 length:2];
+}
+- (void)getMode:(nullable unsigned int *)mode
+            ctr:(nullable unsigned int *)ctr
+            tik:(nullable unsigned int *)tik
+{
+  NSString *hex = [self convertDataToHex];
+  if (hex.length < 12) return;
+  *mode  = [NSData intComponentFromHex:hex start:8  length:2];
+  *ctr   = [NSData intComponentFromHex:hex start:6  length:2];
+  *tik   = [NSData intComponentFromHex:hex start:10 length:2];
+}
++ (unsigned int)intComponentFromHex:(NSString *)hex start:(NSUInteger)start length:(NSUInteger)length {
+  NSString *substring = [hex substringWithRange:NSMakeRange(start, length)];
+  NSString *fullHex = length == 2 ? substring : [NSString stringWithFormat:@"%@%@", substring, substring];
+  unsigned hexComponent;
+  [[NSScanner scannerWithString:fullHex] scanHexInt:&hexComponent];
+  return hexComponent;
+}
+- (NSString *)convertDataToHex {
+  if (!self || [self length] == 0) {
+    return @"";
+  }
+  NSMutableString *string = [[NSMutableString alloc] initWithCapacity:[self length]];
+  
+  [self enumerateByteRangesUsingBlock:^(const void *bytes, NSRange byteRange, BOOL *stop) {
+    unsigned char *dataBytes = (unsigned char*)bytes;
+    for (NSInteger i = 0; i < byteRange.length; i++) {
+      NSString *hexStr = [NSString stringWithFormat:@"%x", (dataBytes[i]) & 0xff];
+      if ([hexStr length] == 2) {
+        [string appendString:hexStr];
+      } else {
+        [string appendFormat:@"0%@", hexStr];
+      }
+    }
+  }];
+  
+  return string;
+}
+@end
+
 #define _delete(v) { delete v; v= NULL; }
 
 using namespace YGB;

@@ -9,7 +9,6 @@
 #include <pthread.h>
 #import "YGBBLESocket.h"
 #import "YGBError.h"
-#import "BabyBluetooth.h"
 
 NSString *const YGBBLESocketErrorDomain = @"YGBBLESocketErrorDomain";
 NSString *const YGBBLESocketErrorKey = @"YGBBLESocketErrorKey";
@@ -57,6 +56,7 @@ static CBPeripheral *willConnectingPeripheral;
          scanForPeripheralsWithServices:nil
                    discoverWithServices:nil
             discoverWithCharacteristics:nil];
+    [self _addObserver];
   }
   
   return self;
@@ -71,6 +71,7 @@ static CBPeripheral *willConnectingPeripheral;
     @strongify(self);
     if (self.readyState != CBManagerStatePoweredOn) {
       self -> _peripheral = nil;
+      willConnectingPeripheral = nil;
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(readyStateUpdate:socket:)]) {
       [self.delegate readyStateUpdate:self.readyState socket:self];
@@ -106,23 +107,29 @@ static CBPeripheral *willConnectingPeripheral;
   [_littleBoy setBlockOnDiscoverToPeripheralsAtChannel:_channel
                                                  block:^(CBCentralManager *central, CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
                                                    @strongify(self);
+                                                   NSLog(@"%@",peripheral);
                                                    YGB_CHECK_CURRENT_PERIPHERAL
                                                    if (willConnectingPeripheral == nil) {
                                                      willConnectingPeripheral = peripheral;
-                                                     self -> _littleBoy
-                                                     .having(peripheral)
-                                                     .and
-                                                     .channel(self -> _channel)
-                                                     .then
-                                                     .connectToPeripherals()
-                                                     .discoverServices()
-                                                     .discoverCharacteristics()
-                                                     .readValueForCharacteristic()
-                                                     .discoverDescriptorsForCharacteristic()
-                                                     .readValueForDescriptors()
-                                                     .begin();
+                                                     if (self.delegate && [self.delegate respondsToSelector:@selector(findPeripheral:socket:RSSI:)]) {
+                                                       [self.delegate findPeripheral:peripheral socket:self RSSI:RSSI];
+                                                     }
                                                    }
                                                  }];
+  
+  // 扫描过滤
+  [_littleBoy setFilterOnDiscoverPeripheralsAtChannel:_channel
+                                               filter:^BOOL(CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
+                                                 @strongify(self);
+                                                 return [peripheral.identifier.UUIDString isEqualToString:self.UUID];
+                                               }];
+  
+  // 连接过滤
+  [_littleBoy setFilterOnConnectToPeripheralsAtChannel:_channel
+                                                filter:^BOOL(CBPeripheral *peripheral, NSDictionary *advertisementData, NSNumber *RSSI) {
+                                                  @strongify(self);
+                                                  return [peripheral.identifier.UUIDString isEqualToString:self.UUID];
+                                                }];
   
   // 成功连接到外设时的回调
   [_littleBoy setBlockOnConnectedAtChannel:_channel
@@ -131,7 +138,6 @@ static CBPeripheral *willConnectingPeripheral;
                                        YGB_CHECK_CURRENT_PERIPHERAL
                                        self -> _peripheral = peripheral;
                                        self -> _workState = YGBBLEWorkStateConnect;
-                                       willConnectingPeripheral = nil;
                                        [self -> _littleBoy cancelScan];
                                        if (self.delegate && [self.delegate respondsToSelector:@selector(connectSucceed:)]) {
                                          [self.delegate connectSucceed:self -> _peripheral];
@@ -144,7 +150,6 @@ static CBPeripheral *willConnectingPeripheral;
     YGB_CHECK_CURRENT_PERIPHERAL
     self -> _peripheral = nil;
     self -> _workState = YGBBLEWorkStateDisconnect;
-    willConnectingPeripheral = nil;
     [self -> _littleBoy cancelScan];
     if (self.delegate && [self.delegate respondsToSelector:@selector(connectFailed:error:)]) {
       [self.delegate connectFailed:self -> _peripheral error:error];
@@ -157,7 +162,6 @@ static CBPeripheral *willConnectingPeripheral;
     YGB_CHECK_CURRENT_PERIPHERAL
     self -> _peripheral = nil;
     self -> _workState = YGBBLEWorkStateDisconnect;
-    willConnectingPeripheral = nil;
     [self -> _littleBoy cancelScan];
     if (self.delegate && [self.delegate respondsToSelector:@selector(disconnect:error:)]) {
       [self.delegate disconnect:self -> _peripheral error:error];
@@ -230,6 +234,17 @@ static CBPeripheral *willConnectingPeripheral;
 
   }];
   
+  // 写值成功的回调
+  [_littleBoy setBlockOnDidWriteValueForCharacteristicAtChannel:_channel
+                                                          block:^(CBCharacteristic *characteristic, NSError *error) {
+                                                            @strongify(self);
+                                                            if (self.delegate && [self.delegate respondsToSelector:@selector(characteristicDidWritValue:peripheral:characteristic:)]) {
+                                                              [self.delegate characteristicDidWritValue:characteristic.value
+                                                                                             peripheral:self -> _peripheral
+                                                                                         characteristic:characteristic];
+                                                            }
+                                                          }];
+  
   /**
   // 设置发现特征的描述的回调
   [_littleBoy setBlockOnDiscoverDescriptorsForCharacteristicAtChannel:_channel block:^(CBPeripheral *peripheral, CBCharacteristic *characteristic, NSError *error) {
@@ -285,7 +300,7 @@ static CBPeripheral *willConnectingPeripheral;
 
 - (void)sendDataNoCopy:(nullable NSData *)data characteristic:(CBCharacteristic *)characteristic error:(NSError **)error;
 {
-  if (data == nil) {
+  if (characteristic == nil) {
     NSString *message = @"特征不能为空";
     if (error) {
       *error = YGBErrorWithCodeDescription(YGBErrorCodeCharacteristicNill, message);
@@ -346,11 +361,11 @@ static CBPeripheral *willConnectingPeripheral;
   }
   
   dispatch_async(_workQueue, ^{
-    [self _sendData:data];
+    [self _sendData:data characteristic:characteristic];
   });
 }
 
-- (void)_sendData:(NSData *)data
+- (void)_sendData:(NSData *)data characteristic:(CBCharacteristic *)characteristic
 {
   [self assertOnWorkQueue];
   
@@ -374,8 +389,8 @@ static CBPeripheral *willConnectingPeripheral;
   }
   
   [_peripheral writeValue:data
-        forCharacteristic:_characteristics[@"B6110002-1114-4D64-8426-0690F9BE36EF"]
-                     type:CBCharacteristicWriteWithoutResponse];
+        forCharacteristic:characteristic
+                     type:CBCharacteristicWriteWithResponse];
   
 }
 
@@ -395,10 +410,26 @@ static CBPeripheral *willConnectingPeripheral;
     return;
   }
   
-  [self _addObserver];
-  [_littleBoy cancelScan];
-  [_littleBoy cancelAllPeripheralsConnection];
-  _littleBoy.channel(_channel).scanForPeripherals().begin();
+  if (willConnectingPeripheral == nil) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(connectFailed:error:)]) {
+      [self.delegate connectFailed:nil error:YGBErrorWithCodeDescription(YGBErrorCodePeripheralNill, @"没有可供连接的外设")];
+    }
+    return;
+  }
+  
+  self -> _littleBoy
+  .having(willConnectingPeripheral)
+  .and
+  .channel(self -> _channel)
+  .then
+  .connectToPeripherals()
+  .discoverServices()
+  .discoverCharacteristics()
+  .readValueForCharacteristic()
+  .discoverDescriptorsForCharacteristic()
+  .readValueForDescriptors()
+  .begin();
+  
 }
 
 - (void)disConnect
@@ -407,13 +438,48 @@ static CBPeripheral *willConnectingPeripheral;
   [_littleBoy cancelAllPeripheralsConnection];
 }
 
+- (void)find
+{
+  if (self.readyState != YGBBLEReadyStateOpen) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(connectFailed:error:)]) {
+      [self.delegate connectFailed:nil error:YGBErrorWithCodeDescription(YGBErrorCodeBLEClosed, @"蓝牙处于关闭状态")];
+    }
+    return;
+  }
+  
+  if (self.UUID == nil && self.UUID.length == 0) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(connectFailed:error:)]) {
+      [self.delegate connectFailed:nil error:YGBErrorWithCodeDescription(YGBErrorCodeUUIDNill, @"UUID 不能为空")];
+    }
+    return;
+  }
+  
+  willConnectingPeripheral = nil;
+  [_littleBoy cancelScan];
+  [_littleBoy cancelAllPeripheralsConnection];
+  _littleBoy.channel(_channel).scanForPeripherals().begin();
+}
+
+- (void)stopFind
+{
+  [_littleBoy cancelScan];
+}
+
+- (void)addAutoConnectPeripheral:(CBPeripheral *)peripheral
+{
+  [_littleBoy AutoReconnect:peripheral];
+}
+
+- (void)removeAutoConnectPeripheral:(CBPeripheral *)peripheral
+{
+  [_littleBoy AutoReconnectCancel:peripheral];
+}
+
 #pragma mark - 
 
 - (void)errorWithCode:(NSInteger)code reason:(NSString *)reason
 {
-  if (self.delegate && [self.delegate respondsToSelector:@selector(requestFailed:peripheral:)]) {
-    [self.delegate requestFailed:YGBErrorWithCodeDescription(code, reason) peripheral:_peripheral];
-  }
+  
 }
 
 #pragma mark -
@@ -425,7 +491,7 @@ static CBPeripheral *willConnectingPeripheral;
 
 - (void)assertOnWorkQueue;
 {
-  assert(dispatch_get_specific((__bridge void *)self) == (__bridge void *)_workQueue);
+  //assert(dispatch_get_specific((__bridge void *)self) == (__bridge void *)_workQueue);
 }
 
 #pragma mark - getter

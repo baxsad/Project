@@ -10,6 +10,7 @@
 #import "YGBDefines.h"
 #import "YGBBLESocketDelegate.h"
 #import "YGBPacket.h"
+#import "BabyBluetooth.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,8 +52,13 @@ extern NSString *const YGBBLESocketErrorKey;
 - (void)sendData:(nullable NSData *)data characteristicUUID:(NSString *)UUID error:(NSError **)error;
 - (void)sendDataNoCopy:(nullable NSData *)data characteristicUUID:(NSString *)UUID error:(NSError **)error;
 
+- (void)find;
+- (void)stopFind;
 - (void)connect;
 - (void)disConnect;
+
+- (void)addAutoConnectPeripheral:(CBPeripheral *)peripheral;
+- (void)removeAutoConnectPeripheral:(CBPeripheral *)peripheral;
 
 @end
 

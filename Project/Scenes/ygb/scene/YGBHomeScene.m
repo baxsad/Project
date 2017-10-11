@@ -8,14 +8,15 @@
 
 #import "YGBHomeScene.h"
 #import "YGBQRCodeScanScene.h"
-#import "NextScene.h"
+#import "YGBTestScene.h"
+#import "YGBPeripheralSearchScene.h"
 
 @interface YGBHomeScene ()
-@property (nonatomic, strong) UICustomLable *timeTitleLable;
-@property (nonatomic, strong) UICustomLable *descSubTitleLable;
+@property (nonatomic, strong) SSUILable *timeTitleLable;
+@property (nonatomic, strong) SSUILable *descSubTitleLable;
 @property (nonatomic, strong) UIView *exhibitionContentView;
-@property (nonatomic, strong) UICustomButton *scanButton;
-@property (nonatomic, strong) UICustomButton *learnMoreButton;
+@property (nonatomic, strong) SSUIButton *scanButton;
+@property (nonatomic, strong) SSUIButton *learnMoreButton;
 @end
 
 @implementation YGBHomeScene
@@ -35,7 +36,7 @@
   self.exhibitionContentView.layer.contents = (__bridge id _Nullable)(icon.CGImage);
   [self.view addSubview:self.exhibitionContentView];
   
-  self.descSubTitleLable = [[UICustomLable alloc] init];
+  self.descSubTitleLable = [[SSUILable alloc] init];
   self.descSubTitleLable.font = UIFontMake(17);
   self.descSubTitleLable.textColor = UIColorWhite;
   self.descSubTitleLable.textAlignment = NSTextAlignmentCenter;
@@ -43,7 +44,7 @@
   self.descSubTitleLable.text = @"もしあなたは YGB、どうぞここでそれをあなたとの APP マッチング";
   [self.view addSubview:self.descSubTitleLable];
   
-  self.timeTitleLable = [[UICustomLable alloc] init];
+  self.timeTitleLable = [[SSUILable alloc] init];
   self.timeTitleLable.font = UIFontBoldMake(25);
   self.timeTitleLable.textColor = UIColorWhite;
   self.timeTitleLable.textAlignment = NSTextAlignmentCenter;
@@ -51,7 +52,7 @@
   self.timeTitleLable.text = @"こんにちは";
   [self.view addSubview:self.timeTitleLable];
   
-  self.scanButton = [[UICustomButton alloc] init];
+  self.scanButton = [[SSUIButton alloc] init];
   self.scanButton.backgroundColor = UIColorMake(66, 68, 77);
   self.scanButton.layer.cornerRadius = 3;
   self.scanButton.layer.masksToBounds = YES;
@@ -61,11 +62,12 @@
   [self.scanButton addTarget:self action:@selector(scanButtonTouchAction:) forControlEvents:UIControlEventTouchUpInside];
   [self.view addSubview:self.scanButton];
   
-  self.learnMoreButton = [[UICustomButton alloc] init];
+  self.learnMoreButton = [[SSUIButton alloc] init];
   self.learnMoreButton.backgroundColor = UIColorClear;
   [self.learnMoreButton setTitle:@"さらに理解する" forState:UIControlStateNormal];
   [self.learnMoreButton.titleLabel setFont:UIFontMake(15)];
   self.learnMoreButton.tintColorAdjustsTitleAndImage =UIColorMake(204, 130, 70);
+  [self.learnMoreButton addTarget:self action:@selector(learnMoreButtonTouchAction:) forControlEvents:UIControlEventTouchUpInside];
   [self.view addSubview:self.learnMoreButton];
   
 }
@@ -100,10 +102,15 @@
 
 - (void)scanButtonTouchAction:(id)sender
 {
-//  YGBQRCodeScanScene *qr = YGBQRCodeScanScene.alloc.init;
-//  [self.navigationController pushViewController:qr animated:YES];
-  NextScene *next = NextScene.alloc.init;
-  [self.navigationController pushViewController:next animated:YES];
+  //YGBQRCodeScanScene *qr = YGBQRCodeScanScene.alloc.init;
+  //[self.navigationController pushViewController:qr animated:YES];
+  YGBPeripheralSearchScene *test = [YGBPeripheralSearchScene.alloc initWithStyle:UITableViewStyleGrouped];
+  [self.navigationController pushViewController:test animated:YES];
+}
+
+- (void)learnMoreButtonTouchAction:(id)sender
+{
+  
 }
 
 - (void)viewDidAppear:(BOOL)animated

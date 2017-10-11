@@ -46,8 +46,8 @@ const UIEdgeInsets SSUICollectionViewControllerInitialContentInsetNotSet = {-1, 
   [self.collectionView clearsSelection];
 }
 
-- (void)viewDidLayoutSubviews {
-  [super viewDidLayoutSubviews];
+- (void)needLayoutSubviews
+{
   BOOL shouldChangeCollectionViewFrame = !CGRectEqualToRect(self.view.bounds, self.collectionView.frame);
   if (shouldChangeCollectionViewFrame) {
     self.collectionView.frame = self.view.bounds;
@@ -64,8 +64,8 @@ const UIEdgeInsets SSUICollectionViewControllerInitialContentInsetNotSet = {-1, 
     [self.collectionView scrollToTopAnimated:NO];
     self.hasSetInitialContentInset = YES;
   }
-
-  [self layoutEmptyView];
+  
+  [super needLayoutSubviews];
 }
 
 #pragma mark - 工具方法

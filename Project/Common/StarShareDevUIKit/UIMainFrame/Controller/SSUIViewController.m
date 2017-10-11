@@ -71,7 +71,7 @@
 
 - (void)viewDidLayoutSubviews {
   [super viewDidLayoutSubviews];
-  [self layoutEmptyView];
+  [self needLayoutSubviews];
 }
 
 - (void)setTitle:(NSString *)title {
@@ -281,6 +281,9 @@
 
 @implementation SSUIViewController (Hooks)
 - (void)initSubviews {}
+- (void)needLayoutSubviews {
+  [self layoutEmptyView];
+}
 - (void)setNavigationItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated {
   self.navigationItem.titleView = self.titleView;
 }

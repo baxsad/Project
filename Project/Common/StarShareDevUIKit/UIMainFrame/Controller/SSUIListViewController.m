@@ -10,6 +10,7 @@
 #import "UIComponents.h"
 #import "UIExtensions.h"
 #import "UICore.h"
+#import "UIMainFrame.h"
 
 const UIEdgeInsets SSUIListViewControllerInitialContentInsetNotSet = {-1, -1, -1, -1};
 const NSInteger kSectionHeaderFooterLabelTag = 1024;
@@ -113,13 +114,8 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
   [self initTableView];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-  [super viewWillAppear:animated];
-  [self.tableView clearsSelection];
-}
-
-- (void)viewDidLayoutSubviews {
-  [super viewDidLayoutSubviews];
+- (void)needLayoutSubviews
+{
   BOOL shouldChangeTableViewFrame = !CGRectEqualToRect(self.view.bounds, self.tableView.frame);
   if (shouldChangeTableViewFrame) {
     self.tableView.frame = self.view.bounds;
@@ -139,7 +135,12 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
   
   [self hideTableHeaderViewInitialIfCanWithAnimated:NO force:NO];
   
-  [self layoutEmptyView];
+  [super needLayoutSubviews];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
+  [self.tableView clearsSelection];
 }
 
 #pragma mark - 工具方法
@@ -245,7 +246,7 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
   NSString *title = [self tableView:tableView realTitleForHeaderInSection:section];
   if (title) {
     UITableViewHeaderFooterView *headerFooterView = [self tableHeaderFooterLabelInTableView:tableView identifier:@"headerTitle"];
-    UICustomLable *label = (UICustomLable *)[headerFooterView.contentView viewWithTag:kSectionHeaderFooterLabelTag];
+    SSUILable *label = (SSUILable *)[headerFooterView.contentView viewWithTag:kSectionHeaderFooterLabelTag];
     label.text = title;
     label.contentEdgeInsets = tableView.style == UITableViewStylePlain ? TableViewSectionHeaderContentInset : TableViewGroupedSectionHeaderContentInset;
     label.font = tableView.style == UITableViewStylePlain ? TableViewSectionHeaderFont : TableViewGroupedSectionHeaderFont;
@@ -262,7 +263,7 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 - (UITableViewHeaderFooterView *)tableHeaderFooterLabelInTableView:(UITableView *)tableView identifier:(NSString *)identifier {
   UITableViewHeaderFooterView *headerFooterView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
   if (!headerFooterView) {
-    UICustomLable *label = [[UICustomLable alloc] init];
+    SSUILable *label = [[SSUILable alloc] init];
     label.tag = kSectionHeaderFooterLabelTag;
     label.numberOfLines = 0;
     headerFooterView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:identifier];

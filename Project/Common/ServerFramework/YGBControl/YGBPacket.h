@@ -8,6 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+@interface NSData (YGBPacket)
+- (void)getMode:(nullable unsigned int *)mode
+            ctr:(nullable unsigned int *)ctr
+            tik:(nullable unsigned int *)tik
+            red:(nullable unsigned int *)red
+          green:(nullable unsigned int *)green
+           blue:(nullable unsigned int *)blue;
+
+- (void)getMode:(nullable unsigned int *)mode
+            ctr:(nullable unsigned int *)ctr
+            tik:(nullable unsigned int *)tik;
+@end
+
 @interface YGBPacket : NSObject
 
 
@@ -141,3 +156,5 @@
 + (  NSData *)packet_get_pic_num;
 
 @end
+
+NS_ASSUME_NONNULL_END

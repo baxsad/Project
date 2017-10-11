@@ -7,7 +7,6 @@ target ‘Project’ do
     pod 'OpenUDID'
     pod 'pop', '~> 1.0.9'
     pod 'KVOController'
-    pod 'BabyBluetooth'
     pod 'Bugly'
     pod 'WCDB'
 end

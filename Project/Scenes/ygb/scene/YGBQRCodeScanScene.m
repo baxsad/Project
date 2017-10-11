@@ -19,12 +19,21 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.titleView.title = @"二维码/条码";
-//  [self showBarButton:NavBarItemPositionRight title:@"相册"];
-//  [self setNavBarBackgroundAlpha:0.93 needUpdate:NO];
   
 #pragma mark - setup
   [self _setupScanPriview];
   [self _setupScanner];
+}
+
+- (void)setNavigationItemsIsInEditMode:(BOOL)isInEditMode animated:(BOOL)animated
+{
+  [super setNavigationItemsIsInEditMode:isInEditMode animated:animated];
+  UIBarButtonItem *xc = [UINavigationButton barButtonItemWithType:UINavigationButtonTypeNormal
+                                                            title:@"相册"
+                                                         position:UINavigationButtonPositionRight
+                                                           target:self
+                                                           action:@selector(openAlbum)];
+  self.navigationItem.rightBarButtonItem = xc;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -37,7 +46,7 @@
     [QRCodeScanner requestCameraPermissionWithSuccess:^(BOOL success) {
       if (success) {
         __weak typeof(self) weakSelf = self;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
           __strong typeof(self) strongSelf = weakSelf;
           [strongSelf startScanning];
         });
@@ -134,6 +143,13 @@
   [self presentViewController:alertController
                      animated:YES
                    completion:nil];
+}
+
+#pragma mark -
+
+- (void)openAlbum
+{
+  
 }
 
 @end
